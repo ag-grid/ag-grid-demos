@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <div class="container">
+    <div [class]="themeClass" class="grid">
+      <ag-grid-angular
+        style="height: 100%"
+        (gridReady)="onGridReady($event)"
+        [getRowId]="getRowId"
+        [rowData]="rowData"
+        [columnDefs]="colDefs"
+        [defaultColDef]="defaultColDef"
+        [enableRangeSelection]="enableRangeSelection"
+        [enableCharts]="enableCharts"
+        [rowSelection]="rowSelection"
+        [rowGroupPanelShow]="rowGroupPanelShow"
+        [suppressAggFuncInHeader]="suppressAggFuncInHeader"
+        [groupDefaultExpanded]="groupDefaultExpanded"
+        [statusBar]="statusBar"
+      ></ag-grid-angular>
+    </div>
+  </div>
+</div>
