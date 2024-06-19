@@ -1,0 +1,32 @@
+{
+  "name": "ag-grid-finance-example-typescript",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "@ag-grid-community/client-side-row-model": "latest",
+    "@ag-grid-community/core": "latest",
+    "@ag-grid-community/styles": "latest",
+    "@ag-grid-enterprise/advanced-filter": "latest",
+    "@ag-grid-enterprise/charts-enterprise": "latest",
+    "@ag-grid-enterprise/column-tool-panel": "latest",
+    "@ag-grid-enterprise/excel-export": "latest",
+    "@ag-grid-enterprise/filter-tool-panel": "latest",
+    "@ag-grid-enterprise/menu": "latest",
+    "@ag-grid-enterprise/range-selection": "latest",
+    "@ag-grid-enterprise/rich-select": "latest",
+    "@ag-grid-enterprise/row-grouping": "latest",
+    "@ag-grid-enterprise/set-filter": "latest",
+    "@ag-grid-enterprise/sparklines": "latest",
+    "@ag-grid-enterprise/status-bar": "latest"
+  }
+}
