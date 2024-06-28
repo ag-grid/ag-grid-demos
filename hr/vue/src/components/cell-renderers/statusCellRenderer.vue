@@ -1,0 +1,50 @@
+<script setup>
+import { defineProps } from "vue";
+
+const { params } = defineProps(["params"]);
+
+const { value } = params;
+</script>
+
+<template>
+  <div :class="`tag ${value}Tag`">
+    <img
+      v-if="value === 'paid'"
+      class="tick"
+      src="/example/hr/tick.svg"
+      alt="tick"
+    />
+    <span>{{ value }}</span>
+  </div>
+</template>
+
+<style>
+.tag {
+  padding: 4px;
+  padding-left: 4px;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.paidTag {
+  border: 1.5px solid rgb(70, 227, 114, 0.2);
+  color: rgb(62, 184, 97);
+  padding-right: 8px;
+}
+
+.pendingTag {
+  border: 1px solid #cccccc;
+}
+
+.tick {
+  height: 16px;
+  width: 16px;
+  margin-right: 8px;
+}
+</style>
