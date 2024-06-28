@@ -1,3 +1,9 @@
 # AG Grid Demos
 
-[AG Grid](https://www.ag-grid.com/) demo projects.
+Code for the [AG Grid Demo Projects](https://ag-grid.com/example/).
+
+See project folders:
+
+* [Finance Demo](./finance/)
+* [HR Demo](./hr/)
+* [Inventory Demo](./inventory/)
