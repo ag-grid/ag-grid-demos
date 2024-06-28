@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <div class="container">
+    <div [class]="themeClass" class="grid">
+      <ag-grid-angular
+        style="height: 100%"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+        [defaultColDef]="defaultColDef"
+        [rowHeight]="rowHeight"
+        [autoSizeStrategy]="autoSizeStrategy"
+        [pagination]="pagination"
+        [paginationPageSize]="paginationPageSize"
+        [paginationPageSizeSelector]="paginationPageSizeSelector"
+        [masterDetail]="masterDetail"
+        [detailCellRendererParams]="detailCellRendererParams"
+        [quickFilterText]="quickFilterText"
+        [detailRowAutoHeight]="detailRowAutoHeight"
+      ></ag-grid-angular>
+    </div>
+  </div>
+</div>
