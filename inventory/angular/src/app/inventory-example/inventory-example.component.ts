@@ -176,7 +176,7 @@ export class InventoryExample {
   handleTabClick(status: string) {
     this.gridApi.setColumnFilterModel(
       'status',
-      status === 'all' ? null : { values: [status] }
+      status === 'all' ? null : { values: [status] },
     );
     this.gridApi.onFilterChanged();
     this.activeTab = status;
