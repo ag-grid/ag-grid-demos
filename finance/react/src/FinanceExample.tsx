@@ -1,19 +1,13 @@
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import {
   type ColDef,
   type GetRowIdFunc,
   type GetRowIdParams,
   type ValueFormatterFunc,
+  type ValueGetterParams,
 } from "@ag-grid-community/core";
-import { AgGridReact } from "@ag-grid-community/react";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import { ModuleRegistry } from "@ag-grid-community/core";
+import { AgGridReact } from "@ag-grid-community/react";
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import { AdvancedFilterModule } from "@ag-grid-enterprise/advanced-filter";
@@ -28,8 +22,16 @@ import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
 import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
 import { SparklinesModule } from "@ag-grid-enterprise/sparklines";
 import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import styles from "./FinanceExample.module.css";
+import { TickerCellRenderer } from "./cell-renderers/TickerCellRenderer";
 import { getData } from "./data";
 
 interface Props {
@@ -53,12 +55,12 @@ ModuleRegistry.registerModules([
   SparklinesModule,
 ]);
 
-const numberFormatter: ValueFormatterFunc = (params) => {
+const numberFormatter: ValueFormatterFunc = ({ value }) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "decimal",
     maximumFractionDigits: 2,
   });
-  return params.value == null ? "" : formatter.format(params.value);
+  return value == null ? "" : formatter.format(value);
 };
 
 const FinanceExample: React.FC<Props> = ({
@@ -93,29 +95,22 @@ const FinanceExample: React.FC<Props> = ({
     () => [
       {
         field: "ticker",
-        cellDataType: "text",
-        maxWidth: 140,
-      },
-      {
-        field: "name",
-        cellDataType: "text",
-        hide: true,
+        cellRenderer: TickerCellRenderer,
+        minWidth: 380,
       },
       {
         field: "instrument",
         cellDataType: "text",
-        rowGroup: true,
-        hide: true,
+        type: "rightAligned",
+        maxWidth: 180,
       },
       {
         headerName: "P&L",
         cellDataType: "number",
         type: "rightAligned",
         cellRenderer: "agAnimateShowChangeCellRenderer",
-        valueGetter: (params) =>
-          params.data &&
-          params.data.quantity *
-            (params.data.price / params.data.purchasePrice),
+        valueGetter: ({ data }: ValueGetterParams) =>
+          data && data.quantity * (data.price / data.purchasePrice),
         valueFormatter: numberFormatter,
         aggFunc: "sum",
       },
@@ -123,8 +118,8 @@ const FinanceExample: React.FC<Props> = ({
         headerName: "Total Value",
         type: "rightAligned",
         cellDataType: "number",
-        valueGetter: (params) =>
-          params.data && params.data.quantity * params.data.price,
+        valueGetter: ({ data }: ValueGetterParams) =>
+          data && data.quantity * data.price,
         cellRenderer: "agAnimateShowChangeCellRenderer",
         valueFormatter: numberFormatter,
         aggFunc: "sum",
@@ -132,27 +127,35 @@ const FinanceExample: React.FC<Props> = ({
       {
         field: "quantity",
         cellDataType: "number",
-        maxWidth: 140,
         type: "rightAligned",
         valueFormatter: numberFormatter,
+        maxWidth: 150,
       },
       {
+        headerName: "Price",
         field: "purchasePrice",
         cellDataType: "number",
-        maxWidth: 140,
         type: "rightAligned",
         valueFormatter: numberFormatter,
+        maxWidth: 150,
       },
       {
         field: "purchaseDate",
         cellDataType: "dateString",
         type: "rightAligned",
+        hide: true,
       },
       {
         headerName: "Last 24hrs",
         field: "last24",
-        maxWidth: 500,
         cellRenderer: "agSparklineCellRenderer",
+        cellRendererParams: {
+          sparklineOptions: {
+            line: {
+              strokeWidth: 2,
+            },
+          },
+        },
       },
     ],
     [],
@@ -161,10 +164,7 @@ const FinanceExample: React.FC<Props> = ({
   const defaultColDef: ColDef = useMemo(
     () => ({
       flex: 1,
-      minWidth: 140,
-      maxWidth: 180,
       filter: true,
-      floatingFilter: true,
       enableRowGroup: true,
       enableValue: true,
     }),
@@ -172,7 +172,7 @@ const FinanceExample: React.FC<Props> = ({
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
-    (params: GetRowIdParams) => params.data.ticker,
+    ({ data: { ticker } }: GetRowIdParams) => ticker,
     [],
   );
 
@@ -201,11 +201,11 @@ const FinanceExample: React.FC<Props> = ({
             rowData={rowData}
             columnDefs={colDefs}
             defaultColDef={defaultColDef}
-            enableRangeSelection={true}
-            enableCharts={true}
+            enableRangeSelection
+            enableCharts
             rowSelection={"multiple"}
             rowGroupPanelShow={"always"}
-            suppressAggFuncInHeader={true}
+            suppressAggFuncInHeader
             groupDefaultExpanded={-1}
             statusBar={statusBar}
           />

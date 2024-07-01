@@ -5,6 +5,7 @@ import {
   type GridReadyEvent,
   type ValueFormatterFunc,
   createGrid,
+  type ValueGetterParams,
 } from "@ag-grid-community/core";
 
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
@@ -24,6 +25,8 @@ import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
 import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import { getData } from "./data";
+
+import { TickerCellRenderer } from "./cell-renderers/ticker-cell-renderer";
 
 import "./style.css";
 
@@ -54,28 +57,22 @@ const numberFormatter: ValueFormatterFunc = (params) => {
 const columnDefs: ColDef[] = [
   {
     field: "ticker",
-    cellDataType: "text",
-    maxWidth: 140,
-  },
-  {
-    field: "name",
-    cellDataType: "text",
-    hide: true,
+    cellRenderer: TickerCellRenderer,
+    minWidth: 380,
   },
   {
     field: "instrument",
     cellDataType: "text",
-    rowGroup: true,
-    hide: true,
+    type: "rightAligned",
+    maxWidth: 180,
   },
   {
     headerName: "P&L",
     cellDataType: "number",
     type: "rightAligned",
     cellRenderer: "agAnimateShowChangeCellRenderer",
-    valueGetter: (params) =>
-      params.data &&
-      params.data.quantity * (params.data.price / params.data.purchasePrice),
+    valueGetter: ({ data }: ValueGetterParams) =>
+      data && data.quantity * (data.price / data.purchasePrice),
     valueFormatter: numberFormatter,
     aggFunc: "sum",
   },
@@ -83,8 +80,8 @@ const columnDefs: ColDef[] = [
     headerName: "Total Value",
     type: "rightAligned",
     cellDataType: "number",
-    valueGetter: (params) =>
-      params.data && params.data.quantity * params.data.price,
+    valueGetter: ({ data }: ValueGetterParams) =>
+      data && data.quantity * data.price,
     cellRenderer: "agAnimateShowChangeCellRenderer",
     valueFormatter: numberFormatter,
     aggFunc: "sum",
@@ -92,27 +89,35 @@ const columnDefs: ColDef[] = [
   {
     field: "quantity",
     cellDataType: "number",
-    maxWidth: 140,
     type: "rightAligned",
     valueFormatter: numberFormatter,
+    maxWidth: 150,
   },
   {
+    headerName: "Price",
     field: "purchasePrice",
     cellDataType: "number",
-    maxWidth: 140,
     type: "rightAligned",
     valueFormatter: numberFormatter,
+    maxWidth: 150,
   },
   {
     field: "purchaseDate",
     cellDataType: "dateString",
     type: "rightAligned",
+    hide: true,
   },
   {
     headerName: "Last 24hrs",
     field: "last24",
-    maxWidth: 500,
     cellRenderer: "agSparklineCellRenderer",
+    cellRendererParams: {
+      sparklineOptions: {
+        line: {
+          strokeWidth: 2,
+        },
+      },
+    },
   },
 ];
 
@@ -135,7 +140,7 @@ const gridOptions: GridOptions = {
                   ((Math.random() * 4 + 1) / 100) *
                   (Math.random() > 0.5 ? 1 : -1),
             }
-          : item,
+          : item
       );
 
       gridApi.applyTransactionAsync({
@@ -152,10 +157,7 @@ const gridOptions: GridOptions = {
 
   defaultColDef: {
     flex: 1,
-    minWidth: 140,
-    maxWidth: 180,
     filter: true,
-    floatingFilter: true,
     enableRowGroup: true,
     enableValue: true,
   },

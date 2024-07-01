@@ -6,6 +6,7 @@ import {
   type GetRowIdParams,
   type GridReadyEvent,
   type ValueFormatterFunc,
+  type ValueGetterParams,
 } from '@ag-grid-community/core';
 import { AgGridAngular } from '@ag-grid-community/angular';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
@@ -25,6 +26,8 @@ import { StatusBarModule } from '@ag-grid-enterprise/status-bar';
 import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
 import { getData } from './data';
+
+import { TickerCellRenderer } from './cell-renderers/ticker-cell-renderer.component';
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
@@ -53,7 +56,7 @@ const numberFormatter: ValueFormatterFunc = (params) => {
 @Component({
   selector: 'finance-example',
   standalone: true,
-  imports: [AgGridAngular],
+  imports: [AgGridAngular, TickerCellRenderer],
   templateUrl: './finance-example.component.html',
   styleUrl: './finance-example.component.css',
   encapsulation: ViewEncapsulation.None,
@@ -92,38 +95,29 @@ export class FinanceExample {
 
   defaultColDef: ColDef = {
     flex: 1,
-    minWidth: 140,
-    maxWidth: 180,
     filter: true,
-    floatingFilter: true,
     enableRowGroup: true,
     enableValue: true,
   };
   colDefs: ColDef[] = [
     {
       field: 'ticker',
-      cellDataType: 'text',
-      maxWidth: 140,
-    },
-    {
-      field: 'name',
-      cellDataType: 'text',
-      hide: true,
+      cellRenderer: TickerCellRenderer,
+      minWidth: 380,
     },
     {
       field: 'instrument',
       cellDataType: 'text',
-      rowGroup: true,
-      hide: true,
+      type: 'rightAligned',
+      maxWidth: 180,
     },
     {
       headerName: 'P&L',
       cellDataType: 'number',
       type: 'rightAligned',
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      valueGetter: (params) =>
-        params.data &&
-        params.data.quantity * (params.data.price / params.data.purchasePrice),
+      valueGetter: ({ data }: ValueGetterParams) =>
+        data && data.quantity * (data.price / data.purchasePrice),
       valueFormatter: numberFormatter,
       aggFunc: 'sum',
     },
@@ -131,8 +125,8 @@ export class FinanceExample {
       headerName: 'Total Value',
       type: 'rightAligned',
       cellDataType: 'number',
-      valueGetter: (params) =>
-        params.data && params.data.quantity * params.data.price,
+      valueGetter: ({ data }: ValueGetterParams) =>
+        data && data.quantity * data.price,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       valueFormatter: numberFormatter,
       aggFunc: 'sum',
@@ -140,27 +134,35 @@ export class FinanceExample {
     {
       field: 'quantity',
       cellDataType: 'number',
-      maxWidth: 140,
       type: 'rightAligned',
       valueFormatter: numberFormatter,
+      maxWidth: 150,
     },
     {
+      headerName: 'Price',
       field: 'purchasePrice',
       cellDataType: 'number',
-      maxWidth: 140,
       type: 'rightAligned',
       valueFormatter: numberFormatter,
+      maxWidth: 150,
     },
     {
       field: 'purchaseDate',
       cellDataType: 'dateString',
       type: 'rightAligned',
+      hide: true,
     },
     {
       headerName: 'Last 24hrs',
       field: 'last24',
-      maxWidth: 500,
       cellRenderer: 'agSparklineCellRenderer',
+      cellRendererParams: {
+        sparklineOptions: {
+          line: {
+            strokeWidth: 2,
+          },
+        },
+      },
     },
   ];
 
