@@ -8,7 +8,7 @@ import { ICellRendererParams } from '@ag-grid-community/core';
   template: `
     <div class="stock">
       <span>{{ available }}</span>
-      <span class="stockText">Stock /</span>
+      &nbsp;<span class="stockText">Stock /</span>&nbsp;
       <span class="variantsText">{{ variants }} Variants</span>
     </div>
   `,
