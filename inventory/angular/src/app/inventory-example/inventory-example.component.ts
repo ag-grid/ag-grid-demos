@@ -1,4 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AgGridAngular } from '@ag-grid-community/angular';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
@@ -6,6 +7,7 @@ import type {
   ColDef,
   GetDetailRowDataParams,
   GridApi,
+  GridReadyEvent,
   SizeColumnsToFitGridStrategy,
   ValueFormatterFunc,
   ValueFormatterParams,
@@ -49,6 +51,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
   standalone: true,
   imports: [
     AgGridAngular,
+    FormsModule,
     ProductCellRenderer,
     StatusCellRenderer,
     StockCellRenderer,
@@ -162,17 +165,20 @@ export class InventoryExample {
   masterDetail = true;
   detailRowAutoHeight = true;
 
-  quickFilterText = '';
-  onFilterTextBoxChanged(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    this.quickFilterText = inputElement.value;
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
   }
 
-  handleTabClick(status: string): void {
+  statusEntries = Object.entries(statuses);
+  activeTab = 'all';
+  quickFilterText = '';
+
+  handleTabClick(status: string) {
     this.gridApi.setColumnFilterModel(
       'status',
-      status === 'all' ? null : { values: [status] },
+      status === 'all' ? null : { values: [status] }
     );
     this.gridApi.onFilterChanged();
+    this.activeTab = status;
   }
 }
