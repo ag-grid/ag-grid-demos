@@ -21,8 +21,8 @@ export const ActionsCellRenderer: FunctionComponent<
     rowData.status = !isPaused
       ? "paused"
       : !isOutOfStock
-        ? "active"
-        : "outOfStock";
+      ? "active"
+      : "outOfStock";
 
     // Refresh the row to reflect the changes
     api.applyTransaction({ update: [rowData] });
