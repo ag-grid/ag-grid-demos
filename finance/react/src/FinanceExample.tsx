@@ -63,7 +63,7 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
   return value == null ? "" : formatter.format(value);
 };
 
-const FinanceExample: React.FC<Props> = ({
+export const FinanceExample: React.FC<Props> = ({
   gridTheme = "ag-theme-quartz",
   isDarkMode = false,
 }) => {
@@ -83,8 +83,8 @@ const FinanceExample: React.FC<Props> = ({
                     ((Math.random() * 4 + 1) / 100) *
                     (Math.random() > 0.5 ? 1 : -1),
               }
-            : item,
-        ),
+            : item
+        )
       );
     }, 1000);
 
@@ -158,7 +158,7 @@ const FinanceExample: React.FC<Props> = ({
         },
       },
     ],
-    [],
+    []
   );
 
   const defaultColDef: ColDef = useMemo(
@@ -168,12 +168,12 @@ const FinanceExample: React.FC<Props> = ({
       enableRowGroup: true,
       enableValue: true,
     }),
-    [],
+    []
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams) => ticker,
-    [],
+    []
   );
 
   const statusBar = useMemo(
@@ -186,7 +186,7 @@ const FinanceExample: React.FC<Props> = ({
         { statusPanel: "agAggregationComponent" },
       ],
     }),
-    [],
+    []
   );
 
   const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
@@ -214,5 +214,3 @@ const FinanceExample: React.FC<Props> = ({
     </div>
   );
 };
-
-export default FinanceExample;
