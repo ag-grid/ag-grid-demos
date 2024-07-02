@@ -35,10 +35,10 @@ import { Component } from '@angular/core';
       .employeeData {
         display: flex;
         flex-direction: column;
+      }
 
-        span:first-child {
-          font-weight: 500;
-        }
+      .employeeData span:first-child {
+        font-weight: 500;
       }
 
       .description {
