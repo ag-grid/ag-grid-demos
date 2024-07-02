@@ -14,6 +14,7 @@ npm i @ag-grid-community/vue3 \
   @ag-grid-enterprise/set-filter \
   @ag-grid-enterprise/multi-filter \
   @ag-grid-enterprise/master-detail
+```
 
 ## Development
 
@@ -35,3 +36,4 @@ To get started:
 
 2. Install dependencies: `npm install`
 3. Run the dev server: `npm run dev`
+
