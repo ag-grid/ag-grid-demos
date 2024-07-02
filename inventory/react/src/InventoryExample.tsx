@@ -90,6 +90,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
     {
       field: "inventory",
       cellRenderer: StockCellRenderer,
+      headerClass: "header-inventory",
+      sortable: false,
     },
     {
       field: "incoming",
