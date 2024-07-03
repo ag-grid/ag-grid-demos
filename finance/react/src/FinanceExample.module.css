@@ -22,9 +22,9 @@
   --ag-row-hover-color: #323a46;
 }
 
-:global(div.ag-theme-quartz),
-:global(div.ag-theme-quartz-dark) {
-  @media screen and (max-width: 720px) {
+@media screen and (max-width: 720px) {
+  :global(div.ag-theme-quartz),
+  :global(div.ag-theme-quartz-dark) {
     --ag-font-size: 12px;
     --ag-grid-size: 6px;
   }
