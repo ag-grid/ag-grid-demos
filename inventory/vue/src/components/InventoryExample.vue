@@ -165,7 +165,7 @@ function handleTabClick(status: Status) {
 
   gridApi.value.setColumnFilterModel(
     "status",
-    status === "all" ? null : { values: [status] },
+    status === "all" ? null : { values: [status] }
   );
   gridApi.value.onFilterChanged();
 
@@ -242,10 +242,14 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 <style>
 @import "@ag-grid-community/styles/ag-grid.css";
 @import "@ag-grid-community/styles/ag-theme-quartz.css";
-
 :root {
   --layout-grid-header-height: 32px;
+  --layout-grid-margin: 32px;
   --ag-row-border: 1px solid #c41717;
+}
+
+body {
+  margin: 0;
 }
 
 @media screen and (max-width: 720px) {
@@ -375,8 +379,12 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 }
 
 .grid {
-  height: calc(100vh - var(--layout-grid-header-height) - 50px);
   --ag-header-background-color: transparent !important;
+
+  height: calc(
+    100vh - var(--layout-grid-header-height) - 62px - var(--layout-grid-margin)
+  );
+  margin: 0 var(--layout-grid-margin) var(--layout-grid-margin);
 }
 
 .exampleHeader {
@@ -384,6 +392,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
   justify-content: space-between;
   padding-bottom: 16px;
   padding-top: 8px;
+  margin: var(--layout-grid-margin) var(--layout-grid-margin) 0;
 }
 
 .exampleHeader {
@@ -410,8 +419,13 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 }
 
 .inputWrapper input {
-  padding-left: 32px;
   font-size: 14px;
+  padding: 0.375em 0.75em 0.375em 2.4em;
+  line-height: 1.4;
+  border-radius: 6px;
+  border: 1px solid var(--color-input-border, #d0d5dd);
+  background-color: transparent;
+  outline: none;
 }
 
 .price {
@@ -432,22 +446,27 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
   display: flex;
   border-radius: 8px;
   overflow: hidden;
-  background-color: var(--color-bg-secondary);
   padding: 4px;
-  border: 1px solid var(--color-border-secondary);
+  background-color: var(--color-bg-secondary, #f9fafb);
+  border: 1px solid var(--color-border-secondary, #eff0f1);
+  color: #39485d;
+  border-radius: 8px;
 }
 
 .tabButton {
+  appearance: none;
+  display: inline-block;
+  padding: 0.375em 1em 0.5em;
+  white-space: nowrap;
   font-size: 14px;
   font-weight: 500;
+  border-radius: 6px;
   border: none;
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-seondary);
+  background-color: var(--color-bg-secondary, #f9fafb);
+  color: var(--color-text-secondary, #39485d);
   cursor: pointer;
   box-shadow: none;
-  transition:
-    background 0.3s,
-    color 0.3s;
+  transition: background 0.3s, color 0.3s;
 }
 
 .tabButton:hover {

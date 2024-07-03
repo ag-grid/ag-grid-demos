@@ -26,11 +26,24 @@ import { ICellRendererParams } from '@ag-grid-community/core';
         flex-direction: row-reverse;
       }
 
+      .buttonCell button {
+        appearance: none;
+        display: inline-block;
+        padding: 0.375em 1em 0.5em;
+        white-space: nowrap;
+        border-radius: 6px;
+        box-shadow: 0 0 0 4px transparent, 0 1px 2px 0 #0c111d11;
+        outline: none;
+        background-color: var(--ag-background-color);
+        color: var(--color-fg-primary, #101828);
+        border: 1px solid var(--ag-border-color);
+        cursor: pointer;
+      }
+
       .removeButton {
         display: flex !important;
         justify-content: center;
         align-items: center;
-
         height: 40px;
         width: 40px;
       }
@@ -72,8 +85,8 @@ export class ActionsCellRenderer implements ICellRendererAngularComp {
     rowData.status = !isPaused
       ? 'paused'
       : !isOutOfStock
-        ? 'active'
-        : 'outOfStock';
+      ? 'active'
+      : 'outOfStock';
 
     // Refresh the row to reflect the changes
     this.params.api.applyTransaction({ update: [rowData] });

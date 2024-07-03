@@ -75,6 +75,8 @@ export const HRExample: FunctionComponent<Props> = ({
     {
       field: "department",
       width: 250,
+      minWidth: 250,
+      flex: 1,
       valueFormatter: departmentFormatter,
       cellRenderer: TagCellRenderer,
     },
@@ -82,6 +84,8 @@ export const HRExample: FunctionComponent<Props> = ({
       field: "employmentType",
       editable: true,
       width: 180,
+      minWidth: 180,
+      flex: 1,
       cellEditor: "agRichSelectCellEditor",
       cellEditorParams: {
         values: employmentType,
@@ -90,6 +94,8 @@ export const HRExample: FunctionComponent<Props> = ({
     {
       field: "location",
       width: 200,
+      minWidth: 200,
+      flex: 1,
       cellRenderer: FlagCellRenderer,
       editable: true,
     },

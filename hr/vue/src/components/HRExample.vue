@@ -70,6 +70,8 @@ const columnDefs: ColDef[] = [
   {
     field: "department",
     width: 250,
+    minWidth: 250,
+    flex: 1,
     valueFormatter: departmentFormatter,
     cellRenderer: TagCellRenderer,
   },
@@ -77,6 +79,8 @@ const columnDefs: ColDef[] = [
     field: "employmentType",
     editable: true,
     width: 180,
+    minWidth: 180,
+    flex: 1,
     cellEditor: "agRichSelectCellEditor",
     cellEditorParams: {
       values: employmentType,
@@ -85,6 +89,8 @@ const columnDefs: ColDef[] = [
   {
     field: "location",
     width: 200,
+    minWidth: 200,
+    flex: 1,
     cellRenderer: FlagCellRenderer,
     editable: true,
   },
@@ -167,9 +173,13 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 <style>
 @import "@ag-grid-community/styles/ag-grid.css";
 @import "@ag-grid-community/styles/ag-theme-quartz.css";
-
 :root {
   --layout-grid-header-height: 32px;
+  --layout-grid-margin: 32px;
+}
+
+body {
+  margin: 0;
 }
 
 div.ag-theme-quartz,
@@ -180,8 +190,11 @@ div.ag-theme-quartz-dark {
   --ag-odd-row-background-color: rgb(244, 246, 251);
   --ag-border-color: rgba(140, 140, 140, 0.147);
   --ag-row-border-color: var(--ag-border-color);
+}
 
-  @media screen and (max-width: 720px) {
+@media screen and (max-width: 720px) {
+  div.ag-theme-quartz,
+  div.ag-theme-quartz-dark {
     --ag-font-size: 12px;
     --ag-grid-size: 6px;
   }
@@ -277,6 +290,9 @@ div.ag-theme-quartz-dark {
 }
 
 .grid {
-  height: calc(100vh - var(--layout-grid-header-height));
+  height: calc(
+    100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
+  );
+  margin: var(--layout-grid-margin);
 }
 </style>

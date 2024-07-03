@@ -58,6 +58,8 @@ const columnDefs: ColDef[] = [
   {
     field: "department",
     width: 250,
+    minWidth: 250,
+    flex: 1,
     valueFormatter: departmentFormatter,
     cellRenderer: TagCellRenderer,
   },
@@ -65,6 +67,8 @@ const columnDefs: ColDef[] = [
     field: "employmentType",
     editable: true,
     width: 180,
+    minWidth: 180,
+    flex: 1,
     cellEditor: "agRichSelectCellEditor",
     cellEditorParams: {
       values: employmentType,
@@ -73,6 +77,8 @@ const columnDefs: ColDef[] = [
   {
     field: "location",
     width: 200,
+    minWidth: 200,
+    flex: 1,
     cellRenderer: FlagCellRenderer,
     editable: true,
   },
