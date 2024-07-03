@@ -1,5 +1,10 @@
 :root {
   --layout-grid-header-height: 32px;
+  --layout-grid-margin: 32px;
+}
+
+body {
+  margin: 0;
 }
 
 div.ag-theme-quartz,
@@ -107,5 +112,8 @@ div.ag-theme-quartz-dark {
 }
 
 .grid {
-  height: calc(100vh - var(--layout-grid-header-height));
+  height: calc(
+    100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
+  );
+  margin: var(--layout-grid-margin);
 }

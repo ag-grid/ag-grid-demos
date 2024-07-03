@@ -94,6 +94,8 @@ export class HRExample {
     {
       field: 'department',
       width: 250,
+      minWidth: 250,
+      flex: 1,
       valueFormatter: departmentFormatter,
       cellRenderer: TagCellRenderer,
     },
@@ -101,6 +103,8 @@ export class HRExample {
       field: 'employmentType',
       editable: true,
       width: 180,
+      minWidth: 180,
+      flex: 1,
       cellEditor: 'agRichSelectCellEditor',
       cellEditorParams: {
         values: employmentType,
@@ -109,6 +113,8 @@ export class HRExample {
     {
       field: 'location',
       width: 200,
+      minWidth: 200,
+      flex: 1,
       cellRenderer: FlagCellRenderer,
       editable: true,
     },
