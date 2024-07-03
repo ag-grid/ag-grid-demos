@@ -80,7 +80,7 @@ function onGridReady(params: GridReadyEvent) {
                 ((Math.random() * 4 + 1) / 100) *
                 (Math.random() > 0.5 ? 1 : -1),
           }
-        : item,
+        : item
     );
   }, 1000);
 }
@@ -210,16 +210,34 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 
 :root {
   --layout-grid-header-height: 32px;
+  --layout-grid-margin: 32px;
 }
+
+body {
+  margin: 0;
+}
+
 .grid {
-  height: calc(100vh - var(--layout-grid-header-height));
   --ag-value-change-value-highlight-background-color: #44ad4961;
   --ag-value-change-delta-down-color: rgb(255, 0, 92);
   --ag-value-change-delta-up-color: rgb(53, 182, 90);
+
+  height: calc(
+    100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
+  );
+  margin: var(--layout-grid-margin);
 }
 
 .ag-theme-quartz-dark {
   --ag-row-hover-color: #323a46;
+}
+
+div.ag-theme-quartz,
+div.ag-theme-quartz-dark {
+  @media screen and (max-width: 720px) {
+    --ag-font-size: 12px;
+    --ag-grid-size: 6px;
+  }
 }
 
 .ag-theme-quartz .ag-row-group,
@@ -242,7 +260,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
   letter-spacing: -0.01em;
 }
 
-.custom-name {
+.ticker-name {
   opacity: 0.8;
 }
 </style>
