@@ -1,6 +1,29 @@
 # AG Grid Finance Demo (React + TypeScript + Vite)
 
-This [AG Grid Finance Demo](https://ag-grid.com/example-finance/) in React.js is generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
+The [AG Grid Finance Demo](https://ag-grid.com/example-finance/) in React.js.
+
+## Getting Started
+
+1. Get a copy of this folder using [degit](https://github.com/Rich-Harris/degit) (without the git respository files):
+
+   ```
+   npx degit ag-grid/ag-grid-demos/finance/react ag-grid-finance-example-react
+   cd ag-grid-finance-example-react
+   ```
+
+   Alternatively, you can get the files using `git clone`:
+
+   ```
+   git clone git@github.com:ag-grid/ag-grid-demos.git
+   cd ag-grid-demos/finance/react
+   ```
+
+2. Install dependencies: `npm install`
+3. Run the dev server: `npm run dev`
+
+## How It Was Built
+
+ This example code was generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
 
 ```
 npm create vite@latest finance/react -- --template react-ts
@@ -23,24 +46,3 @@ npm i @ag-grid-community/react \
   @ag-grid-enterprise/sparklines \
   @ag-grid-enterprise/status-bar
 ```
-
-## Development
-
-To get started:
-
-1. Get a copy of this folder using [degit](https://github.com/Rich-Harris/degit) (without the git files):
-
-   ```
-   npx degit ag-grid/ag-grid-demos/finance/react ag-grid-finance-example-react
-   cd ag-grid-finance-example-react
-   ```
-
-   Alternatively, you can get the files using `git clone`:
-
-   ```
-   git clone git@github.com:ag-grid/ag-grid-demos.git
-   cd ag-grid-demos/finance/react
-   ```
-
-2. Install dependencies: `npm install`
-3. Run the dev server: `npm run dev`

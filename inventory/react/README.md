@@ -1,26 +1,10 @@
 # AG Grid Inventory Demo (React + TypeScript + Vite)
 
-This [AG Grid Inventory Demo](https://ag-grid.com/example-inventory/) in React.js is generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
+The [AG Grid Inventory Demo](https://ag-grid.com/example-inventory/) in React.js.
 
-```
-npm create vite@latest inventory/react -- --template react-ts
+## Getting Started
 
-# With the addition of the following modules
-npm i @ag-grid-community/react \
-  @ag-grid-community/styles \
-  @ag-grid-community/core \
-  @ag-grid-community/client-side-row-model \
-  @ag-grid-enterprise/excel-export \
-  @ag-grid-enterprise/set-filter \
-  @ag-grid-enterprise/multi-filter \
-  @ag-grid-enterprise/master-detail
-```
-
-## Development
-
-To get started:
-
-1. Get a copy of this folder using [degit](https://github.com/Rich-Harris/degit) (without the git files):
+1. Get a copy of this folder using [degit](https://github.com/Rich-Harris/degit) (without the git respository files):
 
    ```
    npx degit ag-grid/ag-grid-demos/inventory/react ag-grid-inventory-example-react
@@ -36,3 +20,21 @@ To get started:
 
 2. Install dependencies: `npm install`
 3. Run the dev server: `npm run dev`
+
+## How It Was Built
+
+This example code was generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
+
+```
+npm create vite@latest inventory/react -- --template react-ts
+
+# With the addition of the following modules
+npm i @ag-grid-community/react \
+  @ag-grid-community/styles \
+  @ag-grid-community/core \
+  @ag-grid-community/client-side-row-model \
+  @ag-grid-enterprise/excel-export \
+  @ag-grid-enterprise/set-filter \
+  @ag-grid-enterprise/multi-filter \
+  @ag-grid-enterprise/master-detail
+```
