@@ -4,7 +4,19 @@ Code for the [AG Grid Inventory Demo](https://ag-grid.com/example-inventory).
 
 Available in the following frameworks:
 
-* [React](./react/)
-* [Angular](./angular/)
-* [Vue](./vue/)
-* [Typescript](./typescript/)
+- [React](./react/)
+- [Angular](./angular/)
+- [Vue](./vue/)
+- [Typescript](./typescript/)
+
+<br /><br />
+
+## Support
+
+### Enterprise Support
+
+AG Grid Enterprise customers have access to dedicated support via [ZenDesk](https://ag-grid.zendesk.com/hc/en-us), which is monitored by our engineering teams.
+
+### Bug Reports
+
+If you have found a bug, please report it in our main repository's [issues](https://github.com/ag-grid/ag-grid/issues) section.

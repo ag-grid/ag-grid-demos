@@ -23,7 +23,7 @@ The [AG Grid Finance Demo](https://ag-grid.com/example-finance/) in React.js.
 
 ## How It Was Built
 
- This example code was generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
+This example code was generated with the [Vite React Typescript template](https://vitejs.dev/guide/) using:
 
 ```
 npm create vite@latest finance/react -- --template react-ts
@@ -46,3 +46,15 @@ npm i @ag-grid-community/react \
   @ag-grid-enterprise/sparklines \
   @ag-grid-enterprise/status-bar
 ```
+
+<br /><br />
+
+## Support
+
+### Enterprise Support
+
+AG Grid Enterprise customers have access to dedicated support via [ZenDesk](https://ag-grid.zendesk.com/hc/en-us), which is monitored by our engineering teams.
+
+### Bug Reports
+
+If you have found a bug, please report it in our main repository's [issues](https://github.com/ag-grid/ag-grid/issues) section.
