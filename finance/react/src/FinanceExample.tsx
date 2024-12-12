@@ -13,7 +13,6 @@ import {
   type ColDef,
   type GetRowIdFunc,
   type GetRowIdParams,
-  type GridSizeChangedEvent,
   ModuleRegistry,
   type ValueFormatterFunc,
   type ValueGetterParams,
@@ -40,72 +39,18 @@ import { AgGridReact } from "ag-grid-react";
 
 import styles from "./FinanceExample.module.css";
 import { getData } from "./data";
-import { getTickerCellRenderer } from "./renderers/getTickerCellRenderer";
+import { TickerCellRenderer } from "./renderers/TickerCellRenderer";
 import { sparklineTooltipRenderer } from "./renderers/sparklineTooltipRenderer";
 
 export interface Props {
   gridTheme?: string;
   isDarkMode?: boolean;
   gridHeight?: number | null;
-  isSmallerGrid?: boolean;
   updateInterval?: number;
 }
 
-type Breakpoint = "small" | "medium" | "medLarge" | "large" | "xlarge";
-type ColWidth = number | "auto";
-
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
-const BREAKPOINT_CONFIG: Record<
-  Breakpoint,
-  {
-    breakpoint?: number;
-    columns: string[];
-    tickerColumnWidth: ColWidth;
-    timelineColumnWidth: ColWidth;
-    hideTickerName?: boolean;
-  }
-> = {
-  small: {
-    breakpoint: 500,
-    columns: ["ticker", "timeline"],
-    tickerColumnWidth: "auto",
-    timelineColumnWidth: "auto",
-    hideTickerName: true,
-  },
-  medium: {
-    breakpoint: 850,
-    columns: ["ticker", "timeline", "totalValue"],
-    tickerColumnWidth: 180,
-    timelineColumnWidth: 140,
-    hideTickerName: true,
-  },
-  medLarge: {
-    breakpoint: 900,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  large: {
-    breakpoint: 1100,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  xlarge: {
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: [
-      "ticker",
-      "timeline",
-      "totalValue",
-      "p&l",
-      "instrument",
-      "price",
-      "quantity",
-    ],
-  },
-};
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -138,12 +83,10 @@ export const FinanceExample: React.FC<Props> = ({
   gridTheme = "ag-theme-quartz",
   isDarkMode = false,
   gridHeight = null,
-  isSmallerGrid,
   updateInterval = DEFAULT_UPDATE_INTERVAL,
 }) => {
   const [rowData, setRowData] = useState(getData());
   const gridRef = useRef<AgGridReact>(null);
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>("xlarge");
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -179,28 +122,10 @@ export const FinanceExample: React.FC<Props> = ({
   }, [updateInterval]);
 
   const colDefs = useMemo<ColDef[]>(() => {
-    const breakpointConfig = BREAKPOINT_CONFIG[breakpoint];
-    const tickerWidthDefs =
-      breakpointConfig.tickerColumnWidth === "auto"
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.tickerColumnWidth as number,
-            minWidth: breakpointConfig.tickerColumnWidth as number,
-          };
-    const timelineWidthDefs =
-      breakpointConfig.timelineColumnWidth === "auto"
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.timelineColumnWidth as number,
-            minWidth: breakpointConfig.timelineColumnWidth as number,
-          };
-    const allColDefs: ColDef[] = [
+    return [
       {
         field: "ticker",
-        cellRenderer: getTickerCellRenderer(
-          Boolean(breakpointConfig.hideTickerName)
-        ),
-        ...tickerWidthDefs,
+        cellRenderer: TickerCellRenderer,
       },
       {
         headerName: "Timeline",
@@ -220,7 +145,6 @@ export const FinanceExample: React.FC<Props> = ({
             },
           },
         },
-        ...timelineWidthDefs,
       },
       {
         field: "instrument",
@@ -258,36 +182,7 @@ export const FinanceExample: React.FC<Props> = ({
         initialWidth: 160,
       },
     ];
-
-    if (!isSmallerGrid) {
-      allColDefs.push(
-        {
-          field: "quantity",
-          cellDataType: "number",
-          type: "rightAligned",
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        },
-        {
-          headerName: "Price",
-          field: "purchasePrice",
-          cellDataType: "number",
-          type: "rightAligned",
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        }
-      );
-    }
-
-    const cDefs = allColDefs.filter((cDef) => {
-      return (
-        breakpointConfig.columns.includes(cDef.field!) ||
-        breakpointConfig.columns.includes(cDef.colId!)
-      );
-    });
-
-    return cDefs;
-  }, [isSmallerGrid, breakpoint]);
+  }, []);
 
   const defaultColDef: ColDef = useMemo(
     () => ({
@@ -303,19 +198,6 @@ export const FinanceExample: React.FC<Props> = ({
     ({ data: { ticker } }: GetRowIdParams) => ticker,
     []
   );
-  const onGridSizeChanged = useCallback((params: GridSizeChangedEvent) => {
-    if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
-      setBreakpoint("small");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
-      setBreakpoint("medium");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
-      setBreakpoint("medLarge");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
-      setBreakpoint("large");
-    } else {
-      setBreakpoint("xlarge");
-    }
-  }, []);
 
   const statusBar = useMemo(
     () => ({
@@ -354,7 +236,6 @@ export const FinanceExample: React.FC<Props> = ({
         suppressAggFuncInHeader
         groupDefaultExpanded={-1}
         statusBar={statusBar}
-        onGridSizeChanged={onGridSizeChanged}
       />
     </div>
   );
