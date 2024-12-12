@@ -1,7 +1,4 @@
-import {
-  ICellRendererComp,
-  ICellRendererParams,
-} from "@ag-grid-community/core";
+import { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 
 export class TickerCellRenderer implements ICellRendererComp {
   private eGui!: HTMLDivElement;
@@ -10,13 +7,15 @@ export class TickerCellRenderer implements ICellRendererComp {
     const { data } = params;
 
     this.eGui = document.createElement("div");
+    this.eGui.style.display = "flex";
+    this.eGui.style.alignItems = "center";
+    this.eGui.style.gap = "5px";
 
     if (data) {
       const imgElement = document.createElement("img");
       imgElement.src = `/example/finance/logos/${data.ticker}.png`;
       imgElement.style.width = "20px";
       imgElement.style.height = "20px";
-      imgElement.style.marginRight = "5px";
       imgElement.style.borderRadius = "32px";
       this.eGui.appendChild(imgElement);
 
