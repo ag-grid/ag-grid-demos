@@ -13,7 +13,7 @@ const { flag } = data;
       <span>{{ value }}</span>
     </div>
     <img
-      class="image"
+      class="flagImage"
       :src="`/example/hr/${flag}.svg`"
       :alt="value.toLowerCase()"
     />
@@ -38,7 +38,7 @@ const { flag } = data;
   line-height: 20px;
 }
 
-.image {
+.flagImage {
   position: relative;
   width: 33px;
   height: 27px;

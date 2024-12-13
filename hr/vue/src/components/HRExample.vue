@@ -1,21 +1,29 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import {
+import { AgGridVue } from "ag-grid-vue3";
+import type {
+  ColDef,
   GetDataPath,
+  ValueFormatterFunc,
   ValueFormatterParams,
-  type ColDef,
-  type ValueFormatterFunc,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridVue } from "@ag-grid-community/vue3";
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { MasterDetailModule } from "@ag-grid-enterprise/master-detail";
-import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
-import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
-import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
+} from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  RichSelectModule,
+  RowGroupingModule,
+  SetFilterModule,
+  StatusBarModule,
+  TreeDataModule,
+} from "ag-grid-enterprise";
 
 import { getData } from "./data";
 
@@ -36,6 +44,7 @@ const { gridTheme, isDarkMode } = defineProps({
 });
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
@@ -43,6 +52,7 @@ ModuleRegistry.registerModules([
   RichSelectModule,
   SetFilterModule,
   StatusBarModule,
+  TreeDataModule,
 ]);
 
 const rowData = ref(getData());
@@ -149,6 +159,7 @@ const groupDefaultExpanded = -1;
 const treeData = true;
 
 const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
+const theme = "legacy";
 </script>
 
 <template>
@@ -157,6 +168,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
       <div class="grid" :class="themeClass">
         <ag-grid-vue
           :style="{ height: '100%' }"
+          :theme="theme"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :groupDefaultExpanded="groupDefaultExpanded"
@@ -171,8 +183,8 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 </template>
 
 <style>
-@import "@ag-grid-community/styles/ag-grid.css";
-@import "@ag-grid-community/styles/ag-theme-quartz.css";
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-quartz.css";
 :root {
   --layout-grid-header-height: 32px;
   --layout-grid-margin: 32px;
