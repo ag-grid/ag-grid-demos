@@ -29,13 +29,7 @@ This example code was generated with the [Vite Typescript template](https://vite
 npm create vite@latest inventory/typescript -- --template vanilla-ts
 
 # With the addition of the following modules
-npm i @ag-grid-community/styles \
-  @ag-grid-community/core \
-  @ag-grid-community/client-side-row-model \
-  @ag-grid-enterprise/excel-export \
-  @ag-grid-enterprise/set-filter \
-  @ag-grid-enterprise/multi-filter \
-  @ag-grid-enterprise/master-detail
+npm i ag-grid-enterprise
 ```
 
 <br /><br />
