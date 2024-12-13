@@ -11,14 +11,16 @@ body {
   --ag-value-change-value-highlight-background-color: #44ad4961;
   --ag-value-change-delta-down-color: rgb(255, 0, 92);
   --ag-value-change-delta-up-color: rgb(53, 182, 90);
+}
 
+.gridHeight {
   height: calc(
     100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
   );
   margin: var(--layout-grid-margin);
 }
 
-.ag-theme-quartz-dark {
+.ag-theme-quartz-dark .ag-row {
   --ag-row-hover-color: #323a46;
 }
 
@@ -41,7 +43,7 @@ body {
   padding-right: 6px;
   padding-top: 2px;
   padding-bottom: 2px;
-  border-radius: 4px;
+  border-radius: 12px;
   margin-left: 4px;
 }
 

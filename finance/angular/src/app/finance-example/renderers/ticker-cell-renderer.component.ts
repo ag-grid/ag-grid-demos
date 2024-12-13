@@ -1,4 +1,4 @@
-import type { ICellRendererParams } from '@ag-grid-community/core';
+import type { ICellRendererParams } from 'ag-grid-community';
 import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
@@ -7,10 +7,10 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [NgIf],
   template: `
-    <div *ngIf="data">
+    <div *ngIf="data" style="display: flex; align-items: center; gap: 5px">
       <img
         [src]="'/example/finance/logos/' + data.ticker + '.png'"
-        style="width: 20px; height: 20px; margin-right: 5px; border-radius: 32px;"
+        style="width: 20px; height: 20px; border-radius: 32px;"
       />
       <b class="custom-ticker">{{ data.ticker }}</b>
       <span class="ticker-name">{{ data.name }}</span>
