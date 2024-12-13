@@ -1,7 +1,4 @@
-import {
-  ICellRendererComp,
-  ICellRendererParams,
-} from "@ag-grid-community/core";
+import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 
 import "./flagCellRenderer.css";
 
@@ -24,7 +21,7 @@ export class FlagCellRenderer implements ICellRendererComp {
     employeeData.appendChild(valueSpan);
 
     const imageElement = document.createElement("img");
-    imageElement.className = "image";
+    imageElement.className = "flagImage";
     imageElement.src = `/example/hr/${flag}.svg`;
     imageElement.alt = value.toLowerCase();
 

@@ -13,14 +13,6 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
-    "@ag-grid-community/client-side-row-model": "latest",
-    "@ag-grid-community/core": "latest",
-    "@ag-grid-community/styles": "latest",
-    "@ag-grid-enterprise/excel-export": "latest",
-    "@ag-grid-enterprise/master-detail": "latest",
-    "@ag-grid-enterprise/rich-select": "latest",
-    "@ag-grid-enterprise/row-grouping": "latest",
-    "@ag-grid-enterprise/set-filter": "latest",
-    "@ag-grid-enterprise/status-bar": "latest"
+    "ag-grid-enterprise": "33.0.2"
   }
 }
