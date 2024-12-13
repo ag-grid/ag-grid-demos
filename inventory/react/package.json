@@ -10,14 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ag-grid-community/client-side-row-model": "latest",
-    "@ag-grid-community/core": "latest",
-    "@ag-grid-community/react": "latest",
-    "@ag-grid-community/styles": "latest",
-    "@ag-grid-enterprise/excel-export": "latest",
-    "@ag-grid-enterprise/master-detail": "latest",
-    "@ag-grid-enterprise/multi-filter": "latest",
-    "@ag-grid-enterprise/set-filter": "latest",
+    "ag-grid-enterprise": "33.0.2",
+    "ag-grid-react": "33.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
