@@ -29,22 +29,7 @@ This example code was generated with the [Vite React Typescript template](https:
 npm create vite@latest finance/react -- --template react-ts
 
 # With the addition of the following modules
-npm i @ag-grid-community/react \
-  @ag-grid-community/styles \
-  @ag-grid-community/core \
-  @ag-grid-community/client-side-row-model \
-  @ag-grid-enterprise/advanced-filter \
-  @ag-grid-enterprise/charts-enterprise \
-  @ag-grid-enterprise/column-tool-panel \
-  @ag-grid-enterprise/excel-export \
-  @ag-grid-enterprise/filter-tool-panel \
-  @ag-grid-enterprise/menu \
-  @ag-grid-enterprise/range-selection \
-  @ag-grid-enterprise/rich-select \
-  @ag-grid-enterprise/row-grouping \
-  @ag-grid-enterprise/set-filter \
-  @ag-grid-enterprise/sparklines \
-  @ag-grid-enterprise/status-bar
+npm i ag-charts-enterprise ag-grid-enterprise ag-grid-react
 ```
 
 <br /><br />

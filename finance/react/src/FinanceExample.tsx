@@ -1,27 +1,4 @@
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import {
-  type ColDef,
-  type GetRowIdFunc,
-  type GetRowIdParams,
-  type ValueFormatterFunc,
-  type ValueGetterParams,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridReact } from "@ag-grid-community/react";
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-import { AdvancedFilterModule } from "@ag-grid-enterprise/advanced-filter";
-import { GridChartsModule } from "@ag-grid-enterprise/charts-enterprise";
-import { ColumnsToolPanelModule } from "@ag-grid-enterprise/column-tool-panel";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { FiltersToolPanelModule } from "@ag-grid-enterprise/filter-tool-panel";
-import { MenuModule } from "@ag-grid-enterprise/menu";
-import { RangeSelectionModule } from "@ag-grid-enterprise/range-selection";
-import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
-import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
-import { SparklinesModule } from "@ag-grid-enterprise/sparklines";
-import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
+import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
 import React, {
   useCallback,
   useEffect,
@@ -30,29 +7,68 @@ import React, {
   useState,
 } from "react";
 
-import styles from "./FinanceExample.module.css";
-import { TickerCellRenderer } from "./cell-renderers/TickerCellRenderer";
-import { getData } from "./data";
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  type ColDef,
+  type GetRowIdFunc,
+  type GetRowIdParams,
+  ModuleRegistry,
+  type ValueFormatterFunc,
+  type ValueGetterParams,
+} from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import {
+  AdvancedFilterModule,
+  CellSelectionModule,
+  ColumnMenuModule,
+  ColumnsToolPanelModule,
+  ContextMenuModule,
+  ExcelExportModule,
+  FiltersToolPanelModule,
+  IntegratedChartsModule,
+  RichSelectModule,
+  RowGroupingModule,
+  RowGroupingPanelModule,
+  SetFilterModule,
+  SparklinesModule,
+  StatusBarModule,
+} from "ag-grid-enterprise";
+import { AgGridReact } from "ag-grid-react";
 
-interface Props {
+import styles from "./FinanceExample.module.css";
+import { getData } from "./data";
+import { TickerCellRenderer } from "./renderers/TickerCellRenderer";
+import { sparklineTooltipRenderer } from "./renderers/sparklineTooltipRenderer";
+
+export interface Props {
   gridTheme?: string;
   isDarkMode?: boolean;
+  gridHeight?: number | null;
+  updateInterval?: number;
 }
 
+const DEFAULT_UPDATE_INTERVAL = 60;
+const PERCENTAGE_CHANGE = 20;
+
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,
   FiltersToolPanelModule,
-  GridChartsModule,
-  MenuModule,
-  RangeSelectionModule,
+  ColumnMenuModule,
+  ContextMenuModule,
+  CellSelectionModule,
   RowGroupingModule,
+  RowGroupingPanelModule,
   SetFilterModule,
   RichSelectModule,
   StatusBarModule,
-  SparklinesModule,
+  IntegratedChartsModule.with(AgChartsEnterpriseModule),
+  SparklinesModule.with(AgChartsEnterpriseModule),
 ]);
 
 const numberFormatter: ValueFormatterFunc = ({ value }) => {
@@ -66,6 +82,8 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
 export const FinanceExample: React.FC<Props> = ({
   gridTheme = "ag-theme-quartz",
   isDarkMode = false,
+  gridHeight = null,
+  updateInterval = DEFAULT_UPDATE_INTERVAL,
 }) => {
   const [rowData, setRowData] = useState(getData());
   const gridRef = useRef<AgGridReact>(null);
@@ -73,93 +91,98 @@ export const FinanceExample: React.FC<Props> = ({
   useEffect(() => {
     const intervalId = setInterval(() => {
       setRowData((rowData) =>
-        rowData.map((item) =>
-          Math.random() < 0.1
-            ? {
-                ...item,
-                price:
-                  item.price +
-                  item.price *
-                    ((Math.random() * 4 + 1) / 100) *
-                    (Math.random() > 0.5 ? 1 : -1),
-              }
-            : item
-        )
+        rowData.map((item) => {
+          const isRandomChance = Math.random() < 0.1;
+
+          if (!isRandomChance) {
+            return item;
+          }
+          const rnd = (Math.random() * PERCENTAGE_CHANGE) / 100;
+          const change = Math.random() > 0.5 ? 1 - rnd : 1 + rnd;
+          const price =
+            item.price < 10
+              ? item.price * change
+              : // Increase price if it is too low, so it does not hang around 0
+                Math.random() * 40 + 10;
+
+          const timeline = item.timeline
+            .slice(1, item.timeline.length)
+            .concat(Number(price.toFixed(2)));
+
+          return {
+            ...item,
+            price,
+            timeline,
+          };
+        })
       );
-    }, 1000);
+    }, updateInterval);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [updateInterval]);
 
-  const colDefs = useMemo<ColDef[]>(
-    () => [
+  const colDefs = useMemo<ColDef[]>(() => {
+    return [
       {
         field: "ticker",
         cellRenderer: TickerCellRenderer,
-        minWidth: 380,
+      },
+      {
+        headerName: "Timeline",
+        field: "timeline",
+        sortable: false,
+        filter: false,
+        cellRenderer: "agSparklineCellRenderer",
+        cellRendererParams: {
+          sparklineOptions: {
+            type: "bar",
+            direction: "vertical",
+            axis: {
+              strokeWidth: 0,
+            },
+            tooltip: {
+              renderer: sparklineTooltipRenderer,
+            },
+          },
+        },
       },
       {
         field: "instrument",
         cellDataType: "text",
         type: "rightAligned",
-        maxWidth: 180,
+        minWidth: 100,
+        initialWidth: 100,
       },
       {
+        colId: "p&l",
         headerName: "P&L",
         cellDataType: "number",
+        filter: "agNumberColumnFilter",
         type: "rightAligned",
         cellRenderer: "agAnimateShowChangeCellRenderer",
         valueGetter: ({ data }: ValueGetterParams) =>
           data && data.quantity * (data.price / data.purchasePrice),
         valueFormatter: numberFormatter,
         aggFunc: "sum",
+        minWidth: 140,
+        initialWidth: 140,
       },
       {
+        colId: "totalValue",
         headerName: "Total Value",
         type: "rightAligned",
         cellDataType: "number",
+        filter: "agNumberColumnFilter",
         valueGetter: ({ data }: ValueGetterParams) =>
           data && data.quantity * data.price,
         cellRenderer: "agAnimateShowChangeCellRenderer",
         valueFormatter: numberFormatter,
         aggFunc: "sum",
+        minWidth: 160,
+        initialWidth: 160,
       },
-      {
-        field: "quantity",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 150,
-      },
-      {
-        headerName: "Price",
-        field: "purchasePrice",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 150,
-      },
-      {
-        field: "purchaseDate",
-        cellDataType: "dateString",
-        type: "rightAligned",
-        hide: true,
-      },
-      {
-        headerName: "Last 24hrs",
-        field: "last24",
-        cellRenderer: "agSparklineCellRenderer",
-        cellRendererParams: {
-          sparklineOptions: {
-            line: {
-              strokeWidth: 2,
-            },
-          },
-        },
-      },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const defaultColDef: ColDef = useMemo(
     () => ({
@@ -190,27 +213,30 @@ export const FinanceExample: React.FC<Props> = ({
   );
 
   const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
+  const chartThemes = isDarkMode ? ["ag-default-dark"] : ["ag-default"];
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <div className={`${themeClass} ${styles.grid}`}>
-          <AgGridReact
-            ref={gridRef}
-            getRowId={getRowId}
-            rowData={rowData}
-            columnDefs={colDefs}
-            defaultColDef={defaultColDef}
-            enableRangeSelection
-            enableCharts
-            rowSelection={"multiple"}
-            rowGroupPanelShow={"always"}
-            suppressAggFuncInHeader
-            groupDefaultExpanded={-1}
-            statusBar={statusBar}
-          />
-        </div>
-      </div>
+    <div
+      style={gridHeight ? { height: gridHeight } : {}}
+      className={`${themeClass} ${styles.grid} ${
+        gridHeight ? "" : styles.gridHeight
+      }`}
+    >
+      <AgGridReact
+        theme="legacy"
+        chartThemes={chartThemes}
+        ref={gridRef}
+        getRowId={getRowId}
+        rowData={rowData}
+        columnDefs={colDefs}
+        defaultColDef={defaultColDef}
+        cellSelection={true}
+        enableCharts
+        rowGroupPanelShow="always"
+        suppressAggFuncInHeader
+        groupDefaultExpanded={-1}
+        statusBar={statusBar}
+      />
     </div>
   );
 };
