@@ -1,5 +1,5 @@
-import { ICellRendererAngularComp } from '@ag-grid-community/angular';
-import { ICellRendererParams } from '@ag-grid-community/core';
+import type { ICellRendererAngularComp } from 'ag-grid-angular';
+import type { ICellRendererParams } from 'ag-grid-community';
 import { Component } from '@angular/core';
 
 @Component({
@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
         <span>{{ value }}</span>
       </div>
       <img
-        class="image"
+        class="flagImage"
         [src]="'/example/hr/' + flag + '.svg'"
         [alt]="value?.toLowerCase()"
       />
@@ -36,7 +36,7 @@ import { Component } from '@angular/core';
         line-height: 20px;
       }
 
-      .image {
+      .flagImage {
         position: relative;
         width: 33px;
         height: 27px;
