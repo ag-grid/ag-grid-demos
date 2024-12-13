@@ -29,16 +29,7 @@ This example code was generated with the [Vite React Typescript template](https:
 npm create vite@latest hr/react -- --template react-ts
 
 # With the addition of the following modules
-npm i @ag-grid-community/react \
-  @ag-grid-community/styles \
-  @ag-grid-community/core \
-  @ag-grid-community/client-side-row-model \
-  @ag-grid-enterprise/excel-export \
-  @ag-grid-enterprise/master-detail \
-  @ag-grid-enterprise/rich-select \
-  @ag-grid-enterprise/row-grouping \
-  @ag-grid-enterprise/set-filter \
-  @ag-grid-enterprise/status-bar
+npm i ag-grid-react ag-grid-enterprise
 ```
 
 <br /><br />
