@@ -1,21 +1,26 @@
 <script setup lang="ts">
 import { ref, shallowRef } from "vue";
 
-import {
-  ValueFormatterParams,
-  type ColDef,
-  type ValueGetterParams,
-  type GetDetailRowDataParams,
-  type ValueFormatterFunc,
+import { AgGridVue } from "ag-grid-vue3";
+import type {
+  ColDef,
+  GetDetailRowDataParams,
   GridReadyEvent,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridVue } from "@ag-grid-community/vue3";
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { MasterDetailModule } from "@ag-grid-enterprise/master-detail";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
-import { MultiFilterModule } from "@ag-grid-enterprise/multi-filter";
+  ValueFormatterFunc,
+  ValueFormatterParams,
+  ValueGetterParams,
+} from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from "ag-grid-community";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  MultiFilterModule,
+  SetFilterModule,
+} from "ag-grid-enterprise";
 
 import { getData } from "./data";
 
@@ -36,6 +41,7 @@ const { gridTheme, isDarkMode } = defineProps({
 });
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
@@ -49,13 +55,14 @@ const rowData = ref(getData());
 const statuses = {
   all: "All",
   active: "Active",
-  paused: "On  Hold",
+  paused: "On Hold",
   outOfStock: "Out of Stock",
 };
 type Status = keyof typeof statuses;
 const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[value as keyof typeof statuses] ?? "";
 
+const theme = "legacy";
 const columnDefs: ColDef[] = ref([
   {
     field: "product",
@@ -220,6 +227,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
         <ag-grid-vue
           :style="{ height: '100%' }"
           @grid-ready="onGridReady"
+          :theme="theme"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :defaultColDef="defaultColDef"
@@ -240,8 +248,8 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 </template>
 
 <style>
-@import "@ag-grid-community/styles/ag-grid.css";
-@import "@ag-grid-community/styles/ag-theme-quartz.css";
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-quartz.css";
 :root {
   --layout-grid-header-height: 32px;
   --layout-grid-margin: 32px;

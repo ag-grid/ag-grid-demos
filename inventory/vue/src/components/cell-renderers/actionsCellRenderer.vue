@@ -28,10 +28,13 @@ const onStopSellingClick = () => {
 
 <template>
   <div class="buttonCell">
-    <button class="button-secondary" @click="onRemoveClick">
+    <button class="button-secondary removeButton" @click="onRemoveClick">
       <img class="icon" src="/example/inventory/delete.svg" alt="delete" />
     </button>
-    <button class="button-secondary" @click="onStopSellingClick">
+    <button
+      class="button-secondary buttonStopSelling"
+      @click="onStopSellingClick"
+    >
       Hold Selling
     </button>
   </div>

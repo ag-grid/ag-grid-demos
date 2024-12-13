@@ -9,14 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ag-grid-community/client-side-row-model": "latest",
-    "@ag-grid-community/core": "latest",
-    "@ag-grid-community/styles": "latest",
-    "@ag-grid-community/vue3": "latest",
-    "@ag-grid-enterprise/excel-export": "latest",
-    "@ag-grid-enterprise/master-detail": "latest",
-    "@ag-grid-enterprise/multi-filter": "latest",
-    "@ag-grid-enterprise/set-filter": "latest",
+    "ag-grid-enterprise": "33.0.2",
+    "ag-grid-vue3": "33.0.2",
     "vue": "^3.4.21"
   },
   "devDependencies": {
