@@ -1,26 +1,22 @@
-import {
-  ICellRendererComp,
-  ICellRendererParams,
-} from "@ag-grid-community/core";
+import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 
 import "./statusCellRenderer.css";
 
 export class StatusCellRenderer implements ICellRendererComp {
   private eGui!: HTMLDivElement;
+  private circleElement!: HTMLDivElement;
+  private spanElement!: HTMLSpanElement;
 
   public init(params: ICellRendererParams): void {
-    const { value, valueFormatted } = params;
-
     this.eGui = document.createElement("div");
-    this.eGui.className = `tag ${value}Tag`;
 
-    const circleElement = document.createElement("div");
-    circleElement.className = `circle ${value}Circle`;
-    this.eGui.appendChild(circleElement);
+    this.circleElement = document.createElement("div");
+    this.eGui.appendChild(this.circleElement);
 
-    const spanElement = document.createElement("span");
-    spanElement.textContent = valueFormatted!;
-    this.eGui.appendChild(spanElement);
+    this.spanElement = document.createElement("span");
+    this.eGui.appendChild(this.spanElement);
+
+    this.refresh(params);
   }
 
   public getGui(): HTMLElement {
@@ -28,6 +24,11 @@ export class StatusCellRenderer implements ICellRendererComp {
   }
 
   public refresh(params: ICellRendererParams): boolean {
+    const { value, valueFormatted } = params;
+
+    this.eGui.className = `tag ${value}Tag`;
+    this.circleElement.className = `circle ${value}Circle`;
+    this.spanElement.textContent = valueFormatted!;
     return true;
   }
 }

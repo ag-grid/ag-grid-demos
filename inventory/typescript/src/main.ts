@@ -1,21 +1,26 @@
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import type {
+  ColDef,
+  GetDetailRowDataParams,
+  GridApi,
+  GridOptions,
+  ValueFormatterFunc,
+  ValueFormatterParams,
+  ValueGetterParams,
+} from "ag-grid-community";
 import {
-  type ColDef,
-  type GridOptions,
-  type ValueFormatterFunc,
-  type ValueFormatterParams,
+  AllCommunityModule,
+  ClientSideRowModelModule,
   createGrid,
-  type ValueGetterParams,
-  type GetDetailRowDataParams,
-  type GridApi,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { MasterDetailModule } from "@ag-grid-enterprise/master-detail";
-import { MultiFilterModule } from "@ag-grid-enterprise/multi-filter";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
+  ModuleRegistry,
+} from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  MultiFilterModule,
+  SetFilterModule,
+} from "ag-grid-enterprise";
 
 import "./style.css";
 import { getData } from "./data";
@@ -27,6 +32,7 @@ import { StatusCellRenderer } from "./cell-renderers/statusCellRenderer";
 import { StockCellRenderer } from "./cell-renderers/stockCellRenderer";
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
@@ -39,7 +45,7 @@ let gridApi!: GridApi;
 const statuses = {
   all: "All",
   active: "Active",
-  paused: "On  Hold",
+  paused: "On Hold",
   outOfStock: "Out of Stock",
 };
 type Status = keyof typeof statuses;
@@ -138,6 +144,7 @@ const detailCellRendererParams = {
 };
 
 const gridOptions: GridOptions = {
+  theme: "legacy",
   columnDefs,
   rowData,
   defaultColDef,
@@ -170,7 +177,7 @@ function handleTabClick(status: Status) {
 
   gridApi.setColumnFilterModel(
     "status",
-    status === "all" ? null : { values: [status] },
+    status === "all" ? null : { values: [status] }
   );
   gridApi.onFilterChanged();
 

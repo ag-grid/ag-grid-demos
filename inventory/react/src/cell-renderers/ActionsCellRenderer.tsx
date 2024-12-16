@@ -1,4 +1,4 @@
-import type { CustomCellRendererProps } from "@ag-grid-community/react";
+import type { CustomCellRendererProps } from "ag-grid-react";
 import { type FunctionComponent, useCallback } from "react";
 
 import styles from "./ActionsCellRenderer.module.css";

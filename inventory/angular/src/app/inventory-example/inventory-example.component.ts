@@ -1,25 +1,31 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { AgGridAngular } from '@ag-grid-community/angular';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import { AgGridAngular } from 'ag-grid-angular';
 import type {
   ColDef,
   GetDetailRowDataParams,
   GridApi,
+  GridOptions,
   GridReadyEvent,
   SizeColumnsToFitGridStrategy,
   ValueFormatterFunc,
   ValueFormatterParams,
   ValueGetterParams,
-} from '@ag-grid-community/core';
-import { ModuleRegistry } from '@ag-grid-community/core';
-import '@ag-grid-community/styles/ag-grid.css';
-import '@ag-grid-community/styles/ag-theme-quartz.css';
-import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
-import { MasterDetailModule } from '@ag-grid-enterprise/master-detail';
-import { MultiFilterModule } from '@ag-grid-enterprise/multi-filter';
-import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
+} from 'ag-grid-community';
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from 'ag-grid-community';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  MultiFilterModule,
+  SetFilterModule,
+} from 'ag-grid-enterprise';
 
 import { getData } from './data';
 import { ProductCellRenderer } from './cell-renderer/product-cell-renderer.component';
@@ -29,6 +35,7 @@ import { PriceCellRenderer } from './cell-renderer/price-cell-renderer.component
 import { ActionsCellRenderer } from './cell-renderer/actions-cell-renderer.component';
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
@@ -39,7 +46,7 @@ ModuleRegistry.registerModules([
 const statuses = {
   all: 'All',
   active: 'Active',
-  paused: 'On  Hold',
+  paused: 'On Hold',
   outOfStock: 'Out of Stock',
 };
 
@@ -69,6 +76,7 @@ export class InventoryExample {
   private gridApi!: GridApi;
 
   themeClass = `${this.gridTheme}${this.isDarkMode ? '-dark' : ''}`;
+  theme: GridOptions['theme'] = 'legacy';
 
   rowData = getData();
   columnDefs = [
@@ -176,7 +184,7 @@ export class InventoryExample {
   handleTabClick(status: string) {
     this.gridApi.setColumnFilterModel(
       'status',
-      status === 'all' ? null : { values: [status] },
+      status === 'all' ? null : { values: [status] }
     );
     this.gridApi.onFilterChanged();
     this.activeTab = status;

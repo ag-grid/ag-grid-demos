@@ -1,20 +1,26 @@
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import type {
   ColDef,
   GetDataPath,
   ValueFormatterFunc,
   ValueFormatterParams,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridReact } from "@ag-grid-community/react";
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { MasterDetailModule } from "@ag-grid-enterprise/master-detail";
-import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
-import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
-import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
+} from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  RichSelectModule,
+  RowGroupingModule,
+  SetFilterModule,
+  StatusBarModule,
+  TreeDataModule,
+} from "ag-grid-enterprise";
+import { AgGridReact } from "ag-grid-react";
 import {
   type FunctionComponent,
   useCallback,
@@ -32,6 +38,7 @@ import { TagCellRenderer } from "./cell-renderers/TagCellRenderer";
 import { getData } from "./data";
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
@@ -39,6 +46,7 @@ ModuleRegistry.registerModules([
   RichSelectModule,
   SetFilterModule,
   StatusBarModule,
+  TreeDataModule,
 ]);
 
 interface Props {
@@ -159,6 +167,7 @@ export const HRExample: FunctionComponent<Props> = ({
       <div className={styles.container}>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
+            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
             rowData={rowData}

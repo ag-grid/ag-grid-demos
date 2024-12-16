@@ -1,22 +1,29 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 
+import { AgGridAngular } from 'ag-grid-angular';
+import type {
+  ColDef,
+  GetDataPath,
+  ValueFormatterFunc,
+  ValueFormatterParams,
+  GridOptions,
+} from 'ag-grid-community';
 import {
-  type ColDef,
-  type GetDataPath,
-  type ValueFormatterFunc,
-  type ValueFormatterParams,
-} from '@ag-grid-community/core';
-import { AgGridAngular } from '@ag-grid-community/angular';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { ModuleRegistry } from '@ag-grid-community/core';
-import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
-import { RichSelectModule } from '@ag-grid-enterprise/rich-select';
-import { RowGroupingModule } from '@ag-grid-enterprise/row-grouping';
-import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
-import { StatusBarModule } from '@ag-grid-enterprise/status-bar';
-import { MasterDetailModule } from '@ag-grid-enterprise/master-detail';
-import '@ag-grid-community/styles/ag-grid.css';
-import '@ag-grid-community/styles/ag-theme-quartz.css';
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from 'ag-grid-community';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  RichSelectModule,
+  RowGroupingModule,
+  SetFilterModule,
+  StatusBarModule,
+  TreeDataModule,
+} from 'ag-grid-enterprise';
 import { getData } from './data';
 
 import { ContactCellRenderer } from './cell-renderers/contact-cell-renderer.component';
@@ -26,6 +33,7 @@ import { StatusCellRenderer } from './cell-renderers/status-cell-renderer.compon
 import { TagCellRenderer } from './cell-renderers/tag-cell-renderer.component';
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
@@ -33,6 +41,7 @@ ModuleRegistry.registerModules([
   RichSelectModule,
   SetFilterModule,
   StatusBarModule,
+  TreeDataModule,
 ]);
 
 const employmentType = ['Permanent', 'Contract'];
@@ -69,6 +78,7 @@ export class HRExample {
   @Input() isDarkMode: boolean = false;
 
   themeClass = `${this.gridTheme}${this.isDarkMode ? '-dark' : ''}`;
+  theme: GridOptions['theme'] = 'legacy';
 
   rowData = getData();
   getDataPath: GetDataPath = (data) => data.orgHierarchy;

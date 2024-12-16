@@ -1,4 +1,3 @@
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import type {
   ColDef,
   GetDetailRowDataParams,
@@ -6,15 +5,21 @@ import type {
   ValueFormatterFunc,
   ValueFormatterParams,
   ValueGetterParams,
-} from "@ag-grid-community/core";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridReact } from "@ag-grid-community/react";
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { MasterDetailModule } from "@ag-grid-enterprise/master-detail";
-import { MultiFilterModule } from "@ag-grid-enterprise/multi-filter";
-import { SetFilterModule } from "@ag-grid-enterprise/set-filter";
+} from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+} from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  MultiFilterModule,
+  SetFilterModule,
+} from "ag-grid-enterprise";
+import { AgGridReact } from "ag-grid-react";
 import {
   type ChangeEvent,
   type FunctionComponent,
@@ -33,6 +38,7 @@ import { StockCellRenderer } from "./cell-renderers/StockCellRenderer";
 import { PriceCellRenderer } from "./cell-renderers/PriceCellRenderer";
 
 ModuleRegistry.registerModules([
+  AllCommunityModule,
   ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
@@ -50,7 +56,7 @@ const paginationPageSizeSelector = [5, 10, 20];
 const statuses = {
   all: "All",
   active: "Active",
-  paused: "On  Hold",
+  paused: "On Hold",
   outOfStock: "Out of Stock",
 };
 
@@ -223,6 +229,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
         </div>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
+            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
             rowData={rowData}

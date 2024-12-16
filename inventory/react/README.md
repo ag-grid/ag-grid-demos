@@ -29,14 +29,7 @@ This example code was generated with the [Vite React Typescript template](https:
 npm create vite@latest inventory/react -- --template react-ts
 
 # With the addition of the following modules
-npm i @ag-grid-community/react \
-  @ag-grid-community/styles \
-  @ag-grid-community/core \
-  @ag-grid-community/client-side-row-model \
-  @ag-grid-enterprise/excel-export \
-  @ag-grid-enterprise/set-filter \
-  @ag-grid-enterprise/multi-filter \
-  @ag-grid-enterprise/master-detail
+npm i ag-grid-enterprise ag-grid-react
 ```
 
 <br /><br />

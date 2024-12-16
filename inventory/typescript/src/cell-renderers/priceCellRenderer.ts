@@ -1,9 +1,6 @@
-import {
-  ICellRendererComp,
-  ICellRendererParams,
-} from "@ag-grid-community/core";
+import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 
-import styles from "./PriceCellRenderer.css";
+import "./priceCellRenderer.css";
 
 export class PriceCellRenderer implements ICellRendererComp {
   private eGui!: HTMLDivElement;
