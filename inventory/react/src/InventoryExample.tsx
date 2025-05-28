@@ -55,13 +55,13 @@ const paginationPageSizeSelector = [5, 10, 20];
 
 const statuses = {
   all: "All",
-  active: "Active",
-  paused: "On Hold",
-  outOfStock: "Out of Stock",
+  approved: "Approved",
+  pending: "Pending",
+  draft: "Draft",
 };
 
 const statusFormatter: ValueFormatterFunc = ({ value }) =>
-  statuses[value as keyof typeof statuses] ?? "";
+  statuses[(value as string)?.toLowerCase() as keyof typeof statuses] ?? value ?? "";
 
 export const InventoryExample: FunctionComponent<Props> = ({
   gridTheme = "ag-theme-quartz",
@@ -72,7 +72,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
   const [colDefs] = useState<ColDef[]>([
     {
       field: "product",
-      headerName: "Album Name",
+      headerName: "Customer Name", // Changed from "Album Name" to "Customer Name"
       cellRenderer: "agGroupCellRenderer",
       headerClass: "header-product",
       cellRendererParams: {
@@ -80,10 +80,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
       },
       minWidth: 300,
     },
-    { field: "artist" },
-    { field: "year", width: 150, headerClass: "header-sku" },
     {
-      field: "status",
+      field: "status", // This adds the status column to the master grid
       valueFormatter: statusFormatter,
       cellRenderer: StatusCellRenderer,
       filter: true,
@@ -92,6 +90,9 @@ export const InventoryExample: FunctionComponent<Props> = ({
       },
       headerClass: "header-status",
     },
+    { field: "artist" },
+    { field: "year", width: 150, headerClass: "header-sku" },
+
 
     {
       field: "inventory",
@@ -152,8 +153,17 @@ export const InventoryExample: FunctionComponent<Props> = ({
     () => ({
       detailGridOptions: {
         columnDefs: [
-          { field: "title", flex: 1.5 },
-          { field: "available", maxWidth: 120 },
+          { field: "title", flex: 1.5, headerName: "Quotation ID" },
+          {
+            field: "status", // This adds the status column to the master grid
+            valueFormatter: statusFormatter,
+            cellRenderer: StatusCellRenderer,
+            filter: true,
+            filterParams: {
+              valueFormatter: statusFormatter,
+            },
+            headerClass: "header-status",
+          },
           { field: "format", flex: 2 },
           { field: "label", flex: 1 },
           { field: "country", flex: 0.66 },
@@ -166,6 +176,18 @@ export const InventoryExample: FunctionComponent<Props> = ({
           { field: "year", type: "rightAligned", maxWidth: 80 },
         ],
         headerHeight: 38,
+        sideBar: { // Add filter button (tool panel)
+          toolPanels: [
+            {
+              id: "filters",
+              labelDefault: "Filters",
+              labelKey: "filters",
+              iconKey: "filter",
+              toolPanel: "agFiltersToolPanel",
+            },
+          ],
+          defaultToolPanel: "filters",
+        },
       },
       getDetailRowData: ({
         successCallback,
@@ -192,9 +214,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
           <div className={styles.tabs}>
             {Object.entries(statuses).map(([key, displayValue]) => (
               <button
-                className={`${styles.tabButton} ${
-                  activeTab === key ? styles.active : ""
-                }`}
+                className={`${styles.tabButton} ${activeTab === key ? styles.active : ""
+                  }`}
                 onClick={() => handleTabClick(key)}
                 key={key}
               >
