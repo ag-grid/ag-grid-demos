@@ -2,12 +2,14 @@
   border-radius: 100px;
   padding-left: 4px;
   padding-right: 12px;
+  height: 20px;
   line-height: 2;
   font-weight: 500;
   border: 1.5px solid rgba(91, 91, 91, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 50%;
 }
 
 .activeTag {
@@ -17,12 +19,12 @@
 
 .outOfStockTag {
   background-color: rgb(255, 0, 0, 0.05);
-  color: rgb(234, 83, 83);
-  border: 1.5px solid rgb(255, 0, 0, 0.3);
+  color: rgb(19, 13, 13);
+  border: 1.5px solid rgba(43, 38, 38, 0.3);
 }
 
 .pausedTag {
-  background-color: #caab7036;
+  background-color: #f3bf1336;
 }
 
 .circle {
@@ -34,11 +36,11 @@
 }
 
 .activeCircle {
-  background-color: #6d9b7e;
+  background-color: #0c8f3c;
 }
 
 .outOfStockCircle {
-  background-color: #ea5353;
+  background-color: #1b0404;
 }
 
 .pausedCircle {

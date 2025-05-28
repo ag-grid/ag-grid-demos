@@ -12,11 +12,12 @@ import {
   ModuleRegistry,
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import "ag-grid-community/styles/ag-theme-balham.css";
 import {
   ExcelExportModule,
   MasterDetailModule,
   MultiFilterModule,
+  RowGroupingModule,
   SetFilterModule,
 } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
@@ -44,6 +45,7 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  RowGroupingModule, // <-- Add this line
 ]);
 
 interface Props {
@@ -55,16 +57,16 @@ const paginationPageSizeSelector = [5, 10, 20];
 
 const statuses = {
   all: "All",
-  approved: "Approved",
-  pending: "Pending",
-  draft: "Draft",
+  active: "Approved",
+  paused: "Pending",
+  outofstock: "Draft",
 };
 
 const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[(value as string)?.toLowerCase() as keyof typeof statuses] ?? value ?? "";
 
 export const InventoryExample: FunctionComponent<Props> = ({
-  gridTheme = "ag-theme-quartz",
+  gridTheme = "ag-theme-balham",
   isDarkMode,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
@@ -74,24 +76,27 @@ export const InventoryExample: FunctionComponent<Props> = ({
       field: "product",
       headerName: "Customer Name", // Changed from "Album Name" to "Customer Name"
       cellRenderer: "agGroupCellRenderer",
-      headerClass: "header-product",
-      cellRendererParams: {
-        innerRenderer: ProductCellRenderer,
-      },
+      //headerClass: "header-product",
+      //cellRendererParams: {
+      //  innerRenderer: ProductCellRenderer,
+      //},
+      headerClass: "header-sku",
       minWidth: 300,
+      filter: true, // <-- Add this line
     },
-    {
-      field: "status", // This adds the status column to the master grid
-      valueFormatter: statusFormatter,
-      cellRenderer: StatusCellRenderer,
-      filter: true,
-      filterParams: {
-        valueFormatter: statusFormatter,
-      },
-      headerClass: "header-status",
-    },
-    { field: "artist" },
-    { field: "year", width: 150, headerClass: "header-sku" },
+    //{
+    //  field: "status", // This adds the status column to the master grid
+    //  valueFormatter: statusFormatter,
+    //  cellRenderer: StatusCellRenderer,
+    //  filter: true,
+    //  filterParams: {
+    //    valueFormatter: statusFormatter,
+    //  },
+    //  headerClass: "header-status",
+    // },
+    { field: "phone" },
+    { field: "email" },
+    { field: "lastQuotationAt", width: 150, headerClass: "Last Quotation At" },
 
 
     {
@@ -126,7 +131,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
       valueFormatter: ({ value }: ValueFormatterParams) => `£${value}`,
       width: 150,
     },
-    { field: "actions", cellRenderer: ActionsCellRenderer, minWidth: 194 },
+    //{ field: "actions", cellRenderer: ActionsCellRenderer, minWidth: 194 },
   ]);
   const [rowData] = useState(getData());
   const defaultColDef = useMemo<ColDef>(
@@ -153,29 +158,41 @@ export const InventoryExample: FunctionComponent<Props> = ({
     () => ({
       detailGridOptions: {
         columnDefs: [
-          { field: "title", flex: 1.5, headerName: "Quotation ID" },
+          {
+            field: "title", flex: 1.5, headerName: "Quotation ID",
+            maxWidth: 200,
+          },
+
           {
             field: "status", // This adds the status column to the master grid
             valueFormatter: statusFormatter,
             cellRenderer: StatusCellRenderer,
             filter: true,
+            maxWidth: 200,
             filterParams: {
               valueFormatter: statusFormatter,
             },
             headerClass: "header-status",
+            flex: 2
           },
-          { field: "format", flex: 2 },
-          { field: "label", flex: 1 },
-          { field: "country", flex: 0.66 },
+          { field: "dateCreated", headerName: "Date Created", type: "date", flex: 1 },
+          { field: "dateSubmitted", headerName: "Date Submitted", type: "date", flex: 1 },
+          { field: "quantity", type: "rightAligned", maxWidth: 100 },
+
+          //{ field: "format", flex: 2 },
+          //{ field: "label", flex: 1 },
+          // { field: "country", flex: 0.66 },
           {
             field: "cat",
             headerName: "Cat#",
             type: "rightAligned",
             flex: 0.66,
           },
-          { field: "year", type: "rightAligned", maxWidth: 80 },
+          //{ field: "year", type: "rightAligned", maxWidth: 80 },
+          { field: "actions", cellRenderer: ActionsCellRenderer, minWidth: 194 },
         ],
         headerHeight: 38,
+
         sideBar: { // Add filter button (tool panel)
           toolPanels: [
             {
@@ -243,19 +260,20 @@ export const InventoryExample: FunctionComponent<Props> = ({
             <input
               type="text"
               id="filter-text-box"
-              placeholder="Search product..."
+              placeholder="Search Customer..."
               onInput={onFilterTextBoxChanged}
             />
           </div>
         </div>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
+
             theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
             rowData={rowData}
             defaultColDef={defaultColDef}
-            rowHeight={80}
+            rowHeight={35}
             autoSizeStrategy={autoSizeStrategy}
             pagination
             paginationPageSize={10}
@@ -264,6 +282,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
             detailCellRendererParams={detailCellRendererParams}
             quickFilterText={quickFilterText}
             detailRowAutoHeight
+            allowDragFromColumnsToolPanel={true}
+            rowGroupPanelShow="always"
           />
         </div>
       </div>

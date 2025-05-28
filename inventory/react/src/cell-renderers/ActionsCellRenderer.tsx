@@ -30,6 +30,7 @@ export const ActionsCellRenderer: FunctionComponent<
 
   return (
     <div className={styles.buttonCell}>
+      
       <button
         className={`button-secondary ${styles.removeButton}`}
         onClick={onRemoveClick}
