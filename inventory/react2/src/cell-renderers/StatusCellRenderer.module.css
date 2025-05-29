@@ -1,0 +1,48 @@
+.tag {
+  border-radius: 100px;
+  padding-left: 4px;
+  padding-right: 12px;
+  height: 20px;
+  line-height: 2;
+  font-weight: 500;
+  border: 1.5px solid rgba(91, 91, 91, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.activeTag {
+  background-color: #84ca8130;
+  border: 1.5px solid rgb(70, 227, 114, 0.2);
+}
+
+.outOfStockTag {
+  background-color: rgb(255, 0, 0, 0.05);
+  color: rgb(19, 13, 13);
+  border: 1.5px solid rgba(43, 38, 38, 0.3);
+}
+
+.pausedTag {
+  background-color: #f3bf1336;
+}
+
+.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-left: 6px;
+}
+
+.activeCircle {
+  background-color: #0c8f3c;
+}
+
+.outOfStockCircle {
+  background-color: #1b0404;
+}
+
+.pausedCircle {
+  background-color: #a06d37;
+}

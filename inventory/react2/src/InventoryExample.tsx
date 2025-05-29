@@ -19,6 +19,8 @@ import {
   MultiFilterModule,
   RowGroupingModule,
   SetFilterModule,
+  SideBarModule,
+  RowGroupingPanelModule
 } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -45,6 +47,8 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  SideBarModule,
+  RowGroupingPanelModule, // <-- Add this line
   RowGroupingModule, // <-- Add this line
 ]);
 
@@ -73,7 +77,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
 
   const [colDefs] = useState<ColDef[]>([
     {
-      field: "product",
+      field: "quotationID",
+      enableRowGroup: true,
       headerName: "Customer Name", // Changed from "Album Name" to "Customer Name"
       cellRenderer: "agGroupCellRenderer",
       //headerClass: "header-product",
@@ -94,6 +99,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
     //  },
     //  headerClass: "header-status",
     // },
+    { field: "customerID", enableRowGroup: true, headerClass: "header-customer-id" },
     { field: "phone" },
     { field: "email" },
     { field: "lastQuotationAt", width: 150, headerClass: "Last Quotation At" },
@@ -267,7 +273,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
         </div>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
-            
+
+
             theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
