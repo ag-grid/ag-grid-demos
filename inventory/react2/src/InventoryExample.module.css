@@ -9,6 +9,7 @@
 }
 
 @media screen and (max-width: 720px) {
+
   :global(div.ag-theme-quartz),
   :global(div.ag-theme-quartz-dark) {
     --ag-font-size: 12px;
@@ -137,9 +138,7 @@
 .grid {
   --ag-header-background-color: transparent !important;
 
-  height: calc(
-    100vh - var(--layout-grid-header-height) - 62px - var(--layout-grid-margin)
-  );
+  height: calc(100vh - var(--layout-grid-header-height) - 62px - var(--layout-grid-margin));
   margin: 0 var(--layout-grid-margin) var(--layout-grid-margin);
 }
 
@@ -253,6 +252,7 @@
   content: url("/example/inventory/icons/sku.svg");
   padding-right: 8px;
   opacity: 0.3;
+
 }
 
 :global(.header-inventory .ag-header-cell-text:before) {
@@ -295,4 +295,86 @@
 
 .variantsText {
   opacity: 0.7;
+}
+
+.quotation-group-header {
+  background-color: #007bff !important;
+  /* Bootstrap primary blue */
+  color: white;
+  font-weight: bold;
+}
+
+/* --- Quotation Group Header (Extra Light Blue) --- */
+:global(.ag-header-group-cell.quotation-group-header) {
+  background: linear-gradient(90deg, #f5fafd 0%, #e3f2fd 100%) !important;
+  /* Extra light blue shades */
+  color: #1976d2 !important;
+  border-color: #007bff !important;
+  font-weight: 600;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  opacity: 1 !important;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+/* --- Customer Group Header (Extra Light Yellow) --- */
+:global(.ag-header-group-cell.customer-group-header) {
+  background: linear-gradient(90deg, #fffef7 0%, #f5f0bf 100%) !important;
+  /* Extra light yellow shades */
+  color: #a7920d !important;
+  text-align: center;
+  font-weight: 600;
+  border-color: #a7920d !important;
+  align-content: center;
+  opacity: 1 !important;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+/* --- Customer Group Header (Extra Light Yellow) --- */
+:global(.ag-header-group-cell.specification-group-header) {
+  background: linear-gradient(90deg, #e2e4e7 0%, #d5d8e2 100%) !important;
+  /* Extra light yellow shades */
+  color: #7e90df !important;
+  text-align: center;
+  font-weight: 600;
+  border-color: #d1d3d6 !important;
+  align-content: center;
+  opacity: 1 !important;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+:global(.ag-header-cell.iconHeader) {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 12px;
+  height: 100%;
+  padding: 0;
+  line-height: 1.1;
+  text-wrap: wrap;
+  text-align: center;
+  /* Diagonal text effect */
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  height: 50px;
+  /* Adjust as needed for your header height */
+}
+
+:global(.ag-header) {
+  min-height: 56px !important;
+  height: 56px !important;
+  /* You can adjust 56px to your preferred height */
+}
+
+:global(.ag-header-row) {
+  min-height: 56px !important;
+  height: 56px !important;
 }

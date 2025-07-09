@@ -1,8 +1,16 @@
+import { Children } from "react";
+
 export function getData() {
   const data = [
     {
-      product: "Maria Barden",
+      customerID: "C-001",
+      quotationID: "Q-10001",
+      quotationDate: "2024-05-01",
+      customerName: "Maria Barden",
       email: "maria@example.com",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       category: "Soft Rock",
       phone: "+1 234 567 890",
       lastQuotationAt: "1977-02-02",
@@ -14,62 +22,311 @@ export function getData() {
       sold: 15,
       priceIncrease: 5, // in percentage
       variants: 3,
-      variantDetails: [
-        {
-          title: "100000001",
-          status: "active",
-          quantity: 4,
-          dateCreated: "2024-01-01",
-          dateSubmitted: "2024-01-02",
-          format: "LP, Album, Picture Disc, Reissue",
-          label: "Warner Records",
-          cat: "RPD1 3010",
-          country: "Worldwide",
-          year: "2024",
-        },
-        {
-          title: "100000002",
-          status: "active",
-          quantity: 6,
-          dateCreated: "2024-01-01",
-          dateSubmitted: "2024-01-02",
-          format: "Blu-Ray, Album, Reissue, Dolby Atoms",
-          label: "Warner Records",
-          cat: "BA2 3010",
-          country: "Worldwide",
-          year: "2024",
-        }
-        ,
-        {
-          title: "100000003",
-          status: "paused",
-          quantity: 6,
-          dateCreated: "2024-01-01",
-          dateSubmitted: "2024-01-02",
-          format: "Blu-Ray, Album, Reissue, Dolby Atoms",
-          label: "Warner Records",
-          cat: "BA2 3010",
-          country: "Worldwide",
-          year: "2024",
-        }
-        ,
-        {
-          title: "100000004",
-          status: "outOfStock",
-          quantity: 6,
-          dateCreated: "2024-01-01",
-          dateSubmitted: "2024-01-02",
-          format: "Blu-Ray, Album, Reissue, Dolby Atoms",
-          label: "Warner Records",
-          cat: "BA2 3010",
-          country: "Worldwide",
-          year: "2024",
-        }
-      ],
+      size: 3,
+      die: 3,
+      noOfLots: 4,
+      variantDetails:
+        [
+          {
+            "title": "Machine Type",
+            "col1": "Digital",
+            "col2": "Flex",
+            "col3": "Digital",
+            "col4": "Flex",
+          },
+          {
+            "title": "Total Colors",
+            "col1": "4",
+            "col2": "4",
+            "col3": "4",
+            "col4": "4",
+            children: [
+              {
+                "title": "color per version",
+                "col1": "4",
+                "col2": "4",
+                "col3": "4",
+                "col4": "4"
+              },
+              {
+                "title": "number of versions / copies",
+                "col1": "1",
+                "col2": "1",
+                "col3": "1",
+                "col4": "1"
+              }
+            ]
+          },
+
+          {
+            "title": "Layout Across",
+            "col1": "4",
+            "col2": "4",
+            "col3": "1",
+            "col4": "1"
+          },
+          {
+            "title": "Quantity",
+            "col1": "0",
+            "col2": "45",
+            "col3": "1",
+            "col4": "1"
+          },
+          {
+            "title": "Stock",
+
+            "col2": 590,
+            "col3": "1",
+            "col4": "1",
+            children: [
+
+              {
+                "title": "Stock Width",
+                "col1": "8",
+                "col2": "8",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Quantity Margin",
+                "col1": "0.2",
+                "col2": "0.2",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Quantity (Stock)",
+                "col1": "",
+                "col2": "13.5",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Repeat",
+                "col1": "10.5",
+                "col2": "10.5",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Cost per MSI (Stock)",
+                "col1": "0.52",
+                "col2": "0.52",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "MSI (Stock)",
+                "col1": "",
+                "col2": "1134",
+                "col3": "1",
+                "col4": "1"
+              }]
+          },
+          {
+            "title": "Cold Foil",
+            children: [
+              {
+                "title": "width",
+                "col1": "8",
+                "col2": "0.2",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Quantity Margin (Cold Foil)",
+                "col1": "0.2",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Quantity",
+                "col1": "",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Repeat",
+                "col1": "",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "Cost per MSI",
+                "col1": "",
+                "col3": "1",
+                "col4": "1"
+              },
+              {
+                "title": "MSI",
+                "col1": ""
+              }]
+          },
+          {
+            "title": "Quantity Margin (Laminate)",
+            "col1": "0.2"
+          },
+          {
+            "title": "Quantity (Laminate)",
+            "col1": ""
+          },
+          {
+            "title": "Laminate Material A (Gloss)",
+            "col1": "0.1",
+            "col2": "0.1"
+          },
+          {
+            "title": "Laminate Material B (Matt)",
+            "col1": "0.2",
+            "col2": "0.2"
+          },
+          {
+            "title": "Laminate Material C (Printable)",
+            "col1": "0.3",
+            "col2": "0.3"
+          },
+          {
+            "title": "Laminate Material D (Soft Touch)",
+            "col1": "0.38",
+            "col2": "0.38"
+          },
+          {
+            "title": "Make Ready",
+            "col1": "100",
+            "col2": "100"
+          },
+          {
+            "title": "Run Time (hrs)",
+            "col1": "",
+            "col2": "69.48529412"
+          },
+          {
+            "title": "Ink Cost",
+            "col1": "",
+            "col2": "200"
+          },
+          {
+            "title": "[Flex] Per Color",
+            "col2": "50"
+          },
+          {
+            "title": "[Flex] Number of Colors",
+            "col2": "4"
+          },
+          {
+            "title": "[Digital] Area in MSI",
+            "col1": ""
+          },
+          {
+            "title": "Wash [Flex]",
+            "col2": "40"
+          },
+          {
+            "title": "Wash Cost per Color",
+            "col2": "10"
+          },
+          {
+            "title": "Wash Number of Colors",
+            "col2": "4"
+          },
+          {
+            "title": "Plate",
+            "col2": "100"
+          },
+          {
+            "title": "Finish",
+            "col1": "0",
+            "col2": "30"
+          },
+          {
+            "title": "Quantity per roll/packs",
+            "col2": "750"
+          },
+          {
+            "title": "Number of rolls/packs",
+            "col2": "60"
+          },
+          {
+            "title": "Cost per roll",
+            "col2": "0.5"
+          },
+          {
+            "title": "Cost",
+            "col1": "",
+            "col2": "1129.485294"
+          },
+          {
+            "title": "Markup Option",
+            "col1": "B",
+            "col2": "A"
+          },
+          {
+            "title": "Markup A",
+            "col1": "0.40",
+            "col2": "0.40"
+          },
+          {
+            "title": "Markup B",
+            "col1": "0.52",
+            "col2": "0.52"
+          },
+          {
+            "title": "Markup C",
+            "col1": "0.45",
+            "col2": "0.45"
+          },
+          {
+            "title": "Markup %",
+            "col1": "0.52",
+            "col2": "0.52"
+          },
+          {
+            "title": "Markup $",
+            "col1": "",
+            "col2": "452"
+          },
+          {
+            "title": "Total",
+            "col1": "",
+            "col2": "1581.485294"
+          },
+          {
+            "title": "Total After Less",
+            "col1": "",
+            "col2": "1581.485294"
+          },
+          {
+            "title": "Quantity (in thousand / M)",
+            "col2": "45"
+          },
+          {
+            "title": "Calculated Cost",
+            "col1": "",
+            "col2": "35.14"
+          },
+          {
+            "title": "Estimate To Send",
+            "col1": "Digital",
+            "col2": "Flex"
+          },
+          {
+            "title": "Cost Per Thousand",
+            "col1": "",
+            "col2": "35.14"
+          }
+        ]
+
+      ,
     },
     {
-      product: "Roberto Xavier",
+      customerID: "C-001",
+      quotationID: "Q-10002",
+      quotationDate: "2024-05-03",
+      customerName: "Maria Barden",
       email: "Adele@gmail.com",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       category: "Pop",
       lastQuotationAt: "1977-02-02",
       phone: "+1 234 567 890",
@@ -81,6 +338,9 @@ export function getData() {
       sold: 5,
       priceIncrease: 10,
       variants: 1,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "Future Nostalgia",
@@ -96,7 +356,9 @@ export function getData() {
       ],
     },
     {
-      product: "Dougles Smith",
+      customerID: "C-003",
+      quotationID: "Q-10003",
+      customerName: "Dougles Smith",
       email: "Adele@gmail.com",
       category: "Synth-pop",
       lastQuotationAt: "1977-02-02",
@@ -109,6 +371,9 @@ export function getData() {
       sold: 7,
       priceIncrease: 10,
       variants: 2,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "Actually",
@@ -131,10 +396,16 @@ export function getData() {
       ],
     },
     {
-      product: "Baseden Smith",
+      customerID: "C-004",
+      quotationID: "Q-10004",
+      quotationDate: "2024-05-04",
+      customerName: "Baseden Smith",
       email: "amy@example.com",
       category: "Rhythm & Blues",
       lastQuotationAt: "1977-02-02",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       phone: "+1 234 567 890",
       status: "paused",
       available: 3,
@@ -144,6 +415,9 @@ export function getData() {
       sold: 39,
       priceIncrease: 5,
       variants: 4,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "Back to Black",
@@ -184,12 +458,19 @@ export function getData() {
       ],
     },
     {
-      product: "In A Dream",
+      customerID: "C-005",
+      quotationID: "Q-10005",
+      quotationDate: "2024-05-05",
+
+      customerName: "In A Dream",
       email: "sivan@example.com",
       category: "Pop",
       lastQuotationAt: "1977-02-02",
       phone: "+1 234 567 890",
       status: "draft",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       available: 0,
       incoming: 0,
       image: "inadream",
@@ -197,6 +478,9 @@ export function getData() {
       sold: 10,
       priceIncrease: 30,
       variants: 2,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "In A Dream",
@@ -219,11 +503,17 @@ export function getData() {
       ],
     },
     {
-      product: "21",
+      customerID: "C-001",
+      quotationID: "Q-10006",
+      quotationDate: "2024-05-06",
+      customerName: "Maria Barden",
       email: "Adele@gmail.com",
       category: "Pop",
       lastQuotationAt: "1977-02-02",
       phone: "+1 234 567 890",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       status: "active",
       available: 5,
       incoming: 10,
@@ -232,6 +522,9 @@ export function getData() {
       sold: 4,
       priceIncrease: 12,
       variants: 2,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "21",
@@ -256,11 +549,18 @@ export function getData() {
 
 
     {
-      product: "Discovery",
+      customerID: "C-001",
+      quotationID: "Q-10007",
+      quotationDate: "2024-05-07",
+      customerName: "Maria Barden",
+      email: "Adele@gmail.com",
       artist: "Daft Punk",
       category: "Electronic",
       year: "2001",
       status: "paused",
+      quantity: 6,
+      dateCreated: "2024-01-01",
+      dateSubmitted: "2024-01-02",
       available: 7,
       incoming: 0,
       image: "discovery",
@@ -268,6 +568,9 @@ export function getData() {
       sold: 2,
       priceIncrease: 5,
       variants: 3,
+      size: 3,
+      die: 3,
+      noOfLots: 4,
       variantDetails: [
         {
           title: "Discovery",
