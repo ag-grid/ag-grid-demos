@@ -305,7 +305,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
       ),
     },
     { field: "notification", headerName: "Notification", width: 180 },
-  ];
+  ]; 
 
   // Status icon mapping
   const statusIcon = (status: string) => {
