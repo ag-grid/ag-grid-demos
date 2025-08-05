@@ -8,7 +8,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
   template: `
     <div class="productCell">
       <div class="image">
-        <img [src]="'/example/inventory/' + image + '.webp'" [alt]="image" />
+        <img [src]="'/example/inventory/' + image" [alt]="image" />
       </div>
       <div>
         <div>{{ value }}</div>

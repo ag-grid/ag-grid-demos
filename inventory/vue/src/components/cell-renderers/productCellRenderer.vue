@@ -8,7 +8,7 @@ const { value, data } = params;
 <template>
   <div class="productCell">
     <div class="image">
-      <img :src="`/example/inventory/${data.image}.webp`" :alt="data.image" />
+      <img :src="`/example/inventory/${data.image}`" :alt="data.image" />
     </div>
     <div>
       <div>{{ value }}</div>
