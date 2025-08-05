@@ -15,7 +15,7 @@ export class ProductCellRenderer implements ICellRendererComp {
     imageContainer.className = "image";
 
     const imageElement = document.createElement("img");
-    imageElement.src = `/example/inventory/${data.image}.png`;
+    imageElement.src = `/example/inventory/${data.image}.webp`;
     imageElement.alt = data.image;
     imageContainer.appendChild(imageElement);
     this.eGui.appendChild(imageContainer);

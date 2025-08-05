@@ -8,7 +8,7 @@ export const ProductCellRenderer: FunctionComponent<
 > = ({ value, data: { image, category } }) => (
   <div className={styles.productCell}>
     <div className={styles.image}>
-      <img src={`/example/inventory/${image}.png`} alt={image} />
+      <img src={`/example/inventory/${image}.webp`} alt={image} />
     </div>
     <div>
       <div>{value}</div>
