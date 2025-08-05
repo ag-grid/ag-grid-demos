@@ -13,7 +13,7 @@ export const EmployeeCellRenderer: FunctionComponent<
     </div>
     <img
       className={styles.image}
-      src={`/example/hr/${image}.png`}
+      src={`/example/hr/${image}.webp`}
       alt={value.toLowerCase()}
     />
   </div>

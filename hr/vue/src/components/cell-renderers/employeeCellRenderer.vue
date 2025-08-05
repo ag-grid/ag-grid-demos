@@ -15,7 +15,7 @@ const { jobTitle, image } = data;
     </div>
     <img
       class="image"
-      :src="`/example/hr/${image}.png`"
+      :src="`/example/hr/${image}.webp`"
       :alt="value.toLowerCase()"
     />
   </div>

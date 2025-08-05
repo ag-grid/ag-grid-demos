@@ -27,7 +27,7 @@ export class EmployeeCellRenderer implements ICellRendererComp {
 
     const imageElement = document.createElement("img");
     imageElement.className = "image";
-    imageElement.src = `/example/hr/${image}.png`;
+    imageElement.src = `/example/hr/${image}.webp`;
     imageElement.alt = value.toLowerCase();
 
     this.eGui.appendChild(employeeData);
