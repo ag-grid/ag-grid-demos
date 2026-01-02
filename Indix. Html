@@ -1,0 +1,21 @@
+public_html/
+└─ wingoskill/
+    ├─ index.php
+    ├─ config.php
+    ├─ game.php
+    ├─ engine.php
+    ├─ wallet.php
+    ├─ rewards.php
+    ├─ logout.php
+    ├─ assets/
+    │   ├─ style.css
+    │   ├─ script.js
+    │   ├─ win.mp3
+    │   └─ lose.mp3
+    └─ admin/
+        ├─ login.php
+        ├─ dashboard.php
+        ├─ users.php
+        ├─ wallet.php
+        ├─ rewards.php
+        └─ results.php
