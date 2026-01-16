@@ -1,7 +1,7 @@
 {
   "name": "ag-grid-ecommerce-example-react",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "ag-grid-enterprise": "33.0.2",
-    "ag-grid-react": "33.0.2",
+    "ag-grid-enterprise": "35.0.0",
+    "ag-grid-react": "35.0.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
