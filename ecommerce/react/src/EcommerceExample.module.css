@@ -11,6 +11,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.actions {
+  display: flex;
+  gap: 8px;
+  padding: 16px 32px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actionButton {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.actionButton:hover {
+  background: #f5f5f5;
+}
+
 .grid {
   flex: 1;
   width: 100%;
