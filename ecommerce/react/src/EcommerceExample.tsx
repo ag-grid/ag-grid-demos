@@ -3,9 +3,23 @@ import styles from "./EcommerceExample.module.css";
 import { AgGridReact } from "ag-grid-react";
 import { useMemo, useRef, useState } from "react";
 import { getData } from "./data";
-import { themeQuartz, ColDef, AutoSizeStrategy } from "ag-grid-community";
-import { ProductImageCellRenderer } from "./cell-renderers/ProductImageCellRenderer";
-import "ag-grid-enterprise";
+import {
+  themeQuartz,
+  ColDef,
+  AutoSizeStrategy,
+  ModuleRegistry,
+} from "ag-grid-community";
+import {
+  SideBarModule,
+  ColumnsToolPanelModule,
+  RowGroupingModule,
+} from "ag-grid-enterprise";
+
+ModuleRegistry.registerModules([
+  SideBarModule,
+  ColumnsToolPanelModule,
+  RowGroupingModule,
+]);
 
 export default function EcommerceExample() {
   const gridStyle: CSSProperties = {
@@ -35,212 +49,124 @@ export default function EcommerceExample() {
     []
   );
 
-  const columnDefs = useMemo(
-    () => [
-      { field: "product", headerName: "Product", sortable: true, filter: true },
-      { field: "sku", headerName: "SKU", sortable: true },
-      { field: "artist", headerName: "Artist", sortable: true, filter: true },
+  const colDefs = useMemo<ColDef[]>(() => {
+    return [
       {
-        field: "category",
         headerName: "Category",
-        sortable: true,
-        filter: true,
+        field: "category",
+        rowGroup: true,
+        hide: true,
       },
       {
-        field: "subcategory",
         headerName: "Subcategory",
-        sortable: true,
-        filter: true,
+        field: "subcategory",
+        rowGroup: true,
+        hide: true,
       },
       {
-        field: "launchYear",
-        headerName: "Launch Year",
-        sortable: true,
-        filter: true,
-      },
-      { field: "status", headerName: "Status", sortable: true, filter: true },
-      {
-        field: "isDigital",
-        headerName: "Digital",
-        sortable: true,
-        filter: true,
-      },
-      { field: "price", headerName: "Price ($)", sortable: true, filter: true },
-      { field: "cost", headerName: "Cost ($)", sortable: true, filter: true },
-      {
-        field: "margin",
-        headerName: "Margin (%)",
-        sortable: true,
-        filter: true,
+        headerName: "Product",
+        field: "product",
+        pinned: "left",
+        minWidth: 220,
+        cellRenderer: "agGroupCellRenderer",
       },
       {
-        field: "priceIncrease",
-        headerName: "Price Increase ($)",
-        sortable: true,
+        headerName: "SKU",
+        field: "sku",
+        pinned: "left",
+        minWidth: 140,
       },
       {
-        field: "availableTotal",
-        headerName: "Available Total",
-        sortable: true,
-      },
-      { field: "incomingTotal", headerName: "Incoming Total", sortable: true },
-      { field: "availableUS", headerName: "Available US", sortable: true },
-      { field: "availableEU", headerName: "Available EU", sortable: true },
-      { field: "availableAsia", headerName: "Available Asia", sortable: true },
-      {
-        field: "warehousePrimary",
-        headerName: "Primary Warehouse",
-        sortable: true,
-      },
-      { field: "soldTotal", headerName: "Sold Total", sortable: true },
-      { field: "soldUS", headerName: "Sold US", sortable: true },
-      { field: "soldEU", headerName: "Sold EU", sortable: true },
-      { field: "soldAsia", headerName: "Sold Asia", sortable: true },
-      {
-        field: "revenueTotal",
-        headerName: "Revenue Total ($)",
-        sortable: true,
+        headerName: "Brand / Artist",
+        field: "brand",
+        minWidth: 160,
       },
       {
+        headerName: "Price",
+        field: "price",
+        valueFormatter: ({ value, data }) =>
+          value != null ? `${data.currency} ${Number(value).toFixed(2)}` : "",
+      },
+      {
+        headerName: "Cost",
+        field: "cost",
+        valueFormatter: ({ value, data }) =>
+          value != null ? `${data.currency} ${Number(value).toFixed(2)}` : "",
+      },
+      {
+        headerName: "Margin %",
+        valueGetter: ({ data }) =>
+          data ? ((data.price - data.cost) / data.price) * 100 : null,
+        valueFormatter: ({ value }) =>
+          value != null ? `${Number(value).toFixed(1)}%` : "",
+        aggFunc: "avg",
+      },
+      {
+        headerName: "Price Δ",
+        field: "priceChange",
+        valueFormatter: ({ value }) => (value > 0 ? `+${value}` : value),
+      },
+      {
+        headerName: "Stock (Total)",
+        valueGetter: ({ data }) =>
+          data
+            ? Object.values(data.stockByWarehouse).reduce((a, b) => a + b, 0)
+            : 0,
+        aggFunc: "sum",
+      },
+      {
+        headerName: "Incoming",
+        valueGetter: ({ data }) =>
+          data
+            ? Object.values(data.incomingByWarehouse).reduce((a, b) => a + b, 0)
+            : 0,
+        aggFunc: "sum",
+      },
+      {
+        headerName: "Primary WH",
+        field: "primaryWarehouse",
+        minWidth: 140,
+      },
+      {
+        headerName: "Units Sold (12m)",
+        valueGetter: ({ data }) =>
+          data ? data.monthlySales.reduce((sum, m) => sum + m.sold, 0) : 0,
+        aggFunc: "sum",
+      },
+      {
+        headerName: "Revenue (12m)",
+        valueGetter: ({ data }) =>
+          data
+            ? data.monthlySales.reduce((sum, m) => sum + m.sold * data.price, 0)
+            : 0,
+        valueFormatter: ({ value, data }) =>
+          value != null ? `${data.currency} ${value.toFixed(0)}` : "",
+        aggFunc: "sum",
+      },
+      {
+        headerName: "Velocity (avg / mo)",
+        valueGetter: ({ data }) =>
+          data ? data.monthlySales.reduce((s, m) => s + m.sold, 0) / 12 : 0,
+        valueFormatter: ({ value }) => value?.toFixed(1),
+        aggFunc: "avg",
+      },
+      {
+        headerName: "Variants",
+        valueGetter: ({ data }) => data?.variants.length ?? 0,
+        aggFunc: "avg",
+      },
+      {
+        headerName: "Rating",
         field: "avgRating",
-        headerName: "Avg Rating",
-        sortable: true,
-        filter: true,
-      },
-      { field: "reviewCount", headerName: "Review Count", sortable: true },
-      { field: "variantsCount", headerName: "Variants Count", sortable: true },
-      {
-        field: "variantDetails",
-        headerName: "Variant Details",
-        cellRenderer: (params) => {
-          if (!params.value) return "";
-          return params.value
-            .map(
-              (variant) =>
-                `${variant.title} (${variant.format}, ${variant.year})`
-            )
-            .join(", ");
-        },
+        aggFunc: "avg",
       },
       {
-        field: "image",
-        headerName: "Image",
-        cellRenderer: ProductImageCellRenderer,
-        width: 60,
+        headerName: "Reviews",
+        field: "reviewCount",
+        aggFunc: "sum",
       },
-      {
-        headerName: "Monthly Sales",
-        marryChildren: true,
-        children: [
-          {
-            headerName: "Total",
-            columnGroupShow: "closed",
-            children: [
-              { field: "soldTotal", headerName: "Sold" },
-              { field: "revenueTotal", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "January",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldJan", headerName: "Sold" },
-              { field: "revenueJan", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "February",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldFeb", headerName: "Sold" },
-              { field: "revenueFeb", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "March",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldMar", headerName: "Sold" },
-              { field: "revenueMar", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "April",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldApr", headerName: "Sold" },
-              { field: "revenueApr", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "May",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldMay", headerName: "Sold" },
-              { field: "revenueMay", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "June",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldJun", headerName: "Sold" },
-              { field: "revenueJun", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "July",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldJul", headerName: "Sold" },
-              { field: "revenueJul", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "August",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldAug", headerName: "Sold" },
-              { field: "revenueAug", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "September",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldSep", headerName: "Sold" },
-              { field: "revenueSep", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "October",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldOct", headerName: "Sold" },
-              { field: "revenueOct", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "November",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldNov", headerName: "Sold" },
-              { field: "revenueNov", headerName: "Revenue ($)" },
-            ],
-          },
-          {
-            headerName: "December",
-            columnGroupShow: "open",
-            children: [
-              { field: "soldDec", headerName: "Sold" },
-              { field: "revenueDec", headerName: "Revenue ($)" },
-            ],
-          },
-        ],
-      },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   return (
     <div style={gridStyle} className={`${styles.container}`}>
@@ -249,10 +175,10 @@ export default function EcommerceExample() {
           theme={theme}
           ref={gridRef}
           rowData={rowData}
-          columnDefs={columnDefs}
+          columnDefs={colDefs}
           defaultColDef={defaultColDef}
           autoSizeStrategy={autoSizeStrategy}
-          // skipHeaderOnAutoSize
+          sideBar={"columns"}
         />
       </div>
     </div>
