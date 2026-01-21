@@ -11,6 +11,8 @@ import {
   ModuleRegistry,
   TextFilterModule,
   NumberFilterModule,
+  GetDetailRowDataParams,
+  CellSelectionOptions,
 } from "ag-grid-community";
 import {
   SideBarModule,
@@ -19,7 +21,10 @@ import {
   PivotModule,
   SetFilterModule,
   FiltersToolPanelModule,
+  CellSelectionModule,
   SparklinesModule,
+  MasterDetailModule,
+  StatusBarModule,
 } from "ag-grid-enterprise";
 import {
   AgChartsCommunityModule,
@@ -32,10 +37,13 @@ ModuleRegistry.registerModules([
   RowGroupingModule,
   PivotModule,
   TextFilterModule,
+  CellSelectionModule,
   NumberFilterModule,
   SetFilterModule,
   FiltersToolPanelModule,
   SparklinesModule.with(AgChartsCommunityModule),
+  MasterDetailModule,
+  StatusBarModule,
 ]);
 
 export default function EcommerceExample() {
@@ -43,6 +51,10 @@ export default function EcommerceExample() {
     height: "100vh",
     width: "100%",
   };
+
+  const cellSelection = useMemo<boolean | CellSelectionOptions>(() => {
+    return { handle: { mode: "range" } };
+  }, []);
 
   const theme = useMemo(() => themeQuartz, []);
 
@@ -526,6 +538,10 @@ export default function EcommerceExample() {
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
+                : null,
           },
           {
             headerName: "EU-Central Stock",
@@ -538,6 +554,10 @@ export default function EcommerceExample() {
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
+                : null,
           },
           {
             headerName: "Asia-East Stock",
@@ -550,6 +570,10 @@ export default function EcommerceExample() {
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
+                : null,
           },
           {
             headerName: "Incoming",
@@ -865,6 +889,31 @@ export default function EcommerceExample() {
           grandTotalRow="bottom"
           groupTotalRow="bottom"
           alwaysMultiSort={true}
+          cellSelection
+          masterDetail={true}
+          detailRowAutoHeight={true}
+          detailCellRendererParams={{
+            detailGridOptions: {
+              columnDefs: [
+                { field: "variantId", headerName: "Variant ID", flex: 1 },
+                { field: "format", headerName: "Format", flex: 1 },
+                { field: "available", headerName: "Available", flex: 1 },
+              ],
+            },
+            getDetailRowData: (params: GetDetailRowDataParams) => {
+              params.successCallback(params.data.variants);
+            },
+          }}
+          statusBar={{
+            statusPanels: [
+              {
+                statusPanel: "agTotalAndFilteredRowCountComponent",
+                align: "left",
+              },
+              { statusPanel: "agSelectedRowCountComponent", align: "center" },
+              { statusPanel: "agAggregationComponent", align: "right" },
+            ],
+          }}
         />
       </div>
     </div>
