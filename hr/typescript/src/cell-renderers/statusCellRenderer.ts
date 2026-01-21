@@ -3,7 +3,7 @@ import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 import "./statusCellRenderer.css";
 
 export class StatusCellRenderer implements ICellRendererComp {
-  private eGui: HTMLDivElement;
+  private eGui!: HTMLDivElement;
 
   init(params: ICellRendererParams): void {
     const { value } = params;
@@ -28,7 +28,7 @@ export class StatusCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  refresh(params: ICellRendererParams): boolean {
+  refresh(_params: ICellRendererParams): boolean {
     return false;
   }
 }

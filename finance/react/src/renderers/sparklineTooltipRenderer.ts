@@ -1,5 +1,5 @@
-export function sparklineTooltipRenderer(params: any) {
-    return {
-        content: params.yValue.toFixed(2),
-    };
+export function sparklineTooltipRenderer(params: { yValue: number }) {
+  return {
+    content: params.yValue.toFixed(2),
+  };
 }

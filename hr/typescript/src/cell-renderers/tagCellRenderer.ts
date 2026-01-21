@@ -3,7 +3,7 @@ import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 import "./tagCellRenderer.css";
 
 export class TagCellRenderer implements ICellRendererComp {
-  private eGui: HTMLDivElement;
+  private eGui!: HTMLDivElement;
 
   init(params: ICellRendererParams): void {
     const { value, valueFormatted } = params;
@@ -24,7 +24,7 @@ export class TagCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  refresh(params: ICellRendererParams): boolean {
+  refresh(_params: ICellRendererParams): boolean {
     return false;
   }
 }

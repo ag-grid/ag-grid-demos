@@ -3,7 +3,7 @@ import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 import "./flagCellRenderer.css";
 
 export class FlagCellRenderer implements ICellRendererComp {
-  private eGui: HTMLDivElement;
+  private eGui!: HTMLDivElement;
 
   init(params: ICellRendererParams): void {
     const { value, data } = params;
@@ -33,7 +33,7 @@ export class FlagCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  refresh(params: ICellRendererParams): boolean {
+  refresh(_params: ICellRendererParams): boolean {
     return false;
   }
 }

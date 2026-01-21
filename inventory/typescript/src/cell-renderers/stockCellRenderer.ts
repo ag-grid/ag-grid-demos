@@ -30,7 +30,7 @@ export class StockCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  public refresh(params: ICellRendererParams): boolean {
+  public refresh(_params: ICellRendererParams): boolean {
     return true;
   }
 }
