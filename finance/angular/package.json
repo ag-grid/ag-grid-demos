@@ -1,11 +1,13 @@
 {
   "name": "ag-grid-finance-example-angular",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "lint": "eslint . && prettier --check ."
   },
   "private": true,
   "dependencies": {
@@ -28,6 +30,11 @@
     "@angular-devkit/build-angular": "^18.0.1",
     "@angular/cli": "^18.0.1",
     "@angular/compiler-cli": "^18.0.0",
-    "typescript": "~5.4.2"
+    "angular-eslint": "^18.3.0",
+    "eslint": "^9.10.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
+    "typescript": "~5.4.2",
+    "typescript-eslint": "^8.5.0"
   }
 }

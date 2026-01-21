@@ -127,7 +127,7 @@ const columnDefs: ColDef[] = [
   },
 ];
 
-let rowData = getData();
+const rowData = getData();
 const getDataPath: GetDataPath = (data) => data.orgHierarchy;
 const autoGroupColumnDef: ColDef = {
   headerName: "Employee",

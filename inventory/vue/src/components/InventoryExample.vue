@@ -195,6 +195,7 @@ const onFilterTextBoxChanged = (event: Event) => {
         <div class="tabs">
           <button
             v-for="[key, displayValue] in statusEntries"
+            :key
             :class="{ tabButton: true, active: activeTab === key }"
             @click="handleTabClick(key)"
           >
@@ -228,21 +229,20 @@ const onFilterTextBoxChanged = (event: Event) => {
       <div :class="[themeClass, 'grid']">
         <ag-grid-vue
           :style="{ height: '100%' }"
-          @grid-ready="onGridReady"
-          :rowData="rowData"
-          :columnDefs="columnDefs"
-          :defaultColDef="defaultColDef"
-          :rowHeight="rowHeight"
-          :paginationPageSizeSelector="paginationPageSizeSelector"
+          :row-data="rowData"
+          :column-defs="columnDefs"
+          :default-col-def="defaultColDef"
+          :row-height="rowHeight"
+          :pagination-page-size-selector="paginationPageSizeSelector"
           :pagination="pagination"
-          :paginationPageSize="paginationPageSize"
-          :masterDetail="masterDetail"
-          :detailRowAutoHeight="detailRowAutoHeight"
-          :autoSizeStrategy="autoSizeStrategy"
-          :detailCellRendererParams="detailCellRendererParams"
-          :quickFilterText="quickFilterText"
-        >
-        </ag-grid-vue>
+          :pagination-page-size="paginationPageSize"
+          :master-detail="masterDetail"
+          :detail-row-auto-height="detailRowAutoHeight"
+          :auto-size-strategy="autoSizeStrategy"
+          :detail-cell-renderer-params="detailCellRendererParams"
+          :quick-filter-text="quickFilterText"
+          @grid-ready="onGridReady"
+        />
       </div>
     </div>
   </div>

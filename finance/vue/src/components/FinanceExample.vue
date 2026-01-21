@@ -324,20 +324,19 @@ onBeforeUnmount(() => {
         <ag-grid-vue
           :style="{ height: '100%' }"
           :theme="theme"
-          :getRowId="getRowId"
-          :rowData="rowData"
-          :columnDefs="colDefs"
-          :defaultColDef="defaultColDef"
-          :cellSelection="cellSelection"
-          :enableCharts="enableCharts"
-          :rowGroupPanelShow="rowGroupPanelShow"
-          :suppressAggFuncInHeader="suppressAggFuncInHeader"
-          :groupDefaultExpanded="groupDefaultExpanded"
-          :statusBar="statusBar"
-          :chartThemes="chartThemes"
+          :get-row-id="getRowId"
+          :row-data="rowData"
+          :column-defs="colDefs"
+          :default-col-def="defaultColDef"
+          :cell-selection="cellSelection"
+          :enable-charts="enableCharts"
+          :row-group-panel-show="rowGroupPanelShow"
+          :suppress-agg-func-in-header="suppressAggFuncInHeader"
+          :group-default-expanded="groupDefaultExpanded"
+          :status-bar="statusBar"
+          :chart-themes="chartThemes"
           @grid-size-changed="onGridSizeChanged"
-        >
-        </ag-grid-vue>
+        />
       </div>
     </div>
   </div>
