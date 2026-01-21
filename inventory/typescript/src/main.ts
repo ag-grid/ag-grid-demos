@@ -173,9 +173,9 @@ function handleTabClick(status: Status) {
     return;
   }
 
-  gridApi.setColumnFilterModel(
+  void gridApi.setColumnFilterModel(
     "status",
-    status === "all" ? null : { values: [status] }
+    status === "all" ? null : { values: [status] },
   );
   gridApi.onFilterChanged();
 

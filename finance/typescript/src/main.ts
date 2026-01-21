@@ -145,7 +145,7 @@ const createColDefs = (): ColDef[] => {
     {
       field: "ticker",
       cellRenderer: getTickerCellRenderer(
-        Boolean(breakpointConfig.hideTickerName)
+        Boolean(breakpointConfig.hideTickerName),
       ),
       ...tickerWidthDefs,
     },
@@ -222,14 +222,14 @@ const createColDefs = (): ColDef[] => {
         type: "rightAligned",
         valueFormatter: numberFormatter,
         maxWidth: 75,
-      }
+      },
     );
   }
 
   return allColDefs.filter(
     (cDef) =>
       breakpointConfig.columns.includes(cDef.field as string) ||
-      breakpointConfig.columns.includes(cDef.colId as string)
+      breakpointConfig.columns.includes(cDef.colId as string),
   );
 };
 

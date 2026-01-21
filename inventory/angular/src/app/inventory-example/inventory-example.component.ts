@@ -50,15 +50,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
 @Component({
   selector: 'inventory-example',
   standalone: true,
-  imports: [
-    AgGridAngular,
-    FormsModule,
-    ProductCellRenderer,
-    StatusCellRenderer,
-    StockCellRenderer,
-    PriceCellRenderer,
-    ActionsCellRenderer,
-  ],
+  imports: [AgGridAngular, FormsModule],
   templateUrl: './inventory-example.component.html',
   styleUrl: './inventory-example.component.css',
   encapsulation: ViewEncapsulation.None,
@@ -178,9 +170,9 @@ export class InventoryExample {
   quickFilterText = '';
 
   handleTabClick(status: string) {
-    this.gridApi.setColumnFilterModel(
+    void this.gridApi.setColumnFilterModel(
       'status',
-      status === 'all' ? null : { values: [status] }
+      status === 'all' ? null : { values: [status] },
     );
     this.gridApi.onFilterChanged();
     this.activeTab = status;

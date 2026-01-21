@@ -129,20 +129,20 @@ export const InventoryExample: FunctionComponent<Props> = ({
     () => ({
       resizable: false,
     }),
-    []
+    [],
   );
   const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy>(
     () => ({
       type: "fitGridWidth",
     }),
-    []
+    [],
   );
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
   const [quickFilterText, setQuickFilterText] = useState<string>();
   const onFilterTextBoxChanged = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
       setQuickFilterText(value),
-    []
+    [],
   );
 
   const detailCellRendererParams = useMemo(
@@ -169,7 +169,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
         data: { variantDetails },
       }: GetDetailRowDataParams) => successCallback(variantDetails),
     }),
-    []
+    [],
   );
   const [activeTab, setActiveTab] = useState("all");
   const handleTabClick = useCallback((status: string) => {
@@ -177,7 +177,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
     gridRef
       .current!.api.setColumnFilterModel(
         "status",
-        status === "all" ? null : { values: [status] }
+        status === "all" ? null : { values: [status] },
       )
       .then(() => gridRef.current!.api.onFilterChanged());
   }, []);

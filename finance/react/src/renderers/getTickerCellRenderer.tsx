@@ -3,7 +3,7 @@ import { type FunctionComponent } from "react";
 import type { CustomCellRendererProps } from "ag-grid-react";
 
 export const getTickerCellRenderer: (
-  hideTickerName: boolean
+  hideTickerName: boolean,
 ) => FunctionComponent<CustomCellRendererProps> = (hideTickerName) => {
   return ({ data }) => {
     return (

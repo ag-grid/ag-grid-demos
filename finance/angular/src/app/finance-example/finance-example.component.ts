@@ -117,18 +117,16 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
   breakpoint: Breakpoint = 'xlarge';
 
   get theme() {
-    return this.isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
+    return this.isDarkMode
+      ? themeQuartz.withPart(colorSchemeDark)
+      : themeQuartz;
   }
 
   rowData = getData();
   getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.ticker;
   cellSelection: boolean = true;
   enableCharts: boolean = true;
-  get rowGroupPanelShow():
-    | 'always'
-    | 'onlyWhenGrouping'
-    | 'never'
-    | undefined {
+  get rowGroupPanelShow(): 'always' | 'onlyWhenGrouping' | 'never' | undefined {
     return this.enableRowGroup ? 'always' : 'never';
   }
   suppressAggFuncInHeader: boolean = true;
@@ -254,14 +252,14 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
           type: 'rightAligned',
           valueFormatter: numberFormatter,
           maxWidth: 75,
-        }
+        },
       );
     }
 
     return allColDefs.filter(
       (cDef) =>
         breakpointConfig.columns.includes(cDef.field as string) ||
-        breakpointConfig.columns.includes(cDef.colId as string)
+        breakpointConfig.columns.includes(cDef.colId as string),
     );
   }
 

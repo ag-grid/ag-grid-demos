@@ -45,7 +45,9 @@ const emailName = computed(() => {
   padding: 0.375em 1em 0.5em;
   white-space: nowrap;
   border-radius: 6px;
-  box-shadow: 0 0 0 4px transparent, 0 1px 2px 0 #0c111d11;
+  box-shadow:
+    0 0 0 4px transparent,
+    0 1px 2px 0 #0c111d11;
   outline: none;
   background-color: var(--ag-background-color);
   border: 1px solid #d0d5dd;

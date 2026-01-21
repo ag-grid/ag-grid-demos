@@ -3,13 +3,13 @@
     <div class="exampleHeader">
       <div class="tabs">
         @for (status of statusEntries; track status) {
-        <button
-          class="tabButton"
-          [class]="{ active: activeTab === status[0] }"
-          (click)="handleTabClick(status[0])"
-        >
-          {{ status[1] }}
-        </button>
+          <button
+            class="tabButton"
+            [class]="{ active: activeTab === status[0] }"
+            (click)="handleTabClick(status[0])"
+          >
+            {{ status[1] }}
+          </button>
         }
       </div>
       <div class="inputWrapper">

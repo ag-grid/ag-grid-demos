@@ -8,11 +8,11 @@ import React, {
 } from "react";
 
 import {
-  colorSchemeDark,
   type ColDef,
-  type GridSizeChangedEvent,
+  colorSchemeDark,
   type GetRowIdFunc,
   type GetRowIdParams,
+  type GridSizeChangedEvent,
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
@@ -141,7 +141,7 @@ export const FinanceExample: React.FC<Props> = ({
             price,
             timeline,
           };
-        })
+        }),
       );
     }, updateInterval);
   }, [updateInterval]);
@@ -189,7 +189,7 @@ export const FinanceExample: React.FC<Props> = ({
       {
         field: "ticker",
         cellRenderer: getTickerCellRenderer(
-          Boolean(breakpointConfig.hideTickerName)
+          Boolean(breakpointConfig.hideTickerName),
         ),
         ...tickerWidthDefs,
       },
@@ -266,17 +266,15 @@ export const FinanceExample: React.FC<Props> = ({
           type: "rightAligned",
           valueFormatter: numberFormatter,
           maxWidth: 75,
-        }
+        },
       );
     }
 
-    const cDefs = allColDefs.filter(
+    return allColDefs.filter(
       (cDef) =>
         breakpointConfig.columns.includes(cDef.field!) ||
-        breakpointConfig.columns.includes(cDef.colId!)
+        breakpointConfig.columns.includes(cDef.colId!),
     );
-
-    return cDefs;
   }, [breakpoint, isSmallerGrid]);
 
   const defaultColDef: ColDef = useMemo(
@@ -286,32 +284,27 @@ export const FinanceExample: React.FC<Props> = ({
       enableRowGroup,
       enableValue: true,
     }),
-    [enableRowGroup]
+    [enableRowGroup],
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams) => ticker,
-    []
+    [],
   );
 
-  const onGridSizeChanged = useCallback(
-    (params: GridSizeChangedEvent) => {
-      if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
-        setBreakpoint("small");
-      } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
-        setBreakpoint("medium");
-      } else if (
-        params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!
-      ) {
-        setBreakpoint("medLarge");
-      } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
-        setBreakpoint("large");
-      } else {
-        setBreakpoint("xlarge");
-      }
-    },
-    []
-  );
+  const onGridSizeChanged = useCallback((params: GridSizeChangedEvent) => {
+    if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
+      setBreakpoint("small");
+    } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
+      setBreakpoint("medium");
+    } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
+      setBreakpoint("medLarge");
+    } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
+      setBreakpoint("large");
+    } else {
+      setBreakpoint("xlarge");
+    }
+  }, []);
 
   const statusBar = useMemo(
     () => ({
@@ -323,7 +316,7 @@ export const FinanceExample: React.FC<Props> = ({
         { statusPanel: "agAggregationComponent" },
       ],
     }),
-    []
+    [],
   );
 
   const theme = useMemo(() => {

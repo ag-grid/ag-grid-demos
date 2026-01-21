@@ -226,7 +226,9 @@ body {
   color: var(--color-text-secondary, #39485d);
   cursor: pointer;
   box-shadow: none;
-  transition: background 0.3s, color 0.3s;
+  transition:
+    background 0.3s,
+    color 0.3s;
 }
 
 .tabButton:hover {

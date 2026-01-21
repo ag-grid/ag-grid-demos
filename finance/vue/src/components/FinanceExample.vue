@@ -85,7 +85,7 @@ const props = withDefaults(
   }>(),
   {
     updateInterval: DEFAULT_UPDATE_INTERVAL,
-  }
+  },
 );
 
 ModuleRegistry.registerModules([
@@ -252,14 +252,14 @@ const colDefs = computed<ColDef[]>(() => {
         type: "rightAligned",
         valueFormatter: numberFormatter,
         maxWidth: 75,
-      }
+      },
     );
   }
 
   return allColDefs.filter(
     (cDef) =>
       breakpointConfig.columns.includes(cDef.field as string) ||
-      breakpointConfig.columns.includes(cDef.colId as string)
+      breakpointConfig.columns.includes(cDef.colId as string),
   );
 });
 
@@ -267,12 +267,12 @@ const theme = computed(() => {
   return props.isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
 });
 const chartThemes = computed(() =>
-  props.isDarkMode ? ["ag-default-dark"] : ["ag-default"]
+  props.isDarkMode ? ["ag-default-dark"] : ["ag-default"],
 );
 const cellSelection: boolean = true;
 const enableCharts: boolean = true;
 const rowGroupPanelShow = computed(() =>
-  props.enableRowGroup ? "always" : "never"
+  props.enableRowGroup ? "always" : "never",
 );
 const suppressAggFuncInHeader: boolean = true;
 const groupDefaultExpanded = -1;

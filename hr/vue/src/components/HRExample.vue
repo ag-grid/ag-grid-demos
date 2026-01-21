@@ -155,7 +155,7 @@ const groupDefaultExpanded = -1;
 const treeData = true;
 
 const themeClass = computed(() =>
-  isDarkMode ? `${gridTheme}-dark` : gridTheme
+  isDarkMode ? `${gridTheme}-dark` : gridTheme,
 );
 </script>
 

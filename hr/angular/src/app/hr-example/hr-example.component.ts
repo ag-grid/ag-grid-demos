@@ -56,14 +56,7 @@ const departmentFormatter: ValueFormatterFunc = ({ value }) =>
 @Component({
   selector: 'hr-example',
   standalone: true,
-  imports: [
-    AgGridAngular,
-    ContactCellRenderer,
-    EmployeeCellRenderer,
-    FlagCellRenderer,
-    StatusCellRenderer,
-    TagCellRenderer,
-  ],
+  imports: [AgGridAngular],
   templateUrl: './hr-example.component.html',
   styleUrl: './hr-example.component.css',
   encapsulation: ViewEncapsulation.None,

@@ -62,7 +62,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[value as keyof typeof statuses] ?? "";
 
 const themeClass = computed(() =>
-  isDarkMode ? `${gridTheme}-dark` : gridTheme
+  isDarkMode ? `${gridTheme}-dark` : gridTheme,
 );
 const columnDefs = ref<ColDef[]>([
   {
@@ -175,7 +175,7 @@ function handleTabClick(status: Status) {
 
   gridApi.value.setColumnFilterModel(
     "status",
-    status === "all" ? null : { values: [status] }
+    status === "all" ? null : { values: [status] },
   );
   gridApi.value.onFilterChanged();
 
@@ -477,7 +477,9 @@ body {
   color: var(--color-text-secondary, #39485d);
   cursor: pointer;
   box-shadow: none;
-  transition: background 0.3s, color 0.3s;
+  transition:
+    background 0.3s,
+    color 0.3s;
 }
 
 .tabButton:hover {

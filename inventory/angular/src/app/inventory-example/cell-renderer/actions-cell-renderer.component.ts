@@ -10,10 +10,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
       <button class="removeButton" (click)="onRemoveClick()">
         <img src="/example/inventory/delete.svg" alt="delete" />
       </button>
-      <button
-        class="buttonStopSelling"
-        (click)="onStopSellingClick()"
-      >
+      <button class="buttonStopSelling" (click)="onStopSellingClick()">
         Hold Selling
       </button>
     </div>
@@ -32,7 +29,9 @@ import type { ICellRendererParams } from 'ag-grid-community';
         padding: 0.375em 1em 0.5em;
         white-space: nowrap;
         border-radius: 6px;
-        box-shadow: 0 0 0 4px transparent, 0 1px 2px 0 #0c111d11;
+        box-shadow:
+          0 0 0 4px transparent,
+          0 1px 2px 0 #0c111d11;
         outline: none;
         background-color: var(--ag-background-color);
         color: var(--color-fg-primary, #101828);
@@ -85,8 +84,8 @@ export class ActionsCellRenderer implements ICellRendererAngularComp {
     rowData.status = !isPaused
       ? 'paused'
       : !isOutOfStock
-      ? 'active'
-      : 'outOfStock';
+        ? 'active'
+        : 'outOfStock';
 
     // Refresh the row to reflect the changes
     this.params.api.applyTransaction({ update: [rowData] });
