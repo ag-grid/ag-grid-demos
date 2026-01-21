@@ -1,9 +1,8 @@
 <div class="wrapper">
   <div class="container">
-    <div [class]="themeClass" class="grid">
+    <div class="grid {{ themeClass }}">
       <ag-grid-angular
         style="height: 100%"
-        [theme]="theme"
         [rowData]="rowData"
         [columnDefs]="columnDefs"
         [groupDefaultExpanded]="groupDefaultExpanded"

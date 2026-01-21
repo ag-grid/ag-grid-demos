@@ -1,9 +1,9 @@
 <div class="wrapper">
   <div class="container">
-    <div [class]="themeClass" class="grid gridHeight">
+    <div #gridWrapper class="grid gridHeight">
       <ag-grid-angular
         style="height: 100%"
-        (gridReady)="onGridReady($event)"
+        (gridSizeChanged)="onGridSizeChanged($event)"
         [theme]="theme"
         [getRowId]="getRowId"
         [rowData]="rowData"
