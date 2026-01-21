@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="contactCell">
       <div class="iconContainer">
-        <button class="button-secondary">
+        <button>
           <a
             [href]="'https://www.linkedin.com/company/ag-grid/'"
             target="_blank"
@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
             <img class="icon" src="/example/hr/linkedin.svg" alt="linkedin" />
           </a>
         </button>
-        <button class="button-secondary">
+        <button>
           <a [href]="'mailto:' + emailName + '@company.com'" class="iconLink">
             <img class="icon" src="/example/hr/email.svg" alt="email" />
           </a>

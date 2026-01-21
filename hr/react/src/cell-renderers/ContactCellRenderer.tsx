@@ -11,7 +11,7 @@ export const ContactCellRenderer: FunctionComponent<
   return (
     <div className={styles.contactCell}>
       <div className={styles.iconContainer}>
-        <button className="button-secondary">
+        <button>
           <a
             href={`https://www.linkedin.com/company/ag-grid/`}
             target="_blank"
@@ -25,7 +25,7 @@ export const ContactCellRenderer: FunctionComponent<
             />
           </a>
         </button>
-        <button className="button-secondary">
+        <button>
           <a
             href={`mailto:${emailName}@company.com`}
             className={styles.iconLink}
