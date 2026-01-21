@@ -13,6 +13,6 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
-    "ag-grid-enterprise": "33.0.2"
+    "ag-grid-enterprise": "35.0.0"
   }
 }
