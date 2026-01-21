@@ -37,7 +37,6 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-inferrable-types": "off",
-      "@angular-eslint/component-selector": "off",
       "@angular-eslint/component-class-suffix": "off",
     },
   },
