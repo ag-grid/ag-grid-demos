@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { ref, shallowRef } from "vue";
+import { computed, ref, shallowRef } from "vue";
 
 import { AgGridVue } from "ag-grid-vue3";
-import type {
-  ColDef,
-  GetDetailRowDataParams,
-  GridReadyEvent,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-  ValueGetterParams,
-} from "ag-grid-community";
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDetailRowDataParams,
+  type GridApi,
+  type GridReadyEvent,
   ModuleRegistry,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
+  type ValueGetterParams,
 } from "ag-grid-community";
 import {
   ExcelExportModule,
@@ -30,13 +29,13 @@ import ProductCellRenderer from "./cell-renderers/productCellRenderer.vue";
 import StatusCellRenderer from "./cell-renderers/statusCellRenderer.vue";
 import StockCellRenderer from "./cell-renderers/stockCellRenderer.vue";
 
-const { gridTheme, isDarkMode } = defineProps({
+const { isDarkMode, gridTheme } = defineProps({
+  isDarkMode: {
+    type: Boolean,
+  },
   gridTheme: {
     type: String,
     default: "ag-theme-quartz",
-  },
-  isDarkMode: {
-    type: Boolean,
   },
 });
 
@@ -49,7 +48,7 @@ ModuleRegistry.registerModules([
   MasterDetailModule,
 ]);
 
-const gridApi = shallowRef();
+const gridApi = shallowRef<GridApi | null>(null);
 const rowData = ref(getData());
 
 const statuses = {
@@ -62,8 +61,10 @@ type Status = keyof typeof statuses;
 const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[value as keyof typeof statuses] ?? "";
 
-const theme = "legacy";
-const columnDefs: ColDef[] = ref([
+const themeClass = computed(() =>
+  isDarkMode ? `${gridTheme}-dark` : gridTheme
+);
+const columnDefs = ref<ColDef[]>([
   {
     field: "product",
     headerName: "Album Name",
@@ -80,6 +81,7 @@ const columnDefs: ColDef[] = ref([
     field: "status",
     valueFormatter: statusFormatter,
     cellRenderer: StatusCellRenderer,
+    minWidth: 140,
     filter: true,
     filterParams: {
       valueFormatter: statusFormatter,
@@ -159,12 +161,13 @@ const masterDetail = true;
 const detailRowAutoHeight = true;
 const autoSizeStrategy = {
   type: "fitGridWidth",
-};
+} as const;
 const onGridReady = (params: GridReadyEvent) => {
   gridApi.value = params.api;
 };
 
-const activeTab = ref("all");
+const activeTab = ref<Status>("all");
+const statusEntries = Object.entries(statuses) as [Status, string][];
 function handleTabClick(status: Status) {
   if (!gridApi.value) {
     return;
@@ -179,11 +182,10 @@ function handleTabClick(status: Status) {
   activeTab.value = status;
 }
 const quickFilterText = ref("");
-const onFilterTextBoxChanged = ({
-  target: { value },
-}: ChangeEvent<HTMLInputElement>) => (quickFilterText.value = value);
-
-const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
+const onFilterTextBoxChanged = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  quickFilterText.value = target.value;
+};
 </script>
 
 <template>
@@ -192,7 +194,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
       <div class="exampleHeader">
         <div class="tabs">
           <button
-            v-for="[key, displayValue] in Object.entries(statuses)"
+            v-for="[key, displayValue] in statusEntries"
             :class="{ tabButton: true, active: activeTab === key }"
             @click="handleTabClick(key)"
           >
@@ -223,11 +225,10 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
           />
         </div>
       </div>
-      <div class="grid" :class="themeClass">
+      <div :class="[themeClass, 'grid']">
         <ag-grid-vue
           :style="{ height: '100%' }"
           @grid-ready="onGridReady"
-          :theme="theme"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :defaultColDef="defaultColDef"
@@ -248,12 +249,9 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 </template>
 
 <style>
-@import "ag-grid-community/styles/ag-grid.css";
-@import "ag-grid-community/styles/ag-theme-quartz.css";
 :root {
   --layout-grid-header-height: 32px;
   --layout-grid-margin: 32px;
-  --ag-row-border: 1px solid #c41717;
 }
 
 body {
@@ -393,6 +391,11 @@ body {
     100vh - var(--layout-grid-header-height) - 62px - var(--layout-grid-margin)
   );
   margin: 0 var(--layout-grid-margin) var(--layout-grid-margin);
+
+  @media screen and (max-height: 720px) {
+    min-height: 500px;
+    padding-bottom: 24px;
+  }
 }
 
 .exampleHeader {
@@ -478,8 +481,8 @@ body {
 }
 
 .tabButton:hover {
-  background: #7c7c7c23;
-  color: rgba(37, 37, 37, 0.6);
+  background: color-mix(in srgb, var(--color-fg-secondary) 13%, transparent);
+  color: var(--color-text-secondary, #39485d);
 }
 
 .tabButton.active {

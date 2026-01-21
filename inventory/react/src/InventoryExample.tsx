@@ -1,18 +1,14 @@
-import type {
-  ColDef,
-  GetDetailRowDataParams,
-  SizeColumnsToFitGridStrategy,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-  ValueGetterParams,
-} from "ag-grid-community";
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDetailRowDataParams,
   ModuleRegistry,
+  type SizeColumnsToFitGridStrategy,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
+  type ValueGetterParams,
 } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -47,8 +43,8 @@ ModuleRegistry.registerModules([
 ]);
 
 interface Props {
-  gridTheme?: string;
   isDarkMode?: boolean;
+  gridTheme?: string;
 }
 
 const paginationPageSizeSelector = [5, 10, 20];
@@ -86,6 +82,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
       field: "status",
       valueFormatter: statusFormatter,
       cellRenderer: StatusCellRenderer,
+      minWidth: 140,
       filter: true,
       filterParams: {
         valueFormatter: statusFormatter,
@@ -229,7 +226,6 @@ export const InventoryExample: FunctionComponent<Props> = ({
         </div>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
-            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
             rowData={rowData}

@@ -1,20 +1,15 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 import { AgGridAngular } from 'ag-grid-angular';
-import type {
-  ColDef,
-  GetDataPath,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-  GridOptions,
-} from 'ag-grid-community';
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDataPath,
   ModuleRegistry,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
 } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -74,11 +69,12 @@ const departmentFormatter: ValueFormatterFunc = ({ value }) =>
   encapsulation: ViewEncapsulation.None,
 })
 export class HRExample {
-  @Input() gridTheme: string = 'ag-theme-quartz';
   @Input() isDarkMode: boolean = false;
+  @Input() gridTheme: string = 'ag-theme-quartz';
 
-  themeClass = `${this.gridTheme}${this.isDarkMode ? '-dark' : ''}`;
-  theme: GridOptions['theme'] = 'legacy';
+  get themeClass() {
+    return this.isDarkMode ? `${this.gridTheme}-dark` : this.gridTheme;
+  }
 
   rowData = getData();
   getDataPath: GetDataPath = (data) => data.orgHierarchy;

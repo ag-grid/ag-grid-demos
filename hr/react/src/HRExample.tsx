@@ -1,16 +1,12 @@
-import type {
-  ColDef,
-  GetDataPath,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-} from "ag-grid-community";
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDataPath,
   ModuleRegistry,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
 } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -167,7 +163,6 @@ export const HRExample: FunctionComponent<Props> = ({
       <div className={styles.container}>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
-            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
             rowData={rowData}

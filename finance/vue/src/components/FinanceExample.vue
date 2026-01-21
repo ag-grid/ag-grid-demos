@@ -1,71 +1,102 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, withDefaults } from "vue";
 
 import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
 import { AgGridVue } from "ag-grid-vue3";
 import {
-  AllCommunityModule,
-  ClientSideRowModelModule,
+  colorSchemeDark,
   type ColDef,
   type GetRowIdParams,
+  type GridSizeChangedEvent,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueGetterParams,
 } from "ag-grid-community";
-import {
-  AdvancedFilterModule,
-  CellSelectionModule,
-  ColumnMenuModule,
-  ColumnsToolPanelModule,
-  ContextMenuModule,
-  ExcelExportModule,
-  FiltersToolPanelModule,
-  IntegratedChartsModule,
-  RichSelectModule,
-  RowGroupingModule,
-  RowGroupingPanelModule,
-  SetFilterModule,
-  SparklinesModule,
-  StatusBarModule,
-} from "ag-grid-enterprise";
+import { AllEnterpriseModule } from "ag-grid-enterprise";
 
 import { getData } from "./data";
 
 import TickerCellRenderer from "./renderers/tickerCellRenderer.vue";
 import { sparklineTooltipRenderer } from "./renderers/sparklineTooltipRenderer";
 
-const { gridTheme, isDarkMode } = defineProps({
-  gridTheme: {
-    type: String,
-    default: "ag-theme-quartz",
-  },
-  isDarkMode: {
-    type: Boolean,
-  },
-});
-
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
+type Breakpoint = "small" | "medium" | "medLarge" | "large" | "xlarge";
+type ColWidth = number | "auto";
+
+const BREAKPOINT_CONFIG: Record<
+  Breakpoint,
+  {
+    breakpoint?: number;
+    columns: string[];
+    tickerColumnWidth: ColWidth;
+    timelineColumnWidth: ColWidth;
+    hideTickerName?: boolean;
+  }
+> = {
+  small: {
+    breakpoint: 500,
+    columns: ["ticker", "timeline"],
+    tickerColumnWidth: "auto",
+    timelineColumnWidth: "auto",
+    hideTickerName: true,
+  },
+  medium: {
+    breakpoint: 850,
+    columns: ["ticker", "timeline", "totalValue"],
+    tickerColumnWidth: 180,
+    timelineColumnWidth: 140,
+    hideTickerName: true,
+  },
+  medLarge: {
+    breakpoint: 900,
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: ["ticker", "timeline", "totalValue", "p&l"],
+  },
+  large: {
+    breakpoint: 1100,
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: ["ticker", "timeline", "totalValue", "p&l"],
+  },
+  xlarge: {
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: [
+      "ticker",
+      "timeline",
+      "totalValue",
+      "p&l",
+      "instrument",
+      "price",
+      "quantity",
+    ],
+  },
+};
+
+const props = withDefaults(
+  defineProps<{
+    isDarkMode?: boolean;
+    isSmallerGrid?: boolean;
+    updateInterval?: number;
+    enableRowGroup?: boolean;
+  }>(),
+  {
+    updateInterval: DEFAULT_UPDATE_INTERVAL,
+  }
+);
 
 ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  AdvancedFilterModule,
-  ColumnsToolPanelModule,
-  ExcelExportModule,
-  FiltersToolPanelModule,
-  ColumnMenuModule,
-  ContextMenuModule,
-  CellSelectionModule,
-  RowGroupingModule,
-  RowGroupingPanelModule,
-  SetFilterModule,
-  RichSelectModule,
-  StatusBarModule,
-  IntegratedChartsModule.with(AgChartsEnterpriseModule),
-  SparklinesModule.with(AgChartsEnterpriseModule),
+  AllEnterpriseModule.with(AgChartsEnterpriseModule),
 ]);
+
 const rowData = ref(getData());
+const gridWrapper = ref<HTMLDivElement | null>(null);
+const intervalId = ref<ReturnType<typeof setInterval>>();
+const breakpoint = ref<Breakpoint>("xlarge");
+let observer: IntersectionObserver | undefined;
 
 const numberFormatter: ValueFormatterFunc = (params) => {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -79,8 +110,8 @@ function getRowId(params: GetRowIdParams) {
   return params.data.ticker;
 }
 
-function onGridReady() {
-  setInterval(() => {
+const createUpdater = () => {
+  return setInterval(() => {
     rowData.value = rowData.value.map((item) => {
       const isRandomChance = Math.random() < 0.1;
 
@@ -105,83 +136,153 @@ function onGridReady() {
         timeline,
       };
     });
-  }, DEFAULT_UPDATE_INTERVAL);
-}
+  }, props.updateInterval);
+};
 
-const theme = "legacy";
+const onGridSizeChanged = (params: GridSizeChangedEvent) => {
+  if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
+    breakpoint.value = "small";
+  } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
+    breakpoint.value = "medium";
+  } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
+    breakpoint.value = "medLarge";
+  } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
+    breakpoint.value = "large";
+  } else {
+    breakpoint.value = "xlarge";
+  }
+};
+
+const colDefs = computed<ColDef[]>(() => {
+  const breakpointConfig = BREAKPOINT_CONFIG[breakpoint.value];
+  const tickerWidthDefs =
+    breakpointConfig.tickerColumnWidth === "auto"
+      ? { flex: 1 }
+      : {
+          initialWidth: breakpointConfig.tickerColumnWidth as number,
+          minWidth: breakpointConfig.tickerColumnWidth as number,
+        };
+  const timelineWidthDefs =
+    breakpointConfig.timelineColumnWidth === "auto"
+      ? { flex: 1 }
+      : {
+          initialWidth: breakpointConfig.timelineColumnWidth as number,
+          minWidth: breakpointConfig.timelineColumnWidth as number,
+        };
+
+  const allColDefs: ColDef[] = [
+    {
+      field: "ticker",
+      cellRenderer: TickerCellRenderer,
+      cellRendererParams: {
+        hideTickerName: Boolean(breakpointConfig.hideTickerName),
+      },
+      ...tickerWidthDefs,
+    },
+    {
+      headerName: "Timeline",
+      field: "timeline",
+      sortable: false,
+      filter: false,
+      cellRenderer: "agSparklineCellRenderer",
+      cellRendererParams: {
+        sparklineOptions: {
+          type: "bar",
+          direction: "vertical",
+          axis: {
+            strokeWidth: 0,
+          },
+          tooltip: {
+            renderer: sparklineTooltipRenderer,
+          },
+        },
+      },
+      ...timelineWidthDefs,
+    },
+    {
+      field: "instrument",
+      cellDataType: "text",
+      type: "rightAligned",
+      minWidth: 100,
+      initialWidth: 100,
+    },
+    {
+      colId: "p&l",
+      headerName: "P&L",
+      cellDataType: "number",
+      filter: "agNumberColumnFilter",
+      type: "rightAligned",
+      cellRenderer: "agAnimateShowChangeCellRenderer",
+      valueGetter: ({ data }: ValueGetterParams) =>
+        data && data.quantity * (data.price / data.purchasePrice),
+      valueFormatter: numberFormatter,
+      aggFunc: "sum",
+      minWidth: 140,
+      initialWidth: 140,
+    },
+    {
+      colId: "totalValue",
+      headerName: "Total Value",
+      type: "rightAligned",
+      cellDataType: "number",
+      filter: "agNumberColumnFilter",
+      valueGetter: ({ data }: ValueGetterParams) =>
+        data && data.quantity * data.price,
+      cellRenderer: "agAnimateShowChangeCellRenderer",
+      valueFormatter: numberFormatter,
+      aggFunc: "sum",
+      minWidth: 160,
+      initialWidth: 160,
+    },
+  ];
+
+  if (!props.isSmallerGrid) {
+    allColDefs.push(
+      {
+        field: "quantity",
+        cellDataType: "number",
+        type: "rightAligned",
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      },
+      {
+        headerName: "Price",
+        field: "purchasePrice",
+        cellDataType: "number",
+        type: "rightAligned",
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      }
+    );
+  }
+
+  return allColDefs.filter(
+    (cDef) =>
+      breakpointConfig.columns.includes(cDef.field as string) ||
+      breakpointConfig.columns.includes(cDef.colId as string)
+  );
+});
+
+const theme = computed(() => {
+  return props.isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
+});
+const chartThemes = computed(() =>
+  props.isDarkMode ? ["ag-default-dark"] : ["ag-default"]
+);
 const cellSelection: boolean = true;
 const enableCharts: boolean = true;
-const rowGroupPanelShow: "always" | "onlyWhenGrouping" | "never" | undefined =
-  "always";
+const rowGroupPanelShow = computed(() =>
+  props.enableRowGroup ? "always" : "never"
+);
 const suppressAggFuncInHeader: boolean = true;
 const groupDefaultExpanded = -1;
 
-const defaultColDef: ColDef = {
+const defaultColDef = computed<ColDef>(() => ({
   flex: 1,
   filter: true,
-  enableRowGroup: true,
+  enableRowGroup: props.enableRowGroup,
   enableValue: true,
-};
-const colDefs: ColDef[] = [
-  {
-    field: "ticker",
-    cellRenderer: TickerCellRenderer,
-  },
-  {
-    headerName: "Timeline",
-    field: "timeline",
-    sortable: false,
-    filter: false,
-    cellRenderer: "agSparklineCellRenderer",
-    cellRendererParams: {
-      sparklineOptions: {
-        type: "bar",
-        direction: "vertical",
-        axis: {
-          strokeWidth: 0,
-        },
-        tooltip: {
-          renderer: sparklineTooltipRenderer,
-        },
-      },
-    },
-  },
-  {
-    field: "instrument",
-    cellDataType: "text",
-    type: "rightAligned",
-    minWidth: 100,
-    initialWidth: 100,
-  },
-  {
-    colId: "p&l",
-    headerName: "P&L",
-    cellDataType: "number",
-    filter: "agNumberColumnFilter",
-    type: "rightAligned",
-    cellRenderer: "agAnimateShowChangeCellRenderer",
-    valueGetter: ({ data }: ValueGetterParams) =>
-      data && data.quantity * (data.price / data.purchasePrice),
-    valueFormatter: numberFormatter,
-    aggFunc: "sum",
-    minWidth: 140,
-    initialWidth: 140,
-  },
-  {
-    colId: "totalValue",
-    headerName: "Total Value",
-    type: "rightAligned",
-    cellDataType: "number",
-    filter: "agNumberColumnFilter",
-    valueGetter: ({ data }: ValueGetterParams) =>
-      data && data.quantity * data.price,
-    cellRenderer: "agAnimateShowChangeCellRenderer",
-    valueFormatter: numberFormatter,
-    aggFunc: "sum",
-    minWidth: 160,
-    initialWidth: 160,
-  },
-];
+}));
 
 const statusBar = {
   statusPanels: [
@@ -193,18 +294,37 @@ const statusBar = {
   ],
 };
 
-const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
+onMounted(() => {
+  if (!gridWrapper.value) {
+    return;
+  }
+
+  observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      clearInterval(intervalId.value);
+      intervalId.value = createUpdater();
+    } else {
+      clearInterval(intervalId.value);
+    }
+  });
+
+  observer.observe(gridWrapper.value);
+});
+
+onBeforeUnmount(() => {
+  observer?.disconnect();
+  clearInterval(intervalId.value);
+});
 </script>
 
 <template>
   <div class="wrapper">
     <div class="container">
-      <div class="grid gridHeight" :class="themeClass">
+      <div ref="gridWrapper" class="grid gridHeight">
         <ag-grid-vue
           :style="{ height: '100%' }"
           :theme="theme"
           :getRowId="getRowId"
-          :onGridReady="onGridReady"
           :rowData="rowData"
           :columnDefs="colDefs"
           :defaultColDef="defaultColDef"
@@ -214,6 +334,8 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
           :suppressAggFuncInHeader="suppressAggFuncInHeader"
           :groupDefaultExpanded="groupDefaultExpanded"
           :statusBar="statusBar"
+          :chartThemes="chartThemes"
+          @grid-size-changed="onGridSizeChanged"
         >
         </ag-grid-vue>
       </div>
@@ -222,9 +344,6 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
 </template>
 
 <style>
-@import "ag-grid-community/styles/ag-grid.css";
-@import "ag-grid-community/styles/ag-theme-quartz.css";
-
 :root {
   --layout-grid-header-height: 32px;
   --layout-grid-margin: 32px;
@@ -245,6 +364,11 @@ body {
     100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
   );
   margin: var(--layout-grid-margin);
+
+  @media screen and (max-height: 720px) {
+    min-height: 500px;
+    padding-bottom: 24px;
+  }
 }
 
 .ag-theme-quartz-dark .ag-row {

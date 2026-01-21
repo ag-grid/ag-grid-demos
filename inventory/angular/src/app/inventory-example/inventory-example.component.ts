@@ -2,31 +2,25 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AgGridAngular } from 'ag-grid-angular';
-import type {
-  ColDef,
-  GetDetailRowDataParams,
-  GridApi,
-  GridOptions,
-  GridReadyEvent,
-  SizeColumnsToFitGridStrategy,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-  ValueGetterParams,
-} from 'ag-grid-community';
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDetailRowDataParams,
+  type GridApi,
+  type GridReadyEvent,
   ModuleRegistry,
+  type SizeColumnsToFitGridStrategy,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
+  type ValueGetterParams,
 } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
   ExcelExportModule,
   MasterDetailModule,
   MultiFilterModule,
   SetFilterModule,
 } from 'ag-grid-enterprise';
-
 import { getData } from './data';
 import { ProductCellRenderer } from './cell-renderer/product-cell-renderer.component';
 import { StatusCellRenderer } from './cell-renderer/status-cell-renderer.component';
@@ -70,13 +64,14 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
   encapsulation: ViewEncapsulation.None,
 })
 export class InventoryExample {
-  @Input() gridTheme: string = 'ag-theme-quartz';
   @Input() isDarkMode: boolean = false;
+  @Input() gridTheme: string = 'ag-theme-quartz';
 
   private gridApi!: GridApi;
 
-  themeClass = `${this.gridTheme}${this.isDarkMode ? '-dark' : ''}`;
-  theme: GridOptions['theme'] = 'legacy';
+  get themeClass() {
+    return this.isDarkMode ? `${this.gridTheme}-dark` : this.gridTheme;
+  }
 
   rowData = getData();
   columnDefs = [
@@ -96,6 +91,7 @@ export class InventoryExample {
       field: 'status',
       valueFormatter: statusFormatter,
       cellRenderer: StatusCellRenderer,
+      minWidth: 140,
       filter: true,
       filterParams: {
         valueFormatter: statusFormatter,

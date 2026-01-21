@@ -5,7 +5,7 @@
       style="width: 20px; height: 20px; border-radius: 32px"
     />
     <b class="custom-ticker">{{ data.ticker }}</b>
-    <span class="ticker-name">{{ data.name }}</span>
+    <span v-if="!hideTickerName" class="ticker-name">{{ data.name }}</span>
   </div>
 </template>
 
@@ -15,4 +15,5 @@ import { defineProps } from "vue";
 const { params } = defineProps(["params"]);
 
 const data = params.data;
+const hideTickerName = Boolean(params.hideTickerName);
 </script>

@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import { AgGridVue } from "ag-grid-vue3";
-import type {
-  ColDef,
-  GetDataPath,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-} from "ag-grid-community";
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
+  type ColDef,
+  type GetDataPath,
   ModuleRegistry,
+  type ValueFormatterFunc,
+  type ValueFormatterParams,
 } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -33,13 +29,13 @@ import FlagCellRenderer from "./cell-renderers/flagCellRenderer.vue";
 import StatusCellRenderer from "./cell-renderers/statusCellRenderer.vue";
 import TagCellRenderer from "./cell-renderers/tagCellRenderer.vue";
 
-const { gridTheme, isDarkMode } = defineProps({
+const { isDarkMode, gridTheme } = defineProps({
+  isDarkMode: {
+    type: Boolean,
+  },
   gridTheme: {
     type: String,
     default: "ag-theme-quartz",
-  },
-  isDarkMode: {
-    type: Boolean,
   },
 });
 
@@ -158,17 +154,17 @@ const autoGroupColumnDef: ColDef = {
 const groupDefaultExpanded = -1;
 const treeData = true;
 
-const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
-const theme = "legacy";
+const themeClass = computed(() =>
+  isDarkMode ? `${gridTheme}-dark` : gridTheme
+);
 </script>
 
 <template>
   <div class="wrapper">
     <div class="container">
-      <div class="grid" :class="themeClass">
+      <div :class="[themeClass, 'grid']">
         <ag-grid-vue
           :style="{ height: '100%' }"
-          :theme="theme"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :groupDefaultExpanded="groupDefaultExpanded"
@@ -183,8 +179,6 @@ const theme = "legacy";
 </template>
 
 <style>
-@import "ag-grid-community/styles/ag-grid.css";
-@import "ag-grid-community/styles/ag-theme-quartz.css";
 :root {
   --layout-grid-header-height: 32px;
   --layout-grid-margin: 32px;
@@ -267,8 +261,8 @@ div.ag-theme-quartz-dark {
   font-weight: 600;
 }
 
-.ag-theme-quartz .ag-cell:not(:first-child),
-.ag-theme-quartz-dark .ag-cell:not(:first-child) {
+.ag-theme-quartz .ag-cell:not(:first-child, .ag-cell-focus),
+.ag-theme-quartz-dark .ag-cell:not(:first-child, .ag-cell-focus) {
   border-left: 1px solid var(--ag-border-color);
 }
 
@@ -306,5 +300,10 @@ div.ag-theme-quartz-dark {
     100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
   );
   margin: var(--layout-grid-margin);
+
+  @media screen and (max-height: 720px) {
+    min-height: 500px;
+    padding-bottom: 24px;
+  }
 }
 </style>

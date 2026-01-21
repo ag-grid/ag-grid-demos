@@ -8,67 +8,90 @@ import React, {
 } from "react";
 
 import {
-  AllCommunityModule,
-  ClientSideRowModelModule,
+  colorSchemeDark,
   type ColDef,
+  type GridSizeChangedEvent,
   type GetRowIdFunc,
   type GetRowIdParams,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueGetterParams,
 } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import {
-  AdvancedFilterModule,
-  CellSelectionModule,
-  ColumnMenuModule,
-  ColumnsToolPanelModule,
-  ContextMenuModule,
-  ExcelExportModule,
-  FiltersToolPanelModule,
-  IntegratedChartsModule,
-  RichSelectModule,
-  RowGroupingModule,
-  RowGroupingPanelModule,
-  SetFilterModule,
-  SparklinesModule,
-  StatusBarModule,
-} from "ag-grid-enterprise";
+import { AllEnterpriseModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 
 import styles from "./FinanceExample.module.css";
 import { getData } from "./data";
-import { TickerCellRenderer } from "./renderers/TickerCellRenderer";
+import { getTickerCellRenderer } from "./renderers/getTickerCellRenderer";
 import { sparklineTooltipRenderer } from "./renderers/sparklineTooltipRenderer";
 
 export interface Props {
-  gridTheme?: string;
   isDarkMode?: boolean;
   gridHeight?: number | null;
+  isSmallerGrid?: boolean;
   updateInterval?: number;
+  enableRowGroup?: boolean;
 }
 
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
+type Breakpoint = "small" | "medium" | "medLarge" | "large" | "xlarge";
+type ColWidth = number | "auto";
+
+const BREAKPOINT_CONFIG: Record<
+  Breakpoint,
+  {
+    breakpoint?: number;
+    columns: string[];
+    tickerColumnWidth: ColWidth;
+    timelineColumnWidth: ColWidth;
+    hideTickerName?: boolean;
+  }
+> = {
+  small: {
+    breakpoint: 500,
+    columns: ["ticker", "timeline"],
+    tickerColumnWidth: "auto",
+    timelineColumnWidth: "auto",
+    hideTickerName: true,
+  },
+  medium: {
+    breakpoint: 850,
+    columns: ["ticker", "timeline", "totalValue"],
+    tickerColumnWidth: 180,
+    timelineColumnWidth: 140,
+    hideTickerName: true,
+  },
+  medLarge: {
+    breakpoint: 900,
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: ["ticker", "timeline", "totalValue", "p&l"],
+  },
+  large: {
+    breakpoint: 1100,
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: ["ticker", "timeline", "totalValue", "p&l"],
+  },
+  xlarge: {
+    tickerColumnWidth: 340,
+    timelineColumnWidth: 140,
+    columns: [
+      "ticker",
+      "timeline",
+      "totalValue",
+      "p&l",
+      "instrument",
+      "price",
+      "quantity",
+    ],
+  },
+};
 
 ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  AdvancedFilterModule,
-  ColumnsToolPanelModule,
-  ExcelExportModule,
-  FiltersToolPanelModule,
-  ColumnMenuModule,
-  ContextMenuModule,
-  CellSelectionModule,
-  RowGroupingModule,
-  RowGroupingPanelModule,
-  SetFilterModule,
-  RichSelectModule,
-  StatusBarModule,
-  IntegratedChartsModule.with(AgChartsEnterpriseModule),
-  SparklinesModule.with(AgChartsEnterpriseModule),
+  AllEnterpriseModule.with(AgChartsEnterpriseModule),
 ]);
 
 const numberFormatter: ValueFormatterFunc = ({ value }) => {
@@ -80,16 +103,20 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
 };
 
 export const FinanceExample: React.FC<Props> = ({
-  gridTheme = "ag-theme-quartz",
   isDarkMode = false,
   gridHeight = null,
+  isSmallerGrid,
   updateInterval = DEFAULT_UPDATE_INTERVAL,
+  enableRowGroup,
 }) => {
   const [rowData, setRowData] = useState(getData());
   const gridRef = useRef<AgGridReact>(null);
+  const gridWrapperRef = useRef<HTMLDivElement>(null);
+  const intervalId = useRef<ReturnType<typeof setInterval>>();
+  const [breakpoint, setBreakpoint] = useState<Breakpoint>("xlarge");
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
+  const createUpdater = useCallback(() => {
+    return setInterval(() => {
       setRowData((rowData) =>
         rowData.map((item) => {
           const isRandomChance = Math.random() < 0.1;
@@ -117,15 +144,54 @@ export const FinanceExample: React.FC<Props> = ({
         })
       );
     }, updateInterval);
-
-    return () => clearInterval(intervalId);
   }, [updateInterval]);
 
+  useEffect(() => {
+    const element = gridWrapperRef.current;
+    if (!element) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        clearInterval(intervalId.current);
+        intervalId.current = createUpdater();
+      } else {
+        clearInterval(intervalId.current);
+      }
+    });
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalId.current);
+    };
+  }, [createUpdater]);
+
   const colDefs = useMemo<ColDef[]>(() => {
-    return [
+    const breakpointConfig = BREAKPOINT_CONFIG[breakpoint];
+    const tickerWidthDefs =
+      breakpointConfig.tickerColumnWidth === "auto"
+        ? { flex: 1 }
+        : {
+            initialWidth: breakpointConfig.tickerColumnWidth as number,
+            minWidth: breakpointConfig.tickerColumnWidth as number,
+          };
+    const timelineWidthDefs =
+      breakpointConfig.timelineColumnWidth === "auto"
+        ? { flex: 1 }
+        : {
+            initialWidth: breakpointConfig.timelineColumnWidth as number,
+            minWidth: breakpointConfig.timelineColumnWidth as number,
+          };
+    const allColDefs: ColDef[] = [
       {
         field: "ticker",
-        cellRenderer: TickerCellRenderer,
+        cellRenderer: getTickerCellRenderer(
+          Boolean(breakpointConfig.hideTickerName)
+        ),
+        ...tickerWidthDefs,
       },
       {
         headerName: "Timeline",
@@ -145,6 +211,7 @@ export const FinanceExample: React.FC<Props> = ({
             },
           },
         },
+        ...timelineWidthDefs,
       },
       {
         field: "instrument",
@@ -182,20 +249,67 @@ export const FinanceExample: React.FC<Props> = ({
         initialWidth: 160,
       },
     ];
-  }, []);
+
+    if (!isSmallerGrid) {
+      allColDefs.push(
+        {
+          field: "quantity",
+          cellDataType: "number",
+          type: "rightAligned",
+          valueFormatter: numberFormatter,
+          maxWidth: 75,
+        },
+        {
+          headerName: "Price",
+          field: "purchasePrice",
+          cellDataType: "number",
+          type: "rightAligned",
+          valueFormatter: numberFormatter,
+          maxWidth: 75,
+        }
+      );
+    }
+
+    const cDefs = allColDefs.filter(
+      (cDef) =>
+        breakpointConfig.columns.includes(cDef.field!) ||
+        breakpointConfig.columns.includes(cDef.colId!)
+    );
+
+    return cDefs;
+  }, [breakpoint, isSmallerGrid]);
 
   const defaultColDef: ColDef = useMemo(
     () => ({
       flex: 1,
       filter: true,
-      enableRowGroup: true,
+      enableRowGroup,
       enableValue: true,
     }),
-    []
+    [enableRowGroup]
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams) => ticker,
+    []
+  );
+
+  const onGridSizeChanged = useCallback(
+    (params: GridSizeChangedEvent) => {
+      if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
+        setBreakpoint("small");
+      } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
+        setBreakpoint("medium");
+      } else if (
+        params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!
+      ) {
+        setBreakpoint("medLarge");
+      } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
+        setBreakpoint("large");
+      } else {
+        setBreakpoint("xlarge");
+      }
+    },
     []
   );
 
@@ -212,18 +326,19 @@ export const FinanceExample: React.FC<Props> = ({
     []
   );
 
-  const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
-  const chartThemes = isDarkMode ? ["ag-default-dark"] : ["ag-default"];
+  const theme = useMemo(() => {
+    return isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz;
+  }, [isDarkMode]);
 
+  const chartThemes = isDarkMode ? ["ag-default-dark"] : ["ag-default"];
   return (
     <div
+      ref={gridWrapperRef}
       style={gridHeight ? { height: gridHeight } : {}}
-      className={`${themeClass} ${styles.grid} ${
-        gridHeight ? "" : styles.gridHeight
-      }`}
+      className={`${styles.grid} ${gridHeight ? "" : styles.gridHeight}`}
     >
       <AgGridReact
-        theme="legacy"
+        theme={theme}
         chartThemes={chartThemes}
         ref={gridRef}
         getRowId={getRowId}
@@ -232,10 +347,11 @@ export const FinanceExample: React.FC<Props> = ({
         defaultColDef={defaultColDef}
         cellSelection={true}
         enableCharts
-        rowGroupPanelShow="always"
+        rowGroupPanelShow={enableRowGroup ? "always" : "never"}
         suppressAggFuncInHeader
         groupDefaultExpanded={-1}
         statusBar={statusBar}
+        onGridSizeChanged={onGridSizeChanged}
       />
     </div>
   );
