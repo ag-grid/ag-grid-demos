@@ -19,7 +19,12 @@ import {
   PivotModule,
   SetFilterModule,
   FiltersToolPanelModule,
+  SparklinesModule,
 } from "ag-grid-enterprise";
+import {
+  AgChartsCommunityModule,
+  AgSparklineOptions,
+} from "ag-charts-community";
 
 ModuleRegistry.registerModules([
   SideBarModule,
@@ -30,6 +35,7 @@ ModuleRegistry.registerModules([
   NumberFilterModule,
   SetFilterModule,
   FiltersToolPanelModule,
+  SparklinesModule.with(AgChartsCommunityModule),
 ]);
 
 export default function EcommerceExample() {
@@ -478,6 +484,27 @@ export default function EcommerceExample() {
         headerName: "Inventory",
         children: [
           {
+            headerName: "Stock by Warehouse",
+            minWidth: 120,
+            cellRenderer: "agSparklineCellRenderer",
+            cellRendererParams: {
+              sparklineOptions: {
+                type: "bar",
+                direction: "horizontal",
+                padding: { top: 10, bottom: 10 },
+                label: {
+                  enabled: true,
+                  placement: "outside-end",
+                  fontSize: 8,
+                },
+              } as AgSparklineOptions,
+            },
+            valueGetter: ({ data }) =>
+              data
+                ? Object.values(data.stockByWarehouse as Record<string, number>)
+                : [],
+          },
+          {
             headerName: "Stock (Total)",
             valueGetter: ({ data }) =>
               data
@@ -553,6 +580,25 @@ export default function EcommerceExample() {
         headerName: "Sales Performance",
         openByDefault: false,
         children: [
+          {
+            headerName: "Sales Trend",
+            minWidth: 150,
+            cellRenderer: "agSparklineCellRenderer",
+            cellRendererParams: {
+              sparklineOptions: {
+                type: "line",
+                stroke: "#2196F3",
+                padding: { top: 5, bottom: 5 },
+                marker: {
+                  enabled: true,
+                  size: 3,
+                },
+              } as AgSparklineOptions,
+            },
+            valueGetter: ({ data }) =>
+              data?.monthlySales.map((m: { sold: number }) => m.sold) ?? [],
+            columnGroupShow: "closed",
+          },
           {
             headerName: "Units Sold (12m)",
             valueGetter: ({ data }) =>
