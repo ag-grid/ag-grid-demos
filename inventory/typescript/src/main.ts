@@ -13,8 +13,6 @@ import {
   createGrid,
   ModuleRegistry,
 } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -71,6 +69,7 @@ const columnDefs: ColDef[] = [
     field: "status",
     valueFormatter: statusFormatter,
     cellRenderer: StatusCellRenderer,
+    minWidth: 140,
     filter: true,
     filterParams: {
       valueFormatter: statusFormatter,
@@ -144,7 +143,6 @@ const detailCellRendererParams = {
 };
 
 const gridOptions: GridOptions = {
-  theme: "legacy",
   columnDefs,
   rowData,
   defaultColDef,
@@ -204,8 +202,9 @@ document.addEventListener("DOMContentLoaded", function () {
   gridApi = createGrid(gridDiv, gridOptions);
 
   const filterTextBox = document.getElementById("filter-text-box");
-  filterTextBox!.addEventListener("input", (event) => {
-    const value = event.target?.value;
+  filterTextBox!.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
     gridApi.setGridOption("quickFilterText", value);
   });
 });
