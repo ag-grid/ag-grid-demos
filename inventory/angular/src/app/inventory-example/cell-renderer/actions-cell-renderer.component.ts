@@ -7,11 +7,11 @@ import type { ICellRendererParams } from 'ag-grid-community';
   standalone: true,
   template: `
     <div class="buttonCell">
-      <button class="button-secondary removeButton" (click)="onRemoveClick()">
+      <button class="removeButton" (click)="onRemoveClick()">
         <img src="/example/inventory/delete.svg" alt="delete" />
       </button>
       <button
-        class="button-secondary buttonStopSelling"
+        class="buttonStopSelling"
         (click)="onStopSellingClick()"
       >
         Hold Selling
