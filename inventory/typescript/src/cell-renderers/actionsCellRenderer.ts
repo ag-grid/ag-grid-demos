@@ -34,13 +34,13 @@ export class ActionsCellRenderer implements ICellRendererComp {
     };
 
     const removeButton = document.createElement("button");
-    removeButton.className = "button-secondary removeButton";
+    removeButton.className = "removeButton";
     removeButton.addEventListener("click", onRemoveClick);
     removeButton.innerHTML = `<img src="/example/inventory/delete.svg" alt="delete" />`;
     this.eGui.appendChild(removeButton);
 
     const stopSellingButton = document.createElement("button");
-    stopSellingButton.className = "button-secondary buttonStopSelling";
+    stopSellingButton.className = "buttonStopSelling";
     stopSellingButton.addEventListener("click", onStopSellingClick);
     stopSellingButton.textContent = "Hold Selling";
     this.eGui.appendChild(stopSellingButton);
@@ -50,7 +50,7 @@ export class ActionsCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  public refresh(params: ICellRendererParams): boolean {
+  public refresh(_params: ICellRendererParams): boolean {
     return false;
   }
 }
