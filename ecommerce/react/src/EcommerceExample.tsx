@@ -47,8 +47,23 @@ export default function EcommerceExample() {
     "month"
   );
   const [selectedWarehouse, setSelectedWarehouse] = useState<string>("US-West");
+  const [selectedMonth, setSelectedMonth] = useState<string>("2026-01");
 
   const warehouses = ["US-West", "EU-Central", "Asia-East"];
+  const months = [
+    { value: "2025-02", label: "Feb '25" },
+    { value: "2025-03", label: "Mar '25" },
+    { value: "2025-04", label: "Apr '25" },
+    { value: "2025-05", label: "May '25" },
+    { value: "2025-06", label: "Jun '25" },
+    { value: "2025-07", label: "Jul '25" },
+    { value: "2025-08", label: "Aug '25" },
+    { value: "2025-09", label: "Sep '25" },
+    { value: "2025-10", label: "Oct '25" },
+    { value: "2025-11", label: "Nov '25" },
+    { value: "2025-12", label: "Dec '25" },
+    { value: "2026-01", label: "Jan '26" },
+  ];
 
   // Flatten data by month for pivot mode
   const flattenByMonth = useCallback((data: ReturnType<typeof getData>) => {
@@ -136,7 +151,10 @@ export default function EcommerceExample() {
         return {
           ...col,
           children: col.children.map((child) => {
-            if ("field" in child && (child.field === "category" || child.field === "subcategory")) {
+            if (
+              "field" in child &&
+              (child.field === "category" || child.field === "subcategory")
+            ) {
               return { ...child, rowGroup: true, hide: true };
             }
             if ("field" in child && child.field === "sku") {
@@ -310,6 +328,25 @@ export default function EcommerceExample() {
     api.onFilterChanged();
   };
 
+  const handleFilterLowSales = () => {
+    const api = gridRef.current?.api;
+    if (!api) return;
+
+    // Clear all month filters first
+    months.forEach((m) => {
+      api.setColumnFilterModel(`sales-${m.value}`, null);
+    });
+
+    // Apply filter for selected month: sold < 5
+    api.setColumnFilterModel(`sales-${selectedMonth}`, {
+      filterType: "number",
+      type: "lessThan",
+      filter: 5,
+    });
+
+    api.onFilterChanged();
+  };
+
   const colDefs = useMemo<(ColDef | ColGroupDef)[]>(() => {
     return [
       {
@@ -358,7 +395,8 @@ export default function EcommerceExample() {
           {
             headerName: "Digital",
             field: "isDigital",
-            cellRenderer: ({ value }: { value: boolean }) => (value ? "Yes" : "No"),
+            cellRenderer: ({ value }: { value: boolean }) =>
+              value ? "Yes" : "No",
             filter: "agSetColumnFilter",
           },
           {
@@ -422,12 +460,15 @@ export default function EcommerceExample() {
             valueGetter: ({ data }) =>
               data
                 ? data.monthlySales.reduce(
-                    (sum: number, m: { sold: number }) => sum + m.sold * data.price,
+                    (sum: number, m: { sold: number }) =>
+                      sum + m.sold * data.price,
                     0
                   )
                 : undefined,
             valueFormatter: ({ value, data }) =>
-              value != null ? `${data?.currency ?? "$"} ${value.toFixed(0)}` : "",
+              value != null
+                ? `${data?.currency ?? "$"} ${value.toFixed(0)}`
+                : "",
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
           },
@@ -452,7 +493,9 @@ export default function EcommerceExample() {
             field: "stockByWarehouse.US-West",
             valueGetter: ({ data }) =>
               data
-                ? (data.stockByWarehouse as Record<string, number>)["US-West"] ?? 0
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "US-West"
+                  ] ?? 0
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
@@ -462,7 +505,9 @@ export default function EcommerceExample() {
             field: "stockByWarehouse.EU-Central",
             valueGetter: ({ data }) =>
               data
-                ? (data.stockByWarehouse as Record<string, number>)["EU-Central"] ?? 0
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "EU-Central"
+                  ] ?? 0
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
@@ -472,7 +517,9 @@ export default function EcommerceExample() {
             field: "stockByWarehouse.Asia-East",
             valueGetter: ({ data }) =>
               data
-                ? (data.stockByWarehouse as Record<string, number>)["Asia-East"] ?? 0
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "Asia-East"
+                  ] ?? 0
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
@@ -504,6 +551,7 @@ export default function EcommerceExample() {
       },
       {
         headerName: "Sales Performance",
+        openByDefault: false,
         children: [
           {
             headerName: "Units Sold (12m)",
@@ -516,6 +564,7 @@ export default function EcommerceExample() {
                 : undefined,
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
+            columnGroupShow: "closed",
           },
           {
             headerName: "Velocity (avg / mo)",
@@ -530,6 +579,139 @@ export default function EcommerceExample() {
               typeof value === "number" ? value.toFixed(1) : "",
             aggFunc: "avg",
             filter: "agNumberColumnFilter",
+            columnGroupShow: "closed",
+          },
+          {
+            headerName: "Feb '25",
+            colId: "sales-2025-02",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-02"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Mar '25",
+            colId: "sales-2025-03",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-03"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Apr '25",
+            colId: "sales-2025-04",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-04"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "May '25",
+            colId: "sales-2025-05",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-05"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Jun '25",
+            colId: "sales-2025-06",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-06"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Jul '25",
+            colId: "sales-2025-07",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-07"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Aug '25",
+            colId: "sales-2025-08",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-08"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Sep '25",
+            colId: "sales-2025-09",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-09"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Oct '25",
+            colId: "sales-2025-10",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-10"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Nov '25",
+            colId: "sales-2025-11",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-11"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Dec '25",
+            colId: "sales-2025-12",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2025-12"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
+          },
+          {
+            headerName: "Jan '26",
+            colId: "sales-2026-01",
+            valueGetter: ({ data }) =>
+              data?.monthlySales.find(
+                (m: { month: string }) => m.month === "2026-01"
+              )?.sold ?? 0,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "open",
           },
         ],
       },
@@ -604,6 +786,25 @@ export default function EcommerceExample() {
           disabled={isPivotMode}
         >
           Filter Low Stock
+        </button>
+        <select
+          className={styles.actionButton}
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          disabled={isPivotMode}
+        >
+          {months.map((m) => (
+            <option key={m.value} value={m.value}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+        <button
+          className={styles.actionButton}
+          onClick={handleFilterLowSales}
+          disabled={isPivotMode}
+        >
+          Filter Low Sales
         </button>
       </div>
       <div className={`${styles.grid}`}>
