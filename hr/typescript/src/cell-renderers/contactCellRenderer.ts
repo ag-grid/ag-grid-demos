@@ -3,7 +3,7 @@ import type { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 import "./contactCellRenderer.css";
 
 export class ContactCellRenderer implements ICellRendererComp {
-  private eGui: HTMLDivElement;
+  private eGui!: HTMLDivElement;
 
   init(params: ICellRendererParams) {
     const emailName = params.data.orgHierarchy
@@ -18,7 +18,6 @@ export class ContactCellRenderer implements ICellRendererComp {
     iconContainer.className = "iconContainer";
 
     const linkedinButton = document.createElement("button");
-    linkedinButton.className = "button-secondary";
     const linkedinLink = document.createElement("a");
     linkedinLink.href = `https://www.linkedin.com/company/ag-grid/`;
     linkedinLink.target = "_blank";
@@ -32,7 +31,6 @@ export class ContactCellRenderer implements ICellRendererComp {
     linkedinButton.appendChild(linkedinLink);
 
     const emailButton = document.createElement("button");
-    emailButton.className = "button-secondary";
     const emailLink = document.createElement("a");
     emailLink.href = `mailto:${emailName}@company.com`;
     emailLink.className = "iconLink";
@@ -53,7 +51,7 @@ export class ContactCellRenderer implements ICellRendererComp {
     return this.eGui;
   }
 
-  refresh(params: ICellRendererParams): boolean {
+  refresh(_params: ICellRendererParams): boolean {
     return false;
   }
 }
