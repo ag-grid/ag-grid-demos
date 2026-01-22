@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: default;
+}
+
+.gradeA {
+  background-color: #22c55e;
+  color: white;
+}
+
+.gradeB {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.gradeC {
+  background-color: #eab308;
+  color: white;
+}
+
+.gradeD {
+  background-color: #f97316;
+  color: white;
+}
+
+.gradeF {
+  background-color: #ef4444;
+  color: white;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: pre-line;
+  z-index: 1000;
+  min-width: 140px;
+  text-align: left;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.tooltip:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+  margin-bottom: -4px;
+  z-index: 1001;
+}

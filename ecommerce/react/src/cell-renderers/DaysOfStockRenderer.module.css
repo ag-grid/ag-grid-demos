@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.critical {
+  background-color: #fecaca;
+  color: #991b1b;
+}
+
+.warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.healthy {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.digital {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.icon {
+  display: inline-flex;
+  font-size: 10px;
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

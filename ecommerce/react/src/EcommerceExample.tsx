@@ -3,6 +3,9 @@ import styles from "./EcommerceExample.module.css";
 import { AgGridReact } from "ag-grid-react";
 import { useMemo, useRef, useState, useCallback } from "react";
 import { getData } from "./data";
+import { DaysOfStockRenderer } from "./cell-renderers/DaysOfStockRenderer";
+import { MomentumRenderer } from "./cell-renderers/MomentumRenderer";
+import { ProductHealthRenderer } from "./cell-renderers/ProductHealthRenderer";
 import {
   themeQuartz,
   ColDef,
@@ -398,6 +401,102 @@ export default function EcommerceExample() {
             filter: "agTextColumnFilter",
           },
           {
+            headerName: "Health",
+            colId: "healthScore",
+            minWidth: 80,
+            cellRenderer: ProductHealthRenderer,
+            valueGetter: ({ data }) => {
+              if (!data) return null;
+
+              // Calculate margin score (0-25)
+              const marginPct = ((data.price - data.cost) / data.price) * 100;
+              const marginScore = Math.min(25, (marginPct / 60) * 25);
+
+              // Calculate velocity score (0-25)
+              const velocity =
+                data.monthlySales.reduce(
+                  (s: number, m: { sold: number }) => s + m.sold,
+                  0
+                ) / 12;
+              const velocityScore = Math.min(25, (velocity / 20) * 25);
+
+              // Calculate rating score (0-25)
+              const ratingScore = Math.min(
+                25,
+                ((data.avgRating - 3) / 2) * 25
+              );
+
+              // Calculate stock score (0-25)
+              let stockScore = 25;
+              if (!data.isDigital) {
+                const totalStock = Object.values(
+                  data.stockByWarehouse as Record<string, number>
+                ).reduce((a, b) => a + b, 0);
+                const daysOfStock =
+                  velocity > 0 ? (totalStock / velocity) * 30 : 999;
+                stockScore =
+                  daysOfStock >= 30 ? 25 : (daysOfStock / 30) * 25;
+              }
+
+              const totalScore =
+                marginScore + velocityScore + ratingScore + stockScore;
+
+              let grade: string;
+              if (totalScore >= 80) grade = "A";
+              else if (totalScore >= 60) grade = "B";
+              else if (totalScore >= 40) grade = "C";
+              else if (totalScore >= 20) grade = "D";
+              else grade = "F";
+
+              return {
+                score: totalScore,
+                grade,
+                breakdown: {
+                  margin: marginScore,
+                  velocity: velocityScore,
+                  rating: ratingScore,
+                  stock: stockScore,
+                },
+              };
+            },
+            comparator: (valueA, valueB) => {
+              return (valueA?.score ?? 0) - (valueB?.score ?? 0);
+            },
+            filter: "agSetColumnFilter",
+            filterValueGetter: ({ data }) => {
+              if (!data) return null;
+              const marginPct = ((data.price - data.cost) / data.price) * 100;
+              const marginScore = Math.min(25, (marginPct / 60) * 25);
+              const velocity =
+                data.monthlySales.reduce(
+                  (s: number, m: { sold: number }) => s + m.sold,
+                  0
+                ) / 12;
+              const velocityScore = Math.min(25, (velocity / 20) * 25);
+              const ratingScore = Math.min(
+                25,
+                ((data.avgRating - 3) / 2) * 25
+              );
+              let stockScore = 25;
+              if (!data.isDigital) {
+                const totalStock = Object.values(
+                  data.stockByWarehouse as Record<string, number>
+                ).reduce((a, b) => a + b, 0);
+                const daysOfStock =
+                  velocity > 0 ? (totalStock / velocity) * 30 : 999;
+                stockScore =
+                  daysOfStock >= 30 ? 25 : (daysOfStock / 30) * 25;
+              }
+              const totalScore =
+                marginScore + velocityScore + ratingScore + stockScore;
+              if (totalScore >= 80) return "A";
+              if (totalScore >= 60) return "B";
+              if (totalScore >= 40) return "C";
+              if (totalScore >= 20) return "D";
+              return "F";
+            },
+          },
+          {
             headerName: "Brand / Artist",
             field: "brand",
             minWidth: 160,
@@ -598,6 +697,47 @@ export default function EcommerceExample() {
             aggFunc: "avg",
             filter: "agNumberColumnFilter",
           },
+          {
+            headerName: "Days of Stock",
+            colId: "daysOfStock",
+            minWidth: 130,
+            cellRenderer: DaysOfStockRenderer,
+            valueGetter: ({ data }) => {
+              if (!data) return null;
+              if (data.isDigital) return { days: 0, isDigital: true };
+              const totalStock = Object.values(
+                data.stockByWarehouse as Record<string, number>
+              ).reduce((a, b) => a + b, 0);
+              const velocity =
+                data.monthlySales.reduce(
+                  (s: number, m: { sold: number }) => s + m.sold,
+                  0
+                ) / 12;
+              const days =
+                velocity > 0 ? Math.round((totalStock / velocity) * 30) : 999;
+              return { days, isDigital: false };
+            },
+            comparator: (valueA, valueB) => {
+              const daysA = valueA?.isDigital ? 999 : valueA?.days ?? 0;
+              const daysB = valueB?.isDigital ? 999 : valueB?.days ?? 0;
+              return daysA - daysB;
+            },
+            filter: "agNumberColumnFilter",
+            filterValueGetter: ({ data }) => {
+              if (!data || data.isDigital) return null;
+              const totalStock = Object.values(
+                data.stockByWarehouse as Record<string, number>
+              ).reduce((a, b) => a + b, 0);
+              const velocity =
+                data.monthlySales.reduce(
+                  (s: number, m: { sold: number }) => s + m.sold,
+                  0
+                ) / 12;
+              return velocity > 0
+                ? Math.round((totalStock / velocity) * 30)
+                : 999;
+            },
+          },
         ],
       },
       {
@@ -648,6 +788,25 @@ export default function EcommerceExample() {
             valueFormatter: ({ value }) =>
               typeof value === "number" ? value.toFixed(1) : "",
             aggFunc: "avg",
+            filter: "agNumberColumnFilter",
+            columnGroupShow: "closed",
+          },
+          {
+            headerName: "Momentum",
+            colId: "momentum",
+            minWidth: 110,
+            cellRenderer: MomentumRenderer,
+            valueGetter: ({ data }) => {
+              if (!data) return null;
+              const sales = data.monthlySales as { month: string; sold: number }[];
+              const recent3 = sales
+                .slice(-3)
+                .reduce((s: number, m) => s + m.sold, 0);
+              const prior3 = sales
+                .slice(-6, -3)
+                .reduce((s: number, m) => s + m.sold, 0);
+              return prior3 > 0 ? ((recent3 - prior3) / prior3) * 100 : 0;
+            },
             filter: "agNumberColumnFilter",
             columnGroupShow: "closed",
           },
@@ -890,6 +1049,7 @@ export default function EcommerceExample() {
           groupTotalRow="bottom"
           alwaysMultiSort={true}
           cellSelection
+          rowSelection={{ mode: "multiRow", checkboxes: true, headerCheckbox: true }}
           masterDetail={true}
           detailRowAutoHeight={true}
           detailCellRendererParams={{
