@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.active {
+  background: #ECFDF5;
+  color: #047857;
+}
+
+.active .dot {
+  background: #10B981;
+}
+
+.discontinued {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+.discontinued .dot {
+  background: #94A3B8;
+}
+
+.inactive {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+
+.inactive .dot {
+  background: #EF4444;
+}
+
+.default {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+.default .dot {
+  background: #94A3B8;
+}

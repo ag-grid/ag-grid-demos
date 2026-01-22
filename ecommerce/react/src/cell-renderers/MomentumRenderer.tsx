@@ -10,22 +10,28 @@ export const MomentumRenderer: FunctionComponent<
   const pct = value;
   let statusClass: string;
   let arrow: string;
+  let label: string;
 
   if (pct > 20) {
     statusClass = styles.strongGrowth;
-    arrow = "\u25B2"; // Up triangle
+    arrow = "↑";
+    label = "Strong";
   } else if (pct > 5) {
     statusClass = styles.moderateGrowth;
-    arrow = "\u25B2";
+    arrow = "↗";
+    label = "";
   } else if (pct >= -5) {
     statusClass = styles.flat;
-    arrow = "\u2192"; // Right arrow
+    arrow = "→";
+    label = "Flat";
   } else if (pct >= -20) {
     statusClass = styles.moderateDecline;
-    arrow = "\u25BC"; // Down triangle
+    arrow = "↘";
+    label = "";
   } else {
     statusClass = styles.strongDecline;
-    arrow = "\u25BC";
+    arrow = "↓";
+    label = "Alert";
   }
 
   const displayPct = pct > 0 ? `+${pct.toFixed(0)}%` : `${pct.toFixed(0)}%`;
@@ -34,7 +40,8 @@ export const MomentumRenderer: FunctionComponent<
     <div className={styles.container}>
       <span className={`${styles.badge} ${statusClass}`}>
         <span className={styles.arrow}>{arrow}</span>
-        {displayPct}
+        <span className={styles.value}>{displayPct}</span>
+        {label && <span className={styles.label}>{label}</span>}
       </span>
     </div>
   );

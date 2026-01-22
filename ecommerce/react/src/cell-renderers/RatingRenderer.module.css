@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.filled {
+  color: #F59E0B;
+}
+
+.half {
+  color: #F59E0B;
+  opacity: 0.5;
+}
+
+.empty {
+  color: #E2E8F0;
+}
+
+.value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  min-width: 28px;
+}

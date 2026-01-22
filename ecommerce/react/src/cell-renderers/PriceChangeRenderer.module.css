@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.arrow {
+  font-size: 11px;
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+}
+
+.positive {
+  background: #ECFDF5;
+  color: #047857;
+}
+
+.negative {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+
+.neutral {
+  background: #F1F5F9;
+  color: #64748B;
+}

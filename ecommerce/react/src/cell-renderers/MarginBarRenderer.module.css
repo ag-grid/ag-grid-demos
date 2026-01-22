@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  width: 100%;
+  padding-right: 4px;
+}
+
+.barWrapper {
+  flex: 1;
+  height: 8px;
+  background: #E2E8F0;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.barHigh {
+  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+}
+
+.barMedium {
+  background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+}
+
+.barLow {
+  background: linear-gradient(90deg, #EF4444 0%, #DC2626 100%);
+}
+
+.value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  min-width: 45px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

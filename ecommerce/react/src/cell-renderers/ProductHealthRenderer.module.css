@@ -6,6 +6,34 @@
   padding: 0 8px;
 }
 
+.badgeWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+}
+
+.ringCircle {
+  fill: none;
+  stroke: #E2E8F0;
+  stroke-width: 3;
+}
+
+.ringProgress {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -16,31 +44,43 @@
   font-size: 14px;
   font-weight: 700;
   cursor: default;
+  transition: transform 0.15s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.badge:hover {
+  transform: scale(1.1);
 }
 
 .gradeA {
-  background-color: #22c55e;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
 }
 
 .gradeB {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
 }
 
 .gradeC {
-  background-color: #eab308;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);
 }
 
 .gradeD {
-  background-color: #f97316;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
 }
 
 .gradeF {
-  background-color: #ef4444;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
 }
 
 .tooltip {
@@ -50,31 +90,30 @@
 .tooltip:hover::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1f2937;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 500;
   white-space: pre-line;
   z-index: 1000;
-  min-width: 140px;
+  min-width: 150px;
   text-align: left;
-  margin-bottom: 8px;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  line-height: 1.5;
 }
 
 .tooltip:hover::before {
   content: "";
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% + 2px);
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-top-color: #1f2937;
-  margin-bottom: -4px;
+  border-top-color: #1e293b;
   z-index: 1001;
 }

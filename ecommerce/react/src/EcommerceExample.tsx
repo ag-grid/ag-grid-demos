@@ -6,6 +6,11 @@ import { getData } from "./data";
 import { DaysOfStockRenderer } from "./cell-renderers/DaysOfStockRenderer";
 import { MomentumRenderer } from "./cell-renderers/MomentumRenderer";
 import { ProductHealthRenderer } from "./cell-renderers/ProductHealthRenderer";
+import { RatingRenderer } from "./cell-renderers/RatingRenderer";
+import { StatusBadgeRenderer } from "./cell-renderers/StatusBadgeRenderer";
+import { PriceChangeRenderer } from "./cell-renderers/PriceChangeRenderer";
+import { MarginBarRenderer } from "./cell-renderers/MarginBarRenderer";
+import { KpiDashboard } from "./components/KpiDashboard";
 import {
   themeQuartz,
   ColDef,
@@ -505,9 +510,9 @@ export default function EcommerceExample() {
           {
             headerName: "Status",
             field: "status",
-            cellRenderer: ({ value }: { value: string }) =>
-              value ? value.charAt(0).toUpperCase() + value.slice(1) : "",
+            cellRenderer: StatusBadgeRenderer,
             filter: "agSetColumnFilter",
+            minWidth: 120,
           },
           {
             headerName: "Digital",
@@ -561,16 +566,17 @@ export default function EcommerceExample() {
             headerName: "Margin %",
             valueGetter: ({ data }) =>
               data ? ((data.price - data.cost) / data.price) * 100 : null,
-            valueFormatter: ({ value }) =>
-              value != null ? `${Number(value).toFixed(1)}%` : "",
+            cellRenderer: MarginBarRenderer,
             aggFunc: "avg",
             filter: "agNumberColumnFilter",
+            minWidth: 140,
           },
           {
             headerName: "Price Δ",
             field: "priceChange",
-            valueFormatter: ({ value }) => (value > 0 ? `+${value}` : value),
+            cellRenderer: PriceChangeRenderer,
             filter: "agNumberColumnFilter",
+            minWidth: 100,
           },
           {
             headerName: "Revenue (12m)",
@@ -596,17 +602,24 @@ export default function EcommerceExample() {
         children: [
           {
             headerName: "Stock by Warehouse",
-            minWidth: 120,
+            minWidth: 140,
             cellRenderer: "agSparklineCellRenderer",
             cellRendererParams: {
               sparklineOptions: {
                 type: "bar",
                 direction: "horizontal",
-                padding: { top: 10, bottom: 10 },
+                fill: "#4F46E5",
+                stroke: "#4F46E5",
+                padding: { top: 8, bottom: 8, left: 4, right: 4 },
                 label: {
                   enabled: true,
                   placement: "outside-end",
-                  fontSize: 8,
+                  fontSize: 9,
+                  color: "#64748B",
+                },
+                highlightStyle: {
+                  fill: "#6366F1",
+                  stroke: "#6366F1",
                 },
               } as AgSparklineOptions,
             },
@@ -750,12 +763,18 @@ export default function EcommerceExample() {
             cellRenderer: "agSparklineCellRenderer",
             cellRendererParams: {
               sparklineOptions: {
-                type: "line",
-                stroke: "#2196F3",
-                padding: { top: 5, bottom: 5 },
+                type: "area",
+                fill: "rgba(79, 70, 229, 0.1)",
+                stroke: "#4F46E5",
+                strokeWidth: 2,
+                padding: { top: 8, bottom: 8, left: 4, right: 4 },
                 marker: {
-                  enabled: true,
-                  size: 3,
+                  enabled: false,
+                },
+                highlightStyle: {
+                  fill: "#4F46E5",
+                  stroke: "#4F46E5",
+                  strokeWidth: 2,
                 },
               } as AgSparklineOptions,
             },
@@ -950,8 +969,10 @@ export default function EcommerceExample() {
           {
             headerName: "Rating",
             field: "avgRating",
+            cellRenderer: RatingRenderer,
             aggFunc: "avg",
             filter: "agNumberColumnFilter",
+            minWidth: 130,
           },
           {
             headerName: "Reviews",
@@ -964,79 +985,121 @@ export default function EcommerceExample() {
     ];
   }, []);
 
+  // Handler for KPI low stock click
+  const handleKpiLowStockClick = useCallback(() => {
+    const api = gridRef.current?.api;
+    if (!api || isPivotMode) return;
+
+    // Filter to show any product with low stock in any warehouse
+    api.setFilterModel(null);
+
+    // Apply a custom filter - we'll filter by US-West as an example
+    api.setColumnFilterModel("stockByWarehouse.US-West", {
+      filterType: "number",
+      type: "lessThan",
+      filter: 10,
+    });
+
+    api.onFilterChanged();
+  }, [isPivotMode]);
+
   return (
-    <div style={gridStyle} className={`${styles.container}`}>
-      <div className={styles.actions}>
-        <button
-          className={styles.actionButton}
-          onClick={handleGroupByCategory}
-          disabled={isPivotMode}
-        >
-          Group By Category
-        </button>
-        <select
-          className={styles.actionButton}
-          value={pivotDimension}
-          onChange={(e) =>
-            setPivotDimension(e.target.value as "month" | "warehouse")
-          }
-          disabled={isPivotMode}
-        >
-          <option value="month">By Month</option>
-          <option value="warehouse">By Warehouse</option>
-        </select>
-        <button
-          className={styles.actionButton}
-          onClick={handlePivotMode}
-          disabled={isPivotMode}
-        >
-          Pivot Mode
-        </button>
+    <div style={gridStyle} className={styles.container}>
+      {/* Header */}
+      <div className={styles.header}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <h1 className={styles.headerTitle}>Ecommerce Inventory</h1>
+          <span className={styles.headerSubtitle}>Product Performance Dashboard</span>
+        </div>
+      </div>
+
+      {/* KPI Dashboard */}
+      <KpiDashboard data={rowData} onFilterLowStock={handleKpiLowStockClick} />
+
+      {/* Control Panel */}
+      <div className={styles.controlPanel}>
+        <div className={styles.controlGroup}>
+          <span className={styles.controlGroupLabel}>View</span>
+          <button
+            className={styles.actionButton}
+            onClick={handleGroupByCategory}
+            disabled={isPivotMode}
+          >
+            Group By Category
+          </button>
+          <select
+            className={styles.actionButton}
+            value={pivotDimension}
+            onChange={(e) =>
+              setPivotDimension(e.target.value as "month" | "warehouse")
+            }
+            disabled={isPivotMode}
+          >
+            <option value="month">Pivot: By Month</option>
+            <option value="warehouse">Pivot: By Warehouse</option>
+          </select>
+          <button
+            className={`${styles.actionButton} ${styles.actionButtonPrimary}`}
+            onClick={handlePivotMode}
+            disabled={isPivotMode}
+          >
+            Enter Pivot Mode
+          </button>
+        </div>
+
+        <div className={styles.controlDivider} />
+
+        <div className={styles.controlGroup}>
+          <span className={styles.controlGroupLabel}>Filters</span>
+          <select
+            className={styles.actionButton}
+            value={selectedWarehouse}
+            onChange={(e) => setSelectedWarehouse(e.target.value)}
+            disabled={isPivotMode}
+          >
+            {warehouses.map((wh) => (
+              <option key={wh} value={wh}>
+                {wh}
+              </option>
+            ))}
+          </select>
+          <button
+            className={`${styles.actionButton} ${styles.actionButtonDanger}`}
+            onClick={handleFilterLowStock}
+            disabled={isPivotMode}
+          >
+            Low Stock
+          </button>
+          <select
+            className={styles.actionButton}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            disabled={isPivotMode}
+          >
+            {months.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+          <button
+            className={`${styles.actionButton} ${styles.actionButtonDanger}`}
+            onClick={handleFilterLowSales}
+            disabled={isPivotMode}
+          >
+            Low Sales
+          </button>
+        </div>
+
+        <div className={styles.controlDivider} />
+
         <button className={styles.actionButton} onClick={handleReset}>
-          Reset
+          Reset All
         </button>
       </div>
-      <div className={styles.actions}>
-        <select
-          className={styles.actionButton}
-          value={selectedWarehouse}
-          onChange={(e) => setSelectedWarehouse(e.target.value)}
-          disabled={isPivotMode}
-        >
-          {warehouses.map((wh) => (
-            <option key={wh} value={wh}>
-              {wh}
-            </option>
-          ))}
-        </select>
-        <button
-          className={styles.actionButton}
-          onClick={handleFilterLowStock}
-          disabled={isPivotMode}
-        >
-          Filter Low Stock
-        </button>
-        <select
-          className={styles.actionButton}
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          disabled={isPivotMode}
-        >
-          {months.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-        <button
-          className={styles.actionButton}
-          onClick={handleFilterLowSales}
-          disabled={isPivotMode}
-        >
-          Filter Low Sales
-        </button>
-      </div>
-      <div className={`${styles.grid}`}>
+
+      {/* Grid */}
+      <div className={styles.grid}>
         <AgGridReact
           theme={theme}
           ref={gridRef}

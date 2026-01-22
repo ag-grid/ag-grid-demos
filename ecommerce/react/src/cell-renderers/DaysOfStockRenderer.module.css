@@ -1,40 +1,80 @@
 .container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
-  padding: 0 8px;
+  padding: 0 4px;
+}
+
+.badgeWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 80px;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
 }
 
+.text {
+  font-variant-numeric: tabular-nums;
+}
+
+.progressWrapper {
+  height: 3px;
+  background: #E2E8F0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progressBar.critical {
+  background: linear-gradient(90deg, #EF4444 0%, #DC2626 100%);
+}
+
+.progressBar.warning {
+  background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+}
+
+.progressBar.healthy {
+  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+}
+
 .critical {
-  background-color: #fecaca;
-  color: #991b1b;
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  color: #991B1B;
+  border: 1px solid #FECACA;
 }
 
 .warning {
-  background-color: #fef3c7;
-  color: #92400e;
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  color: #92400E;
+  border: 1px solid #FDE68A;
 }
 
 .healthy {
-  background-color: #d1fae5;
-  color: #065f46;
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #065F46;
+  border: 1px solid #A7F3D0;
 }
 
 .digital {
-  background-color: #e5e7eb;
-  color: #6b7280;
+  background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+  color: #64748B;
+  border: 1px solid #E2E8F0;
 }
 
 .icon {
