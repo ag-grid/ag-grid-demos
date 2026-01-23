@@ -363,23 +363,10 @@ body {
     100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
   );
   margin: var(--layout-grid-margin);
-
-  @media screen and (max-height: 720px) {
-    min-height: 500px;
-    padding-bottom: 24px;
-  }
 }
 
 .ag-theme-quartz-dark .ag-row {
   --ag-row-hover-color: #323a46;
-}
-
-@media screen and (max-width: 720px) {
-  div.ag-theme-quartz,
-  div.ag-theme-quartz-dark {
-    --ag-font-size: 12px;
-    --ag-grid-size: 6px;
-  }
 }
 
 .ag-theme-quartz .ag-row-group,
@@ -389,10 +376,7 @@ body {
 
 .ag-theme-quartz .ag-value-change-value-highlight,
 .ag-theme-quartz-dark .ag-value-change-value-highlight {
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding: 2px 6px;
   border-radius: 12px;
   margin-left: 4px;
 }

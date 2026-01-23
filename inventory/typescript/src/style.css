@@ -7,13 +7,7 @@ body {
   margin: 0;
 }
 
-@media screen and (max-width: 720px) {
-  div.ag-theme-quartz,
-  div.ag-theme-quartz-dark {
-    --ag-font-size: 12px;
-    --ag-grid-size: 6px;
-  }
-}
+
 
 .ag-theme-quartz .ag-body-viewport,
 .ag-theme-quartz-dark .ag-body-viewport {
@@ -141,10 +135,7 @@ body {
   );
   margin: 0 var(--layout-grid-margin) var(--layout-grid-margin);
 
-  @media screen and (max-height: 720px) {
-    min-height: 500px;
-    padding-bottom: 24px;
-  }
+
 }
 
 .exampleHeader {

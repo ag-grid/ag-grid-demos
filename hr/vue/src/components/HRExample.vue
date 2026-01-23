@@ -198,13 +198,7 @@ div.ag-theme-quartz-dark {
   --ag-row-border-color: var(--ag-border-color);
 }
 
-@media screen and (max-width: 720px) {
-  div.ag-theme-quartz,
-  div.ag-theme-quartz-dark {
-    --ag-font-size: 12px;
-    --ag-grid-size: 6px;
-  }
-}
+
 
 div.ag-theme-quartz-dark {
   --ag-odd-row-background-color: #252f3f;
@@ -301,9 +295,6 @@ div.ag-theme-quartz-dark {
   );
   margin: var(--layout-grid-margin);
 
-  @media screen and (max-height: 720px) {
-    min-height: 500px;
-    padding-bottom: 24px;
-  }
+
 }
 </style>

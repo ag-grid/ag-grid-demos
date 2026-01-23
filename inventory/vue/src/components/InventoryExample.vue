@@ -258,14 +258,6 @@ body {
   margin: 0;
 }
 
-@media screen and (max-width: 720px) {
-  div.ag-theme-quartz,
-  div.ag-theme-quartz-dark {
-    --ag-font-size: 12px;
-    --ag-grid-size: 6px;
-  }
-}
-
 .ag-theme-quartz .ag-body-viewport,
 .ag-theme-quartz-dark .ag-body-viewport {
   padding-top: 8px;
@@ -391,11 +383,6 @@ body {
     100vh - var(--layout-grid-header-height) - 62px - var(--layout-grid-margin)
   );
   margin: 0 var(--layout-grid-margin) var(--layout-grid-margin);
-
-  @media screen and (max-height: 720px) {
-    min-height: 500px;
-    padding-bottom: 24px;
-  }
 }
 
 .exampleHeader {
@@ -461,7 +448,6 @@ body {
   background-color: var(--color-bg-secondary, #f9fafb);
   border: 1px solid var(--color-border-secondary, #eff0f1);
   color: #39485d;
-  border-radius: 8px;
 }
 
 .tabButton {
