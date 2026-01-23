@@ -7,7 +7,7 @@ const { value, valueFormatted } = params;
 
 <template>
   <div :class="`tag ${value}Tag`">
-    <div :class="`circle ${value}Circle`"></div>
+    <div :class="`circle ${value}Circle`" />
     <span>{{ valueFormatted }}</span>
   </div>
 </template>

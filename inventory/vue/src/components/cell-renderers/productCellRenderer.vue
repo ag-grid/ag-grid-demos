@@ -12,7 +12,9 @@ const { value, data } = params;
     </div>
     <div>
       <div>{{ value }}</div>
-      <div class="stockCell">{{ data.category }}</div>
+      <div class="stockCell">
+        {{ data.category }}
+      </div>
     </div>
   </div>
 </template>
