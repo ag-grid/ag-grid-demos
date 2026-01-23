@@ -12,6 +12,7 @@ import {
   ClientSideRowModelModule,
   createGrid,
   ModuleRegistry,
+  themeQuartz,
 } from "ag-grid-community";
 import {
   ExcelExportModule,
@@ -120,6 +121,7 @@ const defaultColDef = {
 };
 const detailCellRendererParams = {
   detailGridOptions: {
+    theme: themeQuartz,
     columnDefs: [
       { field: "title", flex: 1.5 },
       { field: "available", maxWidth: 120 },
@@ -143,6 +145,7 @@ const detailCellRendererParams = {
 };
 
 const gridOptions: GridOptions = {
+  theme: themeQuartz,
   columnDefs,
   rowData,
   defaultColDef,

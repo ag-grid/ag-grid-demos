@@ -6,10 +6,12 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDetailRowDataParams,
   type GridApi,
   type GridReadyEvent,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
   type ValueGetterParams,
@@ -63,6 +65,9 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
 
 const themeClass = computed(() =>
   isDarkMode ? `${gridTheme}-dark` : gridTheme,
+);
+const theme = computed(() =>
+  isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz,
 );
 const columnDefs = ref<ColDef[]>([
   {
@@ -130,8 +135,9 @@ const columnDefs = ref<ColDef[]>([
 const defaultColDef = {
   resizable: false,
 };
-const detailCellRendererParams = {
+const detailCellRendererParams = computed(() => ({
   detailGridOptions: {
+    theme: theme.value,
     columnDefs: [
       { field: "title", flex: 1.5 },
       { field: "available", maxWidth: 120 },
@@ -152,7 +158,7 @@ const detailCellRendererParams = {
     successCallback,
     data: { variantDetails },
   }: GetDetailRowDataParams) => successCallback(variantDetails),
-};
+}));
 const rowHeight = 80;
 const paginationPageSizeSelector = [5, 10, 20];
 const pagination = true;
@@ -229,6 +235,7 @@ const onFilterTextBoxChanged = (event: Event) => {
       <div :class="[themeClass, 'grid']">
         <ag-grid-vue
           :style="{ height: '100%' }"
+          :theme="theme"
           :row-data="rowData"
           :column-defs="columnDefs"
           :default-col-def="defaultColDef"
@@ -337,7 +344,7 @@ body {
 }
 
 .ag-theme-quartz .ag-header-cell-text,
-.ag-theme-quart-dark .ag-header-cell-text {
+.ag-theme-quartz-dark .ag-header-cell-text {
   color: #1f383c;
   display: flex;
   align-items: center;

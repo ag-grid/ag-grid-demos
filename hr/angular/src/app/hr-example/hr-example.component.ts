@@ -5,8 +5,10 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDataPath,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
 } from 'ag-grid-community';
@@ -67,6 +69,12 @@ export class HRExample {
 
   get themeClass() {
     return this.isDarkMode ? `${this.gridTheme}-dark` : this.gridTheme;
+  }
+
+  get theme() {
+    return this.isDarkMode
+      ? themeQuartz.withPart(colorSchemeDark)
+      : themeQuartz;
   }
 
   rowData = getData();

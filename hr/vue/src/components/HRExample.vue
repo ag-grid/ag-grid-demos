@@ -6,8 +6,10 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDataPath,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
 } from "ag-grid-community";
@@ -157,6 +159,9 @@ const treeData = true;
 const themeClass = computed(() =>
   isDarkMode ? `${gridTheme}-dark` : gridTheme,
 );
+const theme = computed(() =>
+  isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz,
+);
 </script>
 
 <template>
@@ -165,6 +170,7 @@ const themeClass = computed(() =>
       <div :class="[themeClass, 'grid']">
         <ag-grid-vue
           :style="{ height: '100%' }"
+          :theme="theme"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :groupDefaultExpanded="groupDefaultExpanded"

@@ -1,5 +1,5 @@
 export function getData() {
-  return [
+  const data = [
     {
       product: 'Dreams of You',
       artist: 'David Nearing',
@@ -296,4 +296,5 @@ export function getData() {
       ],
     },
   ];
+  return data;
 }

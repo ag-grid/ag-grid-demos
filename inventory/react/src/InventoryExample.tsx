@@ -2,9 +2,11 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDetailRowDataParams,
   ModuleRegistry,
   type SizeColumnsToFitGridStrategy,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
   type ValueGetterParams,
@@ -138,6 +140,10 @@ export const InventoryExample: FunctionComponent<Props> = ({
     [],
   );
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
+  const theme = useMemo(
+    () => (isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz),
+    [isDarkMode],
+  );
   const [quickFilterText, setQuickFilterText] = useState<string>();
   const onFilterTextBoxChanged = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
@@ -148,6 +154,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
   const detailCellRendererParams = useMemo(
     () => ({
       detailGridOptions: {
+        theme,
         columnDefs: [
           { field: "title", flex: 1.5 },
           { field: "available", maxWidth: 120 },
@@ -169,7 +176,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
         data: { variantDetails },
       }: GetDetailRowDataParams) => successCallback(variantDetails),
     }),
-    [],
+    [theme],
   );
   const [activeTab, setActiveTab] = useState("all");
   const handleTabClick = useCallback((status: string) => {
@@ -227,6 +234,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
             ref={gridRef}
+            theme={theme}
             columnDefs={colDefs}
             rowData={rowData}
             defaultColDef={defaultColDef}

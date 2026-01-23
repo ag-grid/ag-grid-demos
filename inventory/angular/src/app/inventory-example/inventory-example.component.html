@@ -41,6 +41,7 @@
       <ag-grid-angular
         style="height: 100%"
         (gridReady)="onGridReady($event)"
+        [theme]="theme"
         [columnDefs]="columnDefs"
         [rowData]="rowData"
         [defaultColDef]="defaultColDef"

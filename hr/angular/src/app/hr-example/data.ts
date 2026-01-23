@@ -49,12 +49,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Michael Allen',
-        'Peggy Williams',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Michael Allen', 'Peggy Williams'],
       contact: 'Peggy.Williams',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -70,12 +65,7 @@ export function getData() {
       flag: 'ne',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Michael Allen',
-        'Kristy Zuniga',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Michael Allen', 'Kristy Zuniga'],
       contact: 'Kristy.Zuniga',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -107,12 +97,7 @@ export function getData() {
       flag: 'ne',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Lori West',
-        'Evelyn Jones',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Lori West', 'Evelyn Jones'],
       contact: 'Evelyn.Jones',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -128,12 +113,7 @@ export function getData() {
       flag: 'it',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Lori West',
-        'Dawn Smith',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Lori West', 'Dawn Smith'],
       contact: 'Dawn.Smith',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -165,12 +145,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Jeffery Moore',
-        'Christopher Carter',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Jeffery Moore', 'Christopher Carter'],
       contact: 'Christopher.Carter',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -186,12 +161,7 @@ export function getData() {
       flag: 'ne',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Deborah Love',
-        'Jeffery Moore',
-        'Jamie Stafford',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Deborah Love', 'Jeffery Moore', 'Jamie Stafford'],
       contact: 'Jamie.Stafford',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -239,12 +209,7 @@ export function getData() {
       flag: 'fr',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Mr. Jeffrey Brown',
-        'Melissa Vazquez',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Mr. Jeffrey Brown', 'Melissa Vazquez'],
       contact: 'Melissa.Vazquez',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -260,12 +225,7 @@ export function getData() {
       flag: 'fr',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Mr. Jeffrey Brown',
-        'John Thomas',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Mr. Jeffrey Brown', 'John Thomas'],
       contact: 'John.Thomas',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -297,12 +257,7 @@ export function getData() {
       flag: 'po',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Nicole Jones',
-        'James Long',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Nicole Jones', 'James Long'],
       contact: 'James.Long',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -318,12 +273,7 @@ export function getData() {
       flag: 'ne',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Nicole Jones',
-        'Susan Hernandez',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Nicole Jones', 'Susan Hernandez'],
       contact: 'Susan.Hernandez',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -355,12 +305,7 @@ export function getData() {
       flag: 'it',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Justin Contreras',
-        'Rachel Ibarra',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Justin Contreras', 'Rachel Ibarra'],
       contact: 'Rachel.Ibarra',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -376,12 +321,7 @@ export function getData() {
       flag: 'it',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Joseph Howe',
-        'Justin Contreras',
-        'John Gomez',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Joseph Howe', 'Justin Contreras', 'John Gomez'],
       contact: 'John.Gomez',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -429,12 +369,7 @@ export function getData() {
       flag: 'us',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Lawrence Martinez',
-        'Devin Pittman',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Lawrence Martinez', 'Devin Pittman'],
       contact: 'Devin.Pittman',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -450,12 +385,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Lawrence Martinez',
-        'Emily Barajas',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Lawrence Martinez', 'Emily Barajas'],
       contact: 'Emily.Barajas',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -487,12 +417,7 @@ export function getData() {
       flag: 'fr',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Breanna Ward',
-        'Ronald Wright',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Breanna Ward', 'Ronald Wright'],
       contact: 'Ronald.Wright',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -508,12 +433,7 @@ export function getData() {
       flag: 'us',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Breanna Ward',
-        'Kristin Thomas',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Breanna Ward', 'Kristin Thomas'],
       contact: 'Kristin.Thomas',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -545,12 +465,7 @@ export function getData() {
       flag: 'es',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Eric Jensen',
-        'Michael Morris',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Eric Jensen', 'Michael Morris'],
       contact: 'Michael.Morris',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -566,12 +481,7 @@ export function getData() {
       flag: 'fr',
     },
     {
-      orgHierarchy: [
-        'Ashley Rivers',
-        'Gary Garcia',
-        'Eric Jensen',
-        'Jodi Miller',
-      ],
+      orgHierarchy: ['Ashley Rivers', 'Gary Garcia', 'Eric Jensen', 'Jodi Miller'],
       contact: 'Jodi.Miller',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -635,12 +545,7 @@ export function getData() {
       flag: 'po',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Melinda Harrington',
-        'Misty Graves',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Melinda Harrington', 'Misty Graves'],
       contact: 'Misty.Graves',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -656,12 +561,7 @@ export function getData() {
       flag: 'es',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Melinda Harrington',
-        'Jill Sullivan',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Melinda Harrington', 'Jill Sullivan'],
       contact: 'Jill.Sullivan',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -693,12 +593,7 @@ export function getData() {
       flag: 'es',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Rebecca Butler',
-        'Jennifer Jones',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Rebecca Butler', 'Jennifer Jones'],
       contact: 'Jennifer.Jones',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -714,12 +609,7 @@ export function getData() {
       flag: 'us',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Rebecca Butler',
-        'Alan Archer',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Rebecca Butler', 'Alan Archer'],
       contact: 'Alan.Archer',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -751,12 +641,7 @@ export function getData() {
       flag: 'es',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Barbara Alexander',
-        'Andrew Sullivan',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Barbara Alexander', 'Andrew Sullivan'],
       contact: 'Andrew.Sullivan',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -772,12 +657,7 @@ export function getData() {
       flag: 'ie',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Steven Mann',
-        'Barbara Alexander',
-        'Christian Klein',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Steven Mann', 'Barbara Alexander', 'Christian Klein'],
       contact: 'Christian.Klein',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -825,12 +705,7 @@ export function getData() {
       flag: 'it',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Deborah Morales',
-        'Ian Kramer',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Deborah Morales', 'Ian Kramer'],
       contact: 'Ian.Kramer',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -846,12 +721,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Deborah Morales',
-        'Amy Rojas',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Deborah Morales', 'Amy Rojas'],
       contact: 'Amy.Rojas',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -883,12 +753,7 @@ export function getData() {
       flag: 'fr',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Shawn Hendrix',
-        'Aaron Hull',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Shawn Hendrix', 'Aaron Hull'],
       contact: 'Aaron.Hull',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -904,12 +769,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Shawn Hendrix',
-        'Dr. Janice Rice',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Shawn Hendrix', 'Dr. Janice Rice'],
       contact: 'Dr Janice.Rice',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -941,12 +801,7 @@ export function getData() {
       flag: 'ie',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Bryan Hawkins',
-        'Gregory Walker',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Bryan Hawkins', 'Gregory Walker'],
       contact: 'Gregory.Walker',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -962,12 +817,7 @@ export function getData() {
       flag: 'po',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Cheryl Browning',
-        'Bryan Hawkins',
-        'Chris Bruce',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Cheryl Browning', 'Bryan Hawkins', 'Chris Bruce'],
       contact: 'Chris.Bruce',
       jobTitle: 'Employee',
       employmentType: 'Permanent',
@@ -1015,12 +865,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Clayton Conway',
-        'Shelby Jenkins',
-        'Vincent Martin',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Clayton Conway', 'Shelby Jenkins', 'Vincent Martin'],
       contact: 'Vincent.Martin',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -1036,12 +881,7 @@ export function getData() {
       flag: 'uk',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Clayton Conway',
-        'Shelby Jenkins',
-        'Devon Bradley',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Clayton Conway', 'Shelby Jenkins', 'Devon Bradley'],
       contact: 'Devon.Bradley',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -1073,12 +913,7 @@ export function getData() {
       flag: 'ie',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Clayton Conway',
-        'Andrew Ford',
-        'Bradley Johnson',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Clayton Conway', 'Andrew Ford', 'Bradley Johnson'],
       contact: 'Bradley.Johnson',
       jobTitle: 'Employee',
       employmentType: 'Contract',
@@ -1094,12 +929,7 @@ export function getData() {
       flag: 'us',
     },
     {
-      orgHierarchy: [
-        'Adrian Conner',
-        'Clayton Conway',
-        'Andrew Ford',
-        'Matthew Jones',
-      ],
+      orgHierarchy: ['Adrian Conner', 'Clayton Conway', 'Andrew Ford', 'Matthew Jones'],
       contact: 'Matthew.Jones',
       jobTitle: 'Employee',
       employmentType: 'Permanent',

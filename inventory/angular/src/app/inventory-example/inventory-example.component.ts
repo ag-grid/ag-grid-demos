@@ -6,11 +6,13 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDetailRowDataParams,
   type GridApi,
   type GridReadyEvent,
   ModuleRegistry,
   type SizeColumnsToFitGridStrategy,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
   type ValueGetterParams,
@@ -60,6 +62,12 @@ export class InventoryExample {
   @Input() gridTheme: string = 'ag-theme-quartz';
 
   private gridApi!: GridApi;
+
+  get theme() {
+    return this.isDarkMode
+      ? themeQuartz.withPart(colorSchemeDark)
+      : themeQuartz;
+  }
 
   get themeClass() {
     return this.isDarkMode ? `${this.gridTheme}-dark` : this.gridTheme;
@@ -131,29 +139,33 @@ export class InventoryExample {
   autoSizeStrategy: SizeColumnsToFitGridStrategy = {
     type: 'fitGridWidth',
   };
-  detailCellRendererParams = {
-    detailGridOptions: {
-      columnDefs: [
-        { field: 'title', flex: 1.5 },
-        { field: 'available', maxWidth: 120 },
-        { field: 'format', flex: 2 },
-        { field: 'label', flex: 1 },
-        { field: 'country', flex: 0.66 },
-        {
-          field: 'cat',
-          headerName: 'Cat#',
-          type: 'rightAligned',
-          flex: 0.66,
-        },
-        { field: 'year', type: 'rightAligned', maxWidth: 80 },
-      ],
-      headerHeight: 38,
+  private detailColumnDefs: ColDef[] = [
+    { field: 'title', flex: 1.5 },
+    { field: 'available', maxWidth: 120 },
+    { field: 'format', flex: 2 },
+    { field: 'label', flex: 1 },
+    { field: 'country', flex: 0.66 },
+    {
+      field: 'cat',
+      headerName: 'Cat#',
+      type: 'rightAligned',
+      flex: 0.66,
     },
-    getDetailRowData: ({
-      successCallback,
-      data: { variantDetails },
-    }: GetDetailRowDataParams) => successCallback(variantDetails),
-  };
+    { field: 'year', type: 'rightAligned', maxWidth: 80 },
+  ];
+  get detailCellRendererParams() {
+    return {
+      detailGridOptions: {
+        theme: this.theme,
+        columnDefs: this.detailColumnDefs,
+        headerHeight: 38,
+      },
+      getDetailRowData: ({
+        successCallback,
+        data: { variantDetails },
+      }: GetDetailRowDataParams) => successCallback(variantDetails),
+    };
+  }
   rowHeight = 80;
   paginationPageSizeSelector = [5, 10, 20];
   pagination = true;

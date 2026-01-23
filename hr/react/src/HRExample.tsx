@@ -2,8 +2,10 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
+  colorSchemeDark,
   type GetDataPath,
   ModuleRegistry,
+  themeQuartz,
   type ValueFormatterFunc,
   type ValueFormatterParams,
 } from "ag-grid-community";
@@ -144,6 +146,10 @@ export const HRExample: FunctionComponent<Props> = ({
   const [rowData] = useState(getData());
   const getDataPath = useCallback<GetDataPath>((data) => data.orgHierarchy, []);
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
+  const theme = useMemo(
+    () => (isDarkMode ? themeQuartz.withPart(colorSchemeDark) : themeQuartz),
+    [isDarkMode],
+  );
   const autoGroupColumnDef = useMemo<ColDef>(() => {
     return {
       headerName: "Employee",
@@ -164,6 +170,7 @@ export const HRExample: FunctionComponent<Props> = ({
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
             ref={gridRef}
+            theme={theme}
             columnDefs={colDefs}
             rowData={rowData}
             groupDefaultExpanded={-1}

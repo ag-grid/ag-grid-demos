@@ -88,7 +88,7 @@ body {
 }
 
 .ag-theme-quartz .ag-header-cell-text,
-.ag-theme-quart-dark .ag-header-cell-text {
+.ag-theme-quartz-dark .ag-header-cell-text {
   color: #1f383c;
   display: flex;
   align-items: center;

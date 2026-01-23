@@ -9,6 +9,7 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   ModuleRegistry,
+  themeQuartz,
   createGrid,
 } from "ag-grid-community";
 import {
@@ -142,6 +143,7 @@ const autoGroupColumnDef: ColDef = {
 };
 
 const gridOptions: GridOptions = {
+  theme: themeQuartz,
   columnDefs: columnDefs,
   rowData,
   groupDefaultExpanded: -1,
