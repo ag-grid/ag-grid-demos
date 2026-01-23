@@ -25,7 +25,6 @@ const PERCENTAGE_CHANGE = 20;
 const props = withDefaults(
   defineProps<{
     isDarkMode?: boolean;
-    isSmallerGrid?: boolean;
     updateInterval?: number;
     enableRowGroup?: boolean;
   }>(),
@@ -85,7 +84,7 @@ const createUpdater = () => {
 };
 
 const colDefs = computed<ColDef[]>(() => {
-  const allColDefs: ColDef[] = [
+  return [
     {
       field: "ticker",
       cellRenderer: TickerCellRenderer,
@@ -144,29 +143,22 @@ const colDefs = computed<ColDef[]>(() => {
       minWidth: 160,
       initialWidth: 160,
     },
+    {
+      field: "quantity",
+      cellDataType: "number",
+      type: "rightAligned",
+      valueFormatter: numberFormatter,
+      maxWidth: 75,
+    },
+    {
+      headerName: "Price",
+      field: "purchasePrice",
+      cellDataType: "number",
+      type: "rightAligned",
+      valueFormatter: numberFormatter,
+      maxWidth: 75,
+    },
   ];
-
-  if (!props.isSmallerGrid) {
-    allColDefs.push(
-      {
-        field: "quantity",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 75,
-      },
-      {
-        headerName: "Price",
-        field: "purchasePrice",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 75,
-      },
-    );
-  }
-
-  return allColDefs;
 });
 
 const theme = computed(() => {

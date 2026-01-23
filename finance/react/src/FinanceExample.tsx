@@ -28,7 +28,6 @@ import { sparklineTooltipRenderer } from "./renderers/sparklineTooltipRenderer";
 export interface Props {
   isDarkMode?: boolean;
   gridHeight?: number | null;
-  isSmallerGrid?: boolean;
   updateInterval?: number;
   enableRowGroup?: boolean;
 }
@@ -51,7 +50,6 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
 export const FinanceExample: React.FC<Props> = ({
   isDarkMode = false,
   gridHeight = null,
-  isSmallerGrid,
   updateInterval = DEFAULT_UPDATE_INTERVAL,
   enableRowGroup,
 }) => {
@@ -115,7 +113,7 @@ export const FinanceExample: React.FC<Props> = ({
   }, [createUpdater]);
 
   const colDefs = useMemo<ColDef[]>(() => {
-    const allColDefs: ColDef[] = [
+    return [
       {
         field: "ticker",
         cellRenderer: getTickerCellRenderer(),
@@ -174,30 +172,23 @@ export const FinanceExample: React.FC<Props> = ({
         minWidth: 160,
         initialWidth: 160,
       },
+      {
+        field: "quantity",
+        cellDataType: "number",
+        type: "rightAligned",
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      },
+      {
+        headerName: "Price",
+        field: "purchasePrice",
+        cellDataType: "number",
+        type: "rightAligned",
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      },
     ];
-
-    if (!isSmallerGrid) {
-      allColDefs.push(
-        {
-          field: "quantity",
-          cellDataType: "number",
-          type: "rightAligned",
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        },
-        {
-          headerName: "Price",
-          field: "purchasePrice",
-          cellDataType: "number",
-          type: "rightAligned",
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        },
-      );
-    }
-
-    return allColDefs;
-  }, [isSmallerGrid]);
+  }, []);
 
   const defaultColDef: ColDef = useMemo(
     () => ({

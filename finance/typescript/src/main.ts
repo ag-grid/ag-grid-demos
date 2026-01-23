@@ -3,14 +3,14 @@ import {
   AllCommunityModule,
   ClientSideRowModelModule,
   type ColDef,
-  type GridOptions,
+  createGrid,
   type GetRowIdParams,
+  type GridOptions,
   type GridReadyEvent,
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
-  type ValueGetterParams,
-  createGrid,
+  type ValueGetterParams
 } from "ag-grid-community";
 import {
   AdvancedFilterModule,
@@ -26,7 +26,7 @@ import {
   RowGroupingPanelModule,
   SetFilterModule,
   SparklinesModule,
-  StatusBarModule,
+  StatusBarModule
 } from "ag-grid-enterprise";
 import { getData } from "./data";
 
@@ -65,12 +65,13 @@ const numberFormatter: ValueFormatterFunc = (params) => {
   return params.value == null ? "" : formatter.format(params.value);
 };
 
-const isSmallerGrid = false;
 const enableRowGroup = false;
 const updateInterval = DEFAULT_UPDATE_INTERVAL;
 
 const createColDefs = (): ColDef[] => {
-  const allColDefs: ColDef[] = [
+
+
+  return [
     {
       field: "ticker",
       cellRenderer: getTickerCellRenderer(),
@@ -129,29 +130,22 @@ const createColDefs = (): ColDef[] => {
       minWidth: 160,
       initialWidth: 160,
     },
+    {
+      field: "quantity",
+      cellDataType: "number",
+      type: "rightAligned",
+      valueFormatter: numberFormatter,
+      maxWidth: 75,
+    },
+    {
+      headerName: "Price",
+      field: "purchasePrice",
+      cellDataType: "number",
+      type: "rightAligned",
+      valueFormatter: numberFormatter,
+      maxWidth: 75,
+    },
   ];
-
-  if (!isSmallerGrid) {
-    allColDefs.push(
-      {
-        field: "quantity",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 75,
-      },
-      {
-        headerName: "Price",
-        field: "purchasePrice",
-        cellDataType: "number",
-        type: "rightAligned",
-        valueFormatter: numberFormatter,
-        maxWidth: 75,
-      },
-    );
-  }
-
-  return allColDefs;
 };
 
 let rowData = getData();

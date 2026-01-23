@@ -10,11 +10,10 @@ import {
 
 import { AgChartsEnterpriseModule } from 'ag-charts-enterprise';
 import {
-  colorSchemeDark,
   type ColDef,
+  colorSchemeDark,
   type GetRowIdFunc,
   type GetRowIdParams,
-  type GridSizeChangedEvent,
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
@@ -44,7 +43,7 @@ const numberFormatter: ValueFormatterFunc = (params) => {
 };
 
 @Component({
-  selector: 'finance-example',
+  selector: 'app-finance-example',
   standalone: true,
   imports: [AgGridAngular],
   templateUrl: './finance-example.component.html',
@@ -55,7 +54,6 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
   @ViewChild('gridWrapper', { static: true })
   gridWrapper!: ElementRef<HTMLDivElement>;
   @Input() isDarkMode: boolean = false;
-  @Input() isSmallerGrid?: boolean;
   @Input() updateInterval: number = DEFAULT_UPDATE_INTERVAL;
   @Input() enableRowGroup?: boolean;
 
@@ -100,7 +98,7 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
   };
 
   createColDefs(): ColDef[] {
-    const allColDefs: ColDef[] = [
+    return [
       {
         field: 'ticker',
         cellRenderer: TickerCellRenderer,
@@ -159,29 +157,22 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
         minWidth: 160,
         initialWidth: 160,
       },
+      {
+        field: 'quantity',
+        cellDataType: 'number',
+        type: 'rightAligned',
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      },
+      {
+        headerName: 'Price',
+        field: 'purchasePrice',
+        cellDataType: 'number',
+        type: 'rightAligned',
+        valueFormatter: numberFormatter,
+        maxWidth: 75,
+      },
     ];
-
-    if (!this.isSmallerGrid) {
-      allColDefs.push(
-        {
-          field: 'quantity',
-          cellDataType: 'number',
-          type: 'rightAligned',
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        },
-        {
-          headerName: 'Price',
-          field: 'purchasePrice',
-          cellDataType: 'number',
-          type: 'rightAligned',
-          valueFormatter: numberFormatter,
-          maxWidth: 75,
-        },
-      );
-    }
-
-    return allColDefs;
   }
 
   createUpdater() {
