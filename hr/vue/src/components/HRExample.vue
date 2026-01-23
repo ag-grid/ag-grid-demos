@@ -171,14 +171,13 @@ const theme = computed(() =>
         <ag-grid-vue
           :style="{ height: '100%' }"
           :theme="theme"
-          :rowData="rowData"
-          :columnDefs="columnDefs"
-          :groupDefaultExpanded="groupDefaultExpanded"
-          :getDataPath="getDataPath"
-          :treeData="treeData"
-          :autoGroupColumnDef="autoGroupColumnDef"
-        >
-        </ag-grid-vue>
+          :row-data="rowData"
+          :column-defs="columnDefs"
+          :group-default-expanded="groupDefaultExpanded"
+          :get-data-path="getDataPath"
+          :tree-data="treeData"
+          :auto-group-column-def="autoGroupColumnDef"
+        />
       </div>
     </div>
   </div>
@@ -203,8 +202,6 @@ div.ag-theme-quartz-dark {
   --ag-border-color: rgba(140, 140, 140, 0.147);
   --ag-row-border-color: var(--ag-border-color);
 }
-
-
 
 div.ag-theme-quartz-dark {
   --ag-odd-row-background-color: #252f3f;
@@ -300,7 +297,5 @@ div.ag-theme-quartz-dark {
     100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
   );
   margin: var(--layout-grid-margin);
-
-
 }
 </style>

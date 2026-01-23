@@ -10,7 +10,7 @@ import {
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
-  type ValueGetterParams
+  type ValueGetterParams,
 } from "ag-grid-community";
 import {
   AdvancedFilterModule,
@@ -26,7 +26,7 @@ import {
   RowGroupingPanelModule,
   SetFilterModule,
   SparklinesModule,
-  StatusBarModule
+  StatusBarModule,
 } from "ag-grid-enterprise";
 import { getData } from "./data";
 
@@ -69,8 +69,6 @@ const enableRowGroup = false;
 const updateInterval = DEFAULT_UPDATE_INTERVAL;
 
 const createColDefs = (): ColDef[] => {
-
-
   return [
     {
       field: "ticker",

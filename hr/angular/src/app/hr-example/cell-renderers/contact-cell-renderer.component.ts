@@ -3,7 +3,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'contact-cell-renderer',
+  selector: 'app-contact-cell-renderer',
   standalone: true,
   template: `
     <div class="contactCell">
