@@ -6,7 +6,6 @@ import {
   type GridOptions,
   type GetRowIdParams,
   type GridReadyEvent,
-  type GridSizeChangedEvent,
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
@@ -38,59 +37,6 @@ import "./style.css";
 
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
-type Breakpoint = "small" | "medium" | "medLarge" | "large" | "xlarge";
-type ColWidth = number | "auto";
-
-const BREAKPOINT_CONFIG: Record<
-  Breakpoint,
-  {
-    breakpoint?: number;
-    columns: string[];
-    tickerColumnWidth: ColWidth;
-    timelineColumnWidth: ColWidth;
-    hideTickerName?: boolean;
-  }
-> = {
-  small: {
-    breakpoint: 500,
-    columns: ["ticker", "timeline"],
-    tickerColumnWidth: "auto",
-    timelineColumnWidth: "auto",
-    hideTickerName: true,
-  },
-  medium: {
-    breakpoint: 850,
-    columns: ["ticker", "timeline", "totalValue"],
-    tickerColumnWidth: 180,
-    timelineColumnWidth: 140,
-    hideTickerName: true,
-  },
-  medLarge: {
-    breakpoint: 900,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  large: {
-    breakpoint: 1100,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  xlarge: {
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: [
-      "ticker",
-      "timeline",
-      "totalValue",
-      "p&l",
-      "instrument",
-      "price",
-      "quantity",
-    ],
-  },
-};
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -119,35 +65,15 @@ const numberFormatter: ValueFormatterFunc = (params) => {
   return params.value == null ? "" : formatter.format(params.value);
 };
 
-let breakpoint: Breakpoint = "xlarge";
 const isSmallerGrid = false;
 const enableRowGroup = false;
 const updateInterval = DEFAULT_UPDATE_INTERVAL;
 
 const createColDefs = (): ColDef[] => {
-  const breakpointConfig = BREAKPOINT_CONFIG[breakpoint];
-  const tickerWidthDefs =
-    breakpointConfig.tickerColumnWidth === "auto"
-      ? { flex: 1 }
-      : {
-          initialWidth: breakpointConfig.tickerColumnWidth as number,
-          minWidth: breakpointConfig.tickerColumnWidth as number,
-        };
-  const timelineWidthDefs =
-    breakpointConfig.timelineColumnWidth === "auto"
-      ? { flex: 1 }
-      : {
-          initialWidth: breakpointConfig.timelineColumnWidth as number,
-          minWidth: breakpointConfig.timelineColumnWidth as number,
-        };
-
   const allColDefs: ColDef[] = [
     {
       field: "ticker",
-      cellRenderer: getTickerCellRenderer(
-        Boolean(breakpointConfig.hideTickerName),
-      ),
-      ...tickerWidthDefs,
+      cellRenderer: getTickerCellRenderer(),
     },
     {
       headerName: "Timeline",
@@ -167,7 +93,6 @@ const createColDefs = (): ColDef[] => {
           },
         },
       },
-      ...timelineWidthDefs,
     },
     {
       field: "instrument",
@@ -226,11 +151,7 @@ const createColDefs = (): ColDef[] => {
     );
   }
 
-  return allColDefs.filter(
-    (cDef) =>
-      breakpointConfig.columns.includes(cDef.field as string) ||
-      breakpointConfig.columns.includes(cDef.colId as string),
-  );
+  return allColDefs;
 };
 
 let rowData = getData();
@@ -245,24 +166,7 @@ const gridOptions: GridOptions = {
   onGridReady(params: GridReadyEvent) {
     gridApi = params.api;
   },
-  onGridSizeChanged(params: GridSizeChangedEvent) {
-    const previousBreakpoint = breakpoint;
-    if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
-      breakpoint = "small";
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
-      breakpoint = "medium";
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
-      breakpoint = "medLarge";
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
-      breakpoint = "large";
-    } else {
-      breakpoint = "xlarge";
-    }
 
-    if (previousBreakpoint !== breakpoint && gridApi) {
-      gridApi.setGridOption("columnDefs", createColDefs());
-    }
-  },
   cellSelection: true,
   enableCharts: true,
   rowGroupPanelShow: enableRowGroup ? "always" : "never",

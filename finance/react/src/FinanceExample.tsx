@@ -12,7 +12,6 @@ import {
   colorSchemeDark,
   type GetRowIdFunc,
   type GetRowIdParams,
-  type GridSizeChangedEvent,
   ModuleRegistry,
   themeQuartz,
   type ValueFormatterFunc,
@@ -36,59 +35,6 @@ export interface Props {
 
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
-type Breakpoint = "small" | "medium" | "medLarge" | "large" | "xlarge";
-type ColWidth = number | "auto";
-
-const BREAKPOINT_CONFIG: Record<
-  Breakpoint,
-  {
-    breakpoint?: number;
-    columns: string[];
-    tickerColumnWidth: ColWidth;
-    timelineColumnWidth: ColWidth;
-    hideTickerName?: boolean;
-  }
-> = {
-  small: {
-    breakpoint: 500,
-    columns: ["ticker", "timeline"],
-    tickerColumnWidth: "auto",
-    timelineColumnWidth: "auto",
-    hideTickerName: true,
-  },
-  medium: {
-    breakpoint: 850,
-    columns: ["ticker", "timeline", "totalValue"],
-    tickerColumnWidth: 180,
-    timelineColumnWidth: 140,
-    hideTickerName: true,
-  },
-  medLarge: {
-    breakpoint: 900,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  large: {
-    breakpoint: 1100,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ["ticker", "timeline", "totalValue", "p&l"],
-  },
-  xlarge: {
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: [
-      "ticker",
-      "timeline",
-      "totalValue",
-      "p&l",
-      "instrument",
-      "price",
-      "quantity",
-    ],
-  },
-};
 
 ModuleRegistry.registerModules([
   AllEnterpriseModule.with(AgChartsEnterpriseModule),
@@ -113,7 +59,6 @@ export const FinanceExample: React.FC<Props> = ({
   const gridRef = useRef<AgGridReact>(null);
   const gridWrapperRef = useRef<HTMLDivElement>(null);
   const intervalId = useRef<ReturnType<typeof setInterval>>();
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>("xlarge");
 
   const createUpdater = useCallback(() => {
     return setInterval(() => {
@@ -170,28 +115,10 @@ export const FinanceExample: React.FC<Props> = ({
   }, [createUpdater]);
 
   const colDefs = useMemo<ColDef[]>(() => {
-    const breakpointConfig = BREAKPOINT_CONFIG[breakpoint];
-    const tickerWidthDefs =
-      breakpointConfig.tickerColumnWidth === "auto"
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.tickerColumnWidth as number,
-            minWidth: breakpointConfig.tickerColumnWidth as number,
-          };
-    const timelineWidthDefs =
-      breakpointConfig.timelineColumnWidth === "auto"
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.timelineColumnWidth as number,
-            minWidth: breakpointConfig.timelineColumnWidth as number,
-          };
     const allColDefs: ColDef[] = [
       {
         field: "ticker",
-        cellRenderer: getTickerCellRenderer(
-          Boolean(breakpointConfig.hideTickerName),
-        ),
-        ...tickerWidthDefs,
+        cellRenderer: getTickerCellRenderer(),
       },
       {
         headerName: "Timeline",
@@ -211,7 +138,6 @@ export const FinanceExample: React.FC<Props> = ({
             },
           },
         },
-        ...timelineWidthDefs,
       },
       {
         field: "instrument",
@@ -270,12 +196,8 @@ export const FinanceExample: React.FC<Props> = ({
       );
     }
 
-    return allColDefs.filter(
-      (cDef) =>
-        breakpointConfig.columns.includes(cDef.field!) ||
-        breakpointConfig.columns.includes(cDef.colId!),
-    );
-  }, [breakpoint, isSmallerGrid]);
+    return allColDefs;
+  }, [isSmallerGrid]);
 
   const defaultColDef: ColDef = useMemo(
     () => ({
@@ -291,20 +213,6 @@ export const FinanceExample: React.FC<Props> = ({
     ({ data: { ticker } }: GetRowIdParams) => ticker,
     [],
   );
-
-  const onGridSizeChanged = useCallback((params: GridSizeChangedEvent) => {
-    if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
-      setBreakpoint("small");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
-      setBreakpoint("medium");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
-      setBreakpoint("medLarge");
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
-      setBreakpoint("large");
-    } else {
-      setBreakpoint("xlarge");
-    }
-  }, []);
 
   const statusBar = useMemo(
     () => ({
@@ -344,7 +252,6 @@ export const FinanceExample: React.FC<Props> = ({
         suppressAggFuncInHeader
         groupDefaultExpanded={-1}
         statusBar={statusBar}
-        onGridSizeChanged={onGridSizeChanged}
       />
     </div>
   );

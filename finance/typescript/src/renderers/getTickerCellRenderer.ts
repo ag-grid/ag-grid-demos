@@ -1,6 +1,6 @@
 import { ICellRendererComp, ICellRendererParams } from "ag-grid-community";
 
-export const getTickerCellRenderer = (hideTickerName: boolean) => {
+export const getTickerCellRenderer = () => {
   return class TickerCellRenderer implements ICellRendererComp {
     private eGui!: HTMLDivElement;
 
@@ -24,13 +24,10 @@ export const getTickerCellRenderer = (hideTickerName: boolean) => {
         tickerElement.className = "custom-ticker";
         tickerElement.textContent = data.ticker;
         this.eGui.appendChild(tickerElement);
-
-        if (!hideTickerName) {
-          const nameElement = document.createElement("span");
-          nameElement.className = "ticker-name";
-          nameElement.textContent = data.name;
-          this.eGui.appendChild(nameElement);
-        }
+        const nameElement = document.createElement("span");
+        nameElement.className = "ticker-name";
+        nameElement.textContent = data.name;
+        this.eGui.appendChild(nameElement);
       }
     }
 

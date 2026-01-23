@@ -30,59 +30,6 @@ import { sparklineTooltipRenderer } from './renderers/sparklineTooltipRenderer';
 
 const DEFAULT_UPDATE_INTERVAL = 60;
 const PERCENTAGE_CHANGE = 20;
-type Breakpoint = 'small' | 'medium' | 'medLarge' | 'large' | 'xlarge';
-type ColWidth = number | 'auto';
-
-const BREAKPOINT_CONFIG: Record<
-  Breakpoint,
-  {
-    breakpoint?: number;
-    columns: string[];
-    tickerColumnWidth: ColWidth;
-    timelineColumnWidth: ColWidth;
-    hideTickerName?: boolean;
-  }
-> = {
-  small: {
-    breakpoint: 500,
-    columns: ['ticker', 'timeline'],
-    tickerColumnWidth: 'auto',
-    timelineColumnWidth: 'auto',
-    hideTickerName: true,
-  },
-  medium: {
-    breakpoint: 850,
-    columns: ['ticker', 'timeline', 'totalValue'],
-    tickerColumnWidth: 180,
-    timelineColumnWidth: 140,
-    hideTickerName: true,
-  },
-  medLarge: {
-    breakpoint: 900,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ['ticker', 'timeline', 'totalValue', 'p&l'],
-  },
-  large: {
-    breakpoint: 1100,
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: ['ticker', 'timeline', 'totalValue', 'p&l'],
-  },
-  xlarge: {
-    tickerColumnWidth: 340,
-    timelineColumnWidth: 140,
-    columns: [
-      'ticker',
-      'timeline',
-      'totalValue',
-      'p&l',
-      'instrument',
-      'price',
-      'quantity',
-    ],
-  },
-};
 
 ModuleRegistry.registerModules([
   AllEnterpriseModule.with(AgChartsEnterpriseModule),
@@ -114,7 +61,6 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
 
   private intervalId?: ReturnType<typeof setInterval>;
   private observer?: IntersectionObserver;
-  breakpoint: Breakpoint = 'xlarge';
 
   get theme() {
     return this.isDarkMode
@@ -154,30 +100,10 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
   };
 
   createColDefs(): ColDef[] {
-    const breakpointConfig = BREAKPOINT_CONFIG[this.breakpoint];
-    const tickerWidthDefs =
-      breakpointConfig.tickerColumnWidth === 'auto'
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.tickerColumnWidth as number,
-            minWidth: breakpointConfig.tickerColumnWidth as number,
-          };
-    const timelineWidthDefs =
-      breakpointConfig.timelineColumnWidth === 'auto'
-        ? { flex: 1 }
-        : {
-            initialWidth: breakpointConfig.timelineColumnWidth as number,
-            minWidth: breakpointConfig.timelineColumnWidth as number,
-          };
-
     const allColDefs: ColDef[] = [
       {
         field: 'ticker',
         cellRenderer: TickerCellRenderer,
-        cellRendererParams: {
-          hideTickerName: Boolean(breakpointConfig.hideTickerName),
-        },
-        ...tickerWidthDefs,
       },
       {
         headerName: 'Timeline',
@@ -197,7 +123,6 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
             },
           },
         },
-        ...timelineWidthDefs,
       },
       {
         field: 'instrument',
@@ -256,27 +181,7 @@ export class FinanceExample implements AfterViewInit, OnDestroy {
       );
     }
 
-    return allColDefs.filter(
-      (cDef) =>
-        breakpointConfig.columns.includes(cDef.field as string) ||
-        breakpointConfig.columns.includes(cDef.colId as string),
-    );
-  }
-
-  onGridSizeChanged(params: GridSizeChangedEvent) {
-    if (params.clientWidth < BREAKPOINT_CONFIG.small.breakpoint!) {
-      this.breakpoint = 'small';
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medium.breakpoint!) {
-      this.breakpoint = 'medium';
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.medLarge.breakpoint!) {
-      this.breakpoint = 'medLarge';
-    } else if (params.clientWidth < BREAKPOINT_CONFIG.large.breakpoint!) {
-      this.breakpoint = 'large';
-    } else {
-      this.breakpoint = 'xlarge';
-    }
-
-    this.colDefs = this.createColDefs();
+    return allColDefs;
   }
 
   createUpdater() {
