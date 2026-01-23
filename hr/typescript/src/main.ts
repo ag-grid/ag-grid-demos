@@ -1,6 +1,7 @@
 import type {
   ColDef,
   GetDataPath,
+  GetRowIdParams,
   ValueFormatterFunc,
   ValueFormatterParams,
   GridOptions,
@@ -14,8 +15,11 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   SetFilterModule,
@@ -41,6 +45,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   StatusBarModule,
   TreeDataModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 const employmentType = ["Permanent", "Contract"];
@@ -98,6 +105,8 @@ const columnDefs: ColDef[] = [
   {
     headerName: "Salary",
     field: "basicMonthlySalary",
+    allowFormula: true,
+    editable: true,
     valueFormatter: ({ value }: ValueFormatterParams) =>
       value == null ? "" : `$${Math.round(value).toLocaleString()}`,
   },
@@ -128,6 +137,10 @@ const columnDefs: ColDef[] = [
     width: 120,
   },
 ];
+const defaultColDef: ColDef = {
+  enableColumnSelection: true,
+};
+const getRowId = ({ data }: GetRowIdParams) => data.id;
 
 let rowData = getData();
 const getDataPath: GetDataPath = (data) => data.orgHierarchy;
@@ -145,6 +158,10 @@ const autoGroupColumnDef: ColDef = {
 
 const gridOptions: GridOptions = {
   theme: "legacy",
+  getRowId,
+  cellSelection: true,
+  enableRangeSelection: true,
+  defaultColDef,
   columnDefs: columnDefs,
   rowData,
   groupDefaultExpanded: -1,

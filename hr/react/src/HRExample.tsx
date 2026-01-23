@@ -1,6 +1,8 @@
 import type {
   ColDef,
   GetDataPath,
+  GetRowIdFunc,
+  GetRowIdParams,
   ValueFormatterFunc,
   ValueFormatterParams,
 } from "ag-grid-community";
@@ -12,8 +14,11 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   SetFilterModule,
@@ -47,6 +52,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   StatusBarModule,
   TreeDataModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 interface Props {
@@ -115,6 +123,8 @@ export const HRExample: FunctionComponent<Props> = ({
     {
       headerName: "Salary",
       field: "basicMonthlySalary",
+      allowFormula: true,
+      editable: true,
       valueFormatter: ({ value }: ValueFormatterParams) =>
         value == null ? "" : `$${Math.round(value).toLocaleString()}`,
     },
@@ -147,6 +157,16 @@ export const HRExample: FunctionComponent<Props> = ({
   ]);
   const [rowData] = useState(getData());
   const getDataPath = useCallback<GetDataPath>((data) => data.orgHierarchy, []);
+  const getRowId = useCallback<GetRowIdFunc>(
+    ({ data: { id } }: GetRowIdParams) => id,
+    []
+  );
+  const defaultColDef = useMemo<ColDef>(
+    () => ({
+      enableColumnSelection: true,
+    }),
+    []
+  );
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
   const autoGroupColumnDef = useMemo<ColDef>(() => {
     return {
@@ -169,6 +189,10 @@ export const HRExample: FunctionComponent<Props> = ({
           <AgGridReact
             theme="legacy"
             ref={gridRef}
+            getRowId={getRowId}
+            cellSelection
+            enableRangeSelection
+            defaultColDef={defaultColDef}
             columnDefs={colDefs}
             rowData={rowData}
             groupDefaultExpanded={-1}

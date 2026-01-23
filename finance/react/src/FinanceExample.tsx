@@ -27,7 +27,9 @@ import {
   ContextMenuModule,
   ExcelExportModule,
   FiltersToolPanelModule,
+  FormulaModule,
   IntegratedChartsModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   RowGroupingPanelModule,
@@ -62,11 +64,13 @@ ModuleRegistry.registerModules([
   ColumnMenuModule,
   ContextMenuModule,
   CellSelectionModule,
+  RangeSelectionModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   RichSelectModule,
   StatusBarModule,
+  FormulaModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
   SparklinesModule.with(AgChartsEnterpriseModule),
 ]);
@@ -126,6 +130,15 @@ export const FinanceExample: React.FC<Props> = ({
       {
         field: "ticker",
         cellRenderer: TickerCellRenderer,
+      },
+      {
+        field: "quantity",
+        headerName: "Quantity",
+        cellDataType: "number",
+        type: "rightAligned",
+        minWidth: 120,
+        allowFormula: true,
+        editable: true,
       },
       {
         headerName: "Timeline",
@@ -190,9 +203,12 @@ export const FinanceExample: React.FC<Props> = ({
       filter: true,
       enableRowGroup: true,
       enableValue: true,
+      enableColumnSelection: true,
     }),
     []
   );
+  const cellSelection = true;
+  const enableRangeSelection = true;
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams) => ticker,
@@ -230,7 +246,8 @@ export const FinanceExample: React.FC<Props> = ({
         rowData={rowData}
         columnDefs={colDefs}
         defaultColDef={defaultColDef}
-        cellSelection={true}
+        cellSelection={cellSelection}
+        enableRangeSelection={enableRangeSelection}
         enableCharts
         rowGroupPanelShow="always"
         suppressAggFuncInHeader

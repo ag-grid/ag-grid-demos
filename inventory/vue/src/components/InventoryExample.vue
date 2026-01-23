@@ -5,6 +5,8 @@ import { AgGridVue } from "ag-grid-vue3";
 import type {
   ColDef,
   GetDetailRowDataParams,
+  GetRowIdParams,
+  GridApi,
   GridReadyEvent,
   ValueFormatterFunc,
   ValueFormatterParams,
@@ -16,9 +18,12 @@ import {
   ModuleRegistry,
 } from "ag-grid-community";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
   MultiFilterModule,
+  RangeSelectionModule,
   SetFilterModule,
 } from "ag-grid-enterprise";
 
@@ -47,10 +52,14 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
-const gridApi = shallowRef();
+const gridApi = shallowRef<GridApi>();
 const rowData = ref(getData());
+const getRowId = ({ data }: GetRowIdParams) => data.id;
 
 const statuses = {
   all: "All",
@@ -95,6 +104,7 @@ const columnDefs: ColDef[] = ref([
   },
   {
     field: "incoming",
+    allowFormula: true,
     cellEditorParams: {
       precision: 0,
       step: 1,
@@ -107,6 +117,8 @@ const columnDefs: ColDef[] = ref([
     width: 120,
     headerClass: "header-price",
     cellRenderer: PriceCellRenderer,
+    allowFormula: true,
+    editable: true,
   },
   { field: "sold", headerClass: "header-calendar" },
   {
@@ -127,6 +139,7 @@ const columnDefs: ColDef[] = ref([
 ]);
 const defaultColDef = {
   resizable: false,
+  enableColumnSelection: true,
 };
 const detailCellRendererParams = {
   detailGridOptions: {
@@ -228,6 +241,9 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
           :style="{ height: '100%' }"
           @grid-ready="onGridReady"
           :theme="theme"
+          :getRowId="getRowId"
+          :cellSelection="true"
+          :enableRangeSelection="true"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :defaultColDef="defaultColDef"

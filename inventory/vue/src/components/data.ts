@@ -296,5 +296,5 @@ export function getData() {
           ],
       },
   ];
-  return data;
+  return data.map((row, index) => ({ ...row, id: `inventory-${index + 1}` }));
 }

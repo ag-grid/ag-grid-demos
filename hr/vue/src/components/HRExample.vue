@@ -5,6 +5,7 @@ import { AgGridVue } from "ag-grid-vue3";
 import type {
   ColDef,
   GetDataPath,
+  GetRowIdParams,
   ValueFormatterFunc,
   ValueFormatterParams,
 } from "ag-grid-community";
@@ -16,9 +17,12 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
   RichSelectModule,
+  RangeSelectionModule,
   RowGroupingModule,
   SetFilterModule,
   StatusBarModule,
@@ -53,6 +57,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   StatusBarModule,
   TreeDataModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 const rowData = ref(getData());
@@ -112,6 +119,8 @@ const columnDefs: ColDef[] = [
   {
     headerName: "Salary",
     field: "basicMonthlySalary",
+    allowFormula: true,
+    editable: true,
     valueFormatter: ({ value }: ValueFormatterParams) =>
       value == null ? "" : `$${Math.round(value).toLocaleString()}`,
   },
@@ -142,6 +151,10 @@ const columnDefs: ColDef[] = [
     width: 120,
   },
 ];
+const getRowId = ({ data }: GetRowIdParams) => data.id;
+const defaultColDef: ColDef = {
+  enableColumnSelection: true,
+};
 
 const getDataPath: GetDataPath = (data) => data.orgHierarchy;
 const autoGroupColumnDef: ColDef = {
@@ -169,6 +182,10 @@ const theme = "legacy";
         <ag-grid-vue
           :style="{ height: '100%' }"
           :theme="theme"
+          :getRowId="getRowId"
+          :cellSelection="true"
+          :enableRangeSelection="true"
+          :defaultColDef="defaultColDef"
           :rowData="rowData"
           :columnDefs="columnDefs"
           :groupDefaultExpanded="groupDefaultExpanded"

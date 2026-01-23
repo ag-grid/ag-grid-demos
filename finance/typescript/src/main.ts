@@ -22,12 +22,14 @@ import {
   ExcelExportModule,
   FiltersToolPanelModule,
   IntegratedChartsModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   SparklinesModule,
   StatusBarModule,
+  FormulaModule,
 } from "ag-grid-enterprise";
 import { getData } from "./data";
 
@@ -49,10 +51,12 @@ ModuleRegistry.registerModules([
   ColumnMenuModule,
   ContextMenuModule,
   CellSelectionModule,
+  RangeSelectionModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   RichSelectModule,
+  FormulaModule,
   StatusBarModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
   SparklinesModule.with(AgChartsEnterpriseModule),
@@ -70,6 +74,15 @@ const columnDefs: ColDef[] = [
   {
     field: "ticker",
     cellRenderer: TickerCellRenderer,
+  },
+  {
+    field: "quantity",
+    headerName: "Quantity",
+    cellDataType: "number",
+    type: "rightAligned",
+    minWidth: 120,
+    allowFormula: true,
+    editable: true,
   },
   {
     headerName: "Timeline",
@@ -169,6 +182,7 @@ const gridOptions: GridOptions = {
     }, DEFAULT_UPDATE_INTERVAL);
   },
   cellSelection: true,
+  enableRangeSelection: true,
   enableCharts: true,
   rowGroupPanelShow: "always",
   suppressAggFuncInHeader: true,
@@ -179,6 +193,7 @@ const gridOptions: GridOptions = {
     filter: true,
     enableRowGroup: true,
     enableValue: true,
+    enableColumnSelection: true,
   },
   columnDefs,
 

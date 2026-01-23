@@ -1,6 +1,7 @@
 import type {
   ColDef,
   GetDetailRowDataParams,
+  GetRowIdParams,
   GridApi,
   GridOptions,
   ValueFormatterFunc,
@@ -16,9 +17,12 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
   MultiFilterModule,
+  RangeSelectionModule,
   SetFilterModule,
 } from "ag-grid-enterprise";
 
@@ -38,6 +42,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 let gridApi!: GridApi;
@@ -54,6 +61,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[value as keyof typeof statuses] ?? "";
 
 const rowData = getData();
+const getRowId = ({ data }: GetRowIdParams) => data.id;
 const columnDefs: ColDef[] = [
   {
     field: "product",
@@ -86,6 +94,7 @@ const columnDefs: ColDef[] = [
   },
   {
     field: "incoming",
+    allowFormula: true,
     cellEditorParams: {
       precision: 0,
       step: 1,
@@ -98,6 +107,8 @@ const columnDefs: ColDef[] = [
     width: 120,
     headerClass: "header-price",
     cellRenderer: PriceCellRenderer,
+    allowFormula: true,
+    editable: true,
   },
   { field: "sold", headerClass: "header-calendar" },
   {
@@ -118,6 +129,7 @@ const columnDefs: ColDef[] = [
 ];
 const defaultColDef = {
   resizable: false,
+  enableColumnSelection: true,
 };
 const detailCellRendererParams = {
   detailGridOptions: {
@@ -145,6 +157,9 @@ const detailCellRendererParams = {
 
 const gridOptions: GridOptions = {
   theme: "legacy",
+  getRowId,
+  cellSelection: true,
+  enableRangeSelection: true,
   columnDefs,
   rowData,
   defaultColDef,

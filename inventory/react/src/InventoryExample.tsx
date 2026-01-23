@@ -1,6 +1,8 @@
 import type {
   ColDef,
   GetDetailRowDataParams,
+  GetRowIdFunc,
+  GetRowIdParams,
   SizeColumnsToFitGridStrategy,
   ValueFormatterFunc,
   ValueFormatterParams,
@@ -14,9 +16,12 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
   MultiFilterModule,
+  RangeSelectionModule,
   SetFilterModule,
 } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
@@ -44,6 +49,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 interface Props {
@@ -101,6 +109,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
     },
     {
       field: "incoming",
+      allowFormula: true,
       cellEditorParams: {
         precision: 0,
         step: 1,
@@ -113,6 +122,8 @@ export const InventoryExample: FunctionComponent<Props> = ({
       width: 120,
       headerClass: "header-price",
       cellRenderer: PriceCellRenderer,
+      allowFormula: true,
+      editable: true,
     },
     { field: "sold", headerClass: "header-calendar" },
     {
@@ -131,6 +142,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
   const defaultColDef = useMemo<ColDef>(
     () => ({
       resizable: false,
+      enableColumnSelection: true,
     }),
     []
   );
@@ -138,6 +150,10 @@ export const InventoryExample: FunctionComponent<Props> = ({
     () => ({
       type: "fitGridWidth",
     }),
+    []
+  );
+  const getRowId = useCallback<GetRowIdFunc>(
+    ({ data: { id } }: GetRowIdParams) => id,
     []
   );
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
@@ -231,6 +247,9 @@ export const InventoryExample: FunctionComponent<Props> = ({
           <AgGridReact
             theme="legacy"
             ref={gridRef}
+            getRowId={getRowId}
+            cellSelection
+            enableRangeSelection
             columnDefs={colDefs}
             rowData={rowData}
             defaultColDef={defaultColDef}

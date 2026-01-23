@@ -5,6 +5,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import type {
   ColDef,
   GetDetailRowDataParams,
+  GetRowIdParams,
   GridApi,
   GridOptions,
   GridReadyEvent,
@@ -21,9 +22,12 @@ import {
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
   MultiFilterModule,
+  RangeSelectionModule,
   SetFilterModule,
 } from 'ag-grid-enterprise';
 
@@ -41,6 +45,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   MultiFilterModule,
   MasterDetailModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 const statuses = {
@@ -79,6 +86,9 @@ export class InventoryExample {
   theme: GridOptions['theme'] = 'legacy';
 
   rowData = getData();
+  getRowId(params: GetRowIdParams) {
+    return params.data.id;
+  }
   columnDefs = [
     {
       field: 'product',
@@ -111,6 +121,7 @@ export class InventoryExample {
     },
     {
       field: 'incoming',
+      allowFormula: true,
       cellEditorParams: {
         precision: 0,
         step: 1,
@@ -123,6 +134,8 @@ export class InventoryExample {
       width: 120,
       headerClass: 'header-price',
       cellRenderer: PriceCellRenderer,
+      allowFormula: true,
+      editable: true,
     },
     { field: 'sold', headerClass: 'header-calendar' },
     {
@@ -139,6 +152,7 @@ export class InventoryExample {
   ];
   defaultColDef: ColDef = {
     resizable: false,
+    enableColumnSelection: true,
   };
   autoSizeStrategy: SizeColumnsToFitGridStrategy = {
     type: 'fitGridWidth',

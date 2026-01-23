@@ -1,10 +1,14 @@
 <div class="wrapper">
   <div class="container">
     <div [class]="themeClass" class="grid">
-      <ag-grid-angular
-        style="height: 100%"
-        [theme]="theme"
-        [rowData]="rowData"
+    <ag-grid-angular
+      style="height: 100%"
+      [theme]="theme"
+      [getRowId]="getRowId"
+      [cellSelection]="true"
+      [enableRangeSelection]="true"
+      [defaultColDef]="defaultColDef"
+      [rowData]="rowData"
         [columnDefs]="columnDefs"
         [groupDefaultExpanded]="groupDefaultExpanded"
         [treeData]="treeData"

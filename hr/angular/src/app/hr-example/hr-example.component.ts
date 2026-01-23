@@ -4,6 +4,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import type {
   ColDef,
   GetDataPath,
+  GetRowIdParams,
   ValueFormatterFunc,
   ValueFormatterParams,
   GridOptions,
@@ -16,8 +17,11 @@ import {
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
+  CellSelectionModule,
   ExcelExportModule,
+  FormulaModule,
   MasterDetailModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   SetFilterModule,
@@ -42,6 +46,9 @@ ModuleRegistry.registerModules([
   SetFilterModule,
   StatusBarModule,
   TreeDataModule,
+  CellSelectionModule,
+  RangeSelectionModule,
+  FormulaModule,
 ]);
 
 const employmentType = ['Permanent', 'Contract'];
@@ -95,6 +102,12 @@ export class HRExample {
   };
   groupDefaultExpanded = -1;
   treeData = true;
+  defaultColDef: ColDef = {
+    enableColumnSelection: true,
+  };
+  getRowId(params: GetRowIdParams) {
+    return params.data.id;
+  }
   columnDefs: ColDef[] = [
     {
       headerName: 'ID',
@@ -136,6 +149,8 @@ export class HRExample {
     {
       headerName: 'Salary',
       field: 'basicMonthlySalary',
+      allowFormula: true,
+      editable: true,
       valueFormatter: ({ value }: ValueFormatterParams) =>
         value == null ? '' : `$${Math.round(value).toLocaleString()}`,
     },

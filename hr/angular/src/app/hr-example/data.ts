@@ -1,5 +1,5 @@
 export function getData() {
-  return [
+  const data = [
       {
           orgHierarchy: ['Ashley Rivers'],
           contact: 'Ashley.Rivers',
@@ -961,4 +961,8 @@ export function getData() {
           flag: 'it',
       },
   ];
+  return data.map((row) => ({
+    ...row,
+    id: `hr-${row.employeeId}`,
+  }));
 }

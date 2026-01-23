@@ -11,8 +11,8 @@
   "private": true,
   "dependencies": {
     "ag-charts-enterprise": "11.0.0",
-    "ag-grid-enterprise": "33.0.2",
-    "ag-grid-angular": "33.0.2",
+    "ag-grid-enterprise": "35.0.0",
+    "ag-grid-angular": "35.0.0",
     "@angular/animations": "^18.0.0",
     "@angular/common": "^18.0.0",
     "@angular/compiler": "^18.0.0",

@@ -24,12 +24,14 @@ import {
   ExcelExportModule,
   FiltersToolPanelModule,
   IntegratedChartsModule,
+  RangeSelectionModule,
   RichSelectModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   SparklinesModule,
   StatusBarModule,
+  FormulaModule,
 } from 'ag-grid-enterprise';
 
 import 'ag-grid-community/styles/ag-grid.css';
@@ -52,10 +54,12 @@ ModuleRegistry.registerModules([
   ColumnMenuModule,
   ContextMenuModule,
   CellSelectionModule,
+  RangeSelectionModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   RichSelectModule,
+  FormulaModule,
   StatusBarModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
   SparklinesModule.with(AgChartsEnterpriseModule),
@@ -130,6 +134,7 @@ export class FinanceExample {
     }, DEFAULT_UPDATE_INTERVAL);
   }
   cellSelection: boolean = true;
+  enableRangeSelection: boolean = true;
   enableCharts: boolean = true;
   rowGroupPanelShow: 'always' | 'onlyWhenGrouping' | 'never' | undefined =
     'always';
@@ -141,11 +146,21 @@ export class FinanceExample {
     filter: true,
     enableRowGroup: true,
     enableValue: true,
+    enableColumnSelection: true,
   };
   colDefs: ColDef[] = [
     {
       field: 'ticker',
       cellRenderer: TickerCellRenderer,
+    },
+    {
+      field: 'quantity',
+      headerName: 'Quantity',
+      cellDataType: 'number',
+      type: 'rightAligned',
+      minWidth: 120,
+      allowFormula: true,
+      editable: true,
     },
     {
       headerName: 'Timeline',

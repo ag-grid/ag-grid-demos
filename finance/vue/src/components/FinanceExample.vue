@@ -21,9 +21,11 @@ import {
   ExcelExportModule,
   FiltersToolPanelModule,
   IntegratedChartsModule,
+  FormulaModule,
   RichSelectModule,
   RowGroupingModule,
   RowGroupingPanelModule,
+  RangeSelectionModule,
   SetFilterModule,
   SparklinesModule,
   StatusBarModule,
@@ -57,11 +59,13 @@ ModuleRegistry.registerModules([
   ColumnMenuModule,
   ContextMenuModule,
   CellSelectionModule,
+  RangeSelectionModule,
   RowGroupingModule,
   RowGroupingPanelModule,
   SetFilterModule,
   RichSelectModule,
   StatusBarModule,
+  FormulaModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
   SparklinesModule.with(AgChartsEnterpriseModule),
 ]);
@@ -110,6 +114,7 @@ function onGridReady() {
 
 const theme = "legacy";
 const cellSelection: boolean = true;
+const enableRangeSelection = true;
 const enableCharts: boolean = true;
 const rowGroupPanelShow: "always" | "onlyWhenGrouping" | "never" | undefined =
   "always";
@@ -121,11 +126,21 @@ const defaultColDef: ColDef = {
   filter: true,
   enableRowGroup: true,
   enableValue: true,
+  enableColumnSelection: true,
 };
 const colDefs: ColDef[] = [
   {
     field: "ticker",
     cellRenderer: TickerCellRenderer,
+  },
+  {
+    field: "quantity",
+    headerName: "Quantity",
+    cellDataType: "number",
+    type: "rightAligned",
+    minWidth: 120,
+    allowFormula: true,
+    editable: true,
   },
   {
     headerName: "Timeline",
@@ -209,6 +224,7 @@ const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
           :columnDefs="colDefs"
           :defaultColDef="defaultColDef"
           :cellSelection="cellSelection"
+          :enableRangeSelection="enableRangeSelection"
           :enableCharts="enableCharts"
           :rowGroupPanelShow="rowGroupPanelShow"
           :suppressAggFuncInHeader="suppressAggFuncInHeader"
