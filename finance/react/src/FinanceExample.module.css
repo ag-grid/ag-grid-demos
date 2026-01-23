@@ -24,8 +24,7 @@
   --ag-row-hover-color: #323a46;
 }
 
-:global(.ag-theme-quartz .ag-row-group),
-.container {
+:global(.ag-theme-quartz .ag-row-group) {
   width: 100%;
 }
 
