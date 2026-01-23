@@ -3,7 +3,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'tag-cell-renderer',
+  selector: 'app-tag-cell-renderer',
   standalone: true,
   template: `
     <div class="tag {{ value + 'Tag' }}">

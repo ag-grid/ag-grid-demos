@@ -56,7 +56,7 @@ const departmentFormatter: ValueFormatterFunc = ({ value }) =>
   departments[value as keyof typeof departments] ?? '';
 
 @Component({
-  selector: 'hr-example',
+  selector: 'app-hr-example',
   standalone: true,
   imports: [AgGridAngular],
   templateUrl: './hr-example.component.html',

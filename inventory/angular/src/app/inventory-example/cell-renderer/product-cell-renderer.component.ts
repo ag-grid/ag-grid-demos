@@ -3,7 +3,7 @@ import type { ICellRendererAngularComp } from 'ag-grid-angular';
 import type { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
-  selector: 'product-cell-renderer',
+  selector: 'app-product-cell-renderer',
   standalone: true,
   template: `
     <div class="productCell">

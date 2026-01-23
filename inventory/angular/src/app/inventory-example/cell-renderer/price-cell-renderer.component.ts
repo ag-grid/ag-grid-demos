@@ -3,7 +3,7 @@ import type { ICellRendererAngularComp } from 'ag-grid-angular';
 import type { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
-  selector: 'price-cell-renderer',
+  selector: 'app-price-cell-renderer',
   standalone: true,
   template: `
     <div class="price">

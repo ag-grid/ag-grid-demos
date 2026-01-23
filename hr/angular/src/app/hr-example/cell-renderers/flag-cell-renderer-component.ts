@@ -3,7 +3,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'flag-cell-renderer',
+  selector: 'app-flag-cell-renderer',
   standalone: true,
   template: `
     <div class="flagCell">

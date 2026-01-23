@@ -3,7 +3,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'employee-cell-renderer',
+  selector: 'app-employee-cell-renderer',
   standalone: true,
   template: `
     <div class="employeeCell">

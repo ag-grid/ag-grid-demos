@@ -3,7 +3,7 @@ import type { ICellRendererAngularComp } from 'ag-grid-angular';
 import type { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
-  selector: 'actions-cell-renderer',
+  selector: 'app-actions-cell-renderer',
   standalone: true,
   template: `
     <div class="buttonCell">

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'status-cell-renderer',
+  selector: 'app-status-cell-renderer',
   standalone: true,
   imports: [NgIf],
   template: `

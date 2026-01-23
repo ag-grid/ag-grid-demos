@@ -50,7 +50,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
   statuses[value as keyof typeof statuses] ?? '';
 
 @Component({
-  selector: 'inventory-example',
+  selector: 'app-inventory-example',
   standalone: true,
   imports: [AgGridAngular, FormsModule],
   templateUrl: './inventory-example.component.html',

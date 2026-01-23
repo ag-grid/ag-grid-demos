@@ -3,7 +3,7 @@ import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'ticker-cell-renderer',
+  selector: 'app-ticker-cell-renderer',
   standalone: true,
   imports: [NgIf],
   template: `
