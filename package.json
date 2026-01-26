@@ -1,0 +1,10 @@
+{
+  "name": "ag-grid-demos-root",
+  "private": true,
+  "packageManager": "pnpm@10.28.1",
+  "scripts": {
+    "format": "pnpm -r format",
+    "format:check": "pnpm -r format:check",
+    "lint": "pnpm -r lint"
+  }
+}
