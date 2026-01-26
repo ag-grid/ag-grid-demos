@@ -1,10 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import "./styles.css";
 
-import { FinanceExample } from "./FinanceExample";
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <FinanceExample />
-  </React.StrictMode>
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
