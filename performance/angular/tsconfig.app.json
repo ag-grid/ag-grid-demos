@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["vite/client", "zone.js"]
+  },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.ts", "src/**/*.html"]
+}

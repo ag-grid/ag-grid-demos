@@ -1,0 +1,52 @@
+.toolbar {
+  padding: 24px 24px 16px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.searchGroup {
+  flex: 1 1 320px;
+  min-width: 220px;
+}
+
+.label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #475569;
+  font-weight: 600;
+}
+
+.select,
+.input {
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.86);
+  color: #0f172a;
+  padding: 10px 12px;
+  font-size: 14px;
+  min-height: 40px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.select:focus,
+.input:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
