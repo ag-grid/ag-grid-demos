@@ -1,18 +1,21 @@
 {
-  "name": "ag-grid-hr-example-typescript",
+  "name": "ag-grid-hr-typescript",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "oxlint ."
   },
+  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
-  },
-  "dependencies": {
-    "ag-grid-enterprise": "33.0.2"
+    "oxlint": "^1.41.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
