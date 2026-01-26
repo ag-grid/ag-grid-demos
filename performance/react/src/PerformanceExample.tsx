@@ -43,7 +43,10 @@ import { AgGridReact } from "ag-grid-react";
 
 import styles from "./PerformanceExample.module.css";
 import { Toolbar } from "./Toolbar";
-import { chartThemeOverrides, getDefaultChartThemes } from "./config/chartOverrides";
+import {
+  chartThemeOverrides,
+  getDefaultChartThemes,
+} from "./config/chartOverrides";
 import {
   autoGroupColDef,
   columnTypes,
@@ -93,7 +96,11 @@ const modules = [
 const staticGridOptions: GridOptions = {
   statusBar: {
     statusPanels: [
-      { statusPanel: "agTotalAndFilteredRowCountComponent", key: "totalAndFilter", align: "left" },
+      {
+        statusPanel: "agTotalAndFilteredRowCountComponent",
+        key: "totalAndFilter",
+        align: "left",
+      },
       { statusPanel: "agSelectedRowCountComponent", align: "left" },
       { statusPanel: "agAggregationComponent", align: "right" },
     ],
@@ -148,13 +155,15 @@ const PerformanceExampleInner = ({
   theme: string;
   isSmall: boolean;
 }) => {
-  const gridRef = useRef<AgGridReact>(null);
+  const gridRef = useRef<AgGridReact>(null as any);
   const loadInstance = useRef(0);
   const [gridThemeStr, setGridThemeStr] = useState(theme);
 
   const gridTheme = themeMap[gridThemeStr] || themeQuartz;
   const chartThemes = getDefaultChartThemes(darkMode);
-  const themeClass = darkMode ? `ag-theme-${gridThemeStr}-dark` : `ag-theme-${gridThemeStr}`;
+  const themeClass = darkMode
+    ? `ag-theme-${gridThemeStr}-dark`
+    : `ag-theme-${gridThemeStr}`;
 
   const [base64Flags, setBase64Flags] = useState<Record<string, string>>();
   const [defaultCols, setDefaultCols] = useState<(ColDef | ColGroupDef)[]>();
@@ -190,7 +199,7 @@ const PerformanceExampleInner = ({
         return undefined;
       },
     }),
-    [base64Flags]
+    [base64Flags],
   );
 
   const defaultColDef = useMemo<ColDef>(
@@ -201,7 +210,7 @@ const PerformanceExampleInner = ({
       floatingFilter: !isSmall,
       enableCellChangeFlash: true,
     }),
-    [isSmall]
+    [isSmall],
   );
   const sideBar = useMemo<SideBarDef>(
     () => ({
@@ -210,7 +219,7 @@ const PerformanceExampleInner = ({
       defaultToolPanel: "columns",
       hiddenByDefault: isSmall,
     }),
-    [isSmall]
+    [isSmall],
   );
 
   const onGridReady = useCallback((event: GridReadyEvent) => {
@@ -240,7 +249,12 @@ const PerformanceExampleInner = ({
 
       for (let i = 0; i < loopCount; i += 1) {
         if (row < rowCount) {
-          const rowItem = createRowItem(row, colCount, defaultCols?.length ?? 0, defaultColCount);
+          const rowItem = createRowItem(
+            row,
+            colCount,
+            defaultCols?.length ?? 0,
+            defaultColCount,
+          );
           data.push(rowItem);
           row += 1;
         } else {
@@ -268,13 +282,17 @@ const PerformanceExampleInner = ({
     if (!gridApi || !columnDefs) {
       return;
     }
-    const participantGroup = columnDefs.find((group) => group.headerName === "Participant");
+    const participantGroup = columnDefs.find(
+      (group) => group.headerName === "Participant",
+    );
     if (!participantGroup) {
       return;
     }
 
-    const countryColumn: ColDef = (participantGroup as ColGroupDef).children.find(
-      (column) => (column as ColDef).field === "country"
+    const countryColumn: ColDef = (
+      participantGroup as ColGroupDef
+    ).children.find(
+      (column) => (column as ColDef).field === "country",
     ) as ColDef;
     countryColumn.cellEditorPopup = themeName.includes("material");
 
@@ -294,7 +312,11 @@ const PerformanceExampleInner = ({
     ];
 
     if (!isSmall) {
-      newRowsCols.push([10000, 100], [50000, newDefaultColCount], [100000, newDefaultColCount]);
+      newRowsCols.push(
+        [10000, 100],
+        [50000, newDefaultColCount],
+        [100000, newDefaultColCount],
+      );
     }
 
     setDataSize(createDataSizeValue(newRowsCols[0][0], newRowsCols[0][1]));
@@ -303,22 +325,21 @@ const PerformanceExampleInner = ({
 
   useEffect(() => {
     const flags: Record<string, string> = {};
-    const promiseArray = countries.map((country) => {
+    const promiseArray = countries.map(async (country) => {
       const countryCode = COUNTRY_CODES[country.country];
 
-      return fetch(`https://flagcdn.com/w20/${countryCode}.png`)
-        .then((response) => response.blob())
-        .then(
-          (blob) =>
-            new Promise((resolve) => {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                flags[countryCode] = String(reader.result);
-                resolve(reader.result);
-              };
-              reader.readAsDataURL(blob);
-            })
-        );
+      const response = await fetch(
+        `https://flagcdn.com/w20/${countryCode}.png`,
+      );
+      const blob = await response.blob();
+      return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          flags[countryCode] = String(reader.result);
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      });
     });
 
     Promise.all(promiseArray).then(() => setBase64Flags(flags));
@@ -400,8 +421,17 @@ export const PerformanceExample = () => {
     return new URLSearchParams(window.location.search).get("theme") ?? "quartz";
   });
   const [small] = useState(() =>
-    IS_SSR ? false : document.documentElement.clientHeight <= 415 || document.documentElement.clientWidth < 768
+    IS_SSR
+      ? false
+      : document.documentElement.clientHeight <= 415 ||
+        document.documentElement.clientWidth < 768,
   );
 
-  return <PerformanceExampleInner darkMode={darkMode} theme={gridThemeStr} isSmall={small} />;
+  return (
+    <PerformanceExampleInner
+      darkMode={darkMode}
+      theme={gridThemeStr}
+      isSmall={small}
+    />
+  );
 };
