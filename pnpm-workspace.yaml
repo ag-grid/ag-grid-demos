@@ -1,0 +1,5 @@
+packages:
+  - "finance/*"
+  - "hr/*"
+  - "performance/*"
+  - "inventory/*"
