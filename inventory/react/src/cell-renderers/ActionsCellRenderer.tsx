@@ -1,5 +1,6 @@
-import type { CustomCellRendererProps } from "ag-grid-react";
 import { type FunctionComponent, useCallback } from "react";
+
+import type { CustomCellRendererProps } from "ag-grid-react";
 
 import styles from "./ActionsCellRenderer.module.css";
 
@@ -21,8 +22,8 @@ export const ActionsCellRenderer: FunctionComponent<
     rowData.status = !isPaused
       ? "paused"
       : !isOutOfStock
-      ? "active"
-      : "outOfStock";
+        ? "active"
+        : "outOfStock";
 
     // Refresh the row to reflect the changes
     api.applyTransaction({ update: [rowData] });
@@ -30,16 +31,10 @@ export const ActionsCellRenderer: FunctionComponent<
 
   return (
     <div className={styles.buttonCell}>
-      <button
-        className={`button-secondary ${styles.removeButton}`}
-        onClick={onRemoveClick}
-      >
+      <button className={styles.removeButton} onClick={onRemoveClick}>
         <img src={`/example/inventory/delete.svg`} alt="delete" />
       </button>
-      <button
-        className={`button-secondary ${styles.buttonStopSelling}`}
-        onClick={onStopSellingClick}
-      >
+      <button className={styles.buttonStopSelling} onClick={onStopSellingClick}>
         Hold Selling
       </button>
     </div>

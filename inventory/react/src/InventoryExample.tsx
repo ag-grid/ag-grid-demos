@@ -1,25 +1,3 @@
-import type {
-  ColDef,
-  GetDetailRowDataParams,
-  SizeColumnsToFitGridStrategy,
-  ValueFormatterFunc,
-  ValueFormatterParams,
-  ValueGetterParams,
-} from "ag-grid-community";
-import {
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  ModuleRegistry,
-} from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import {
-  ExcelExportModule,
-  MasterDetailModule,
-  MultiFilterModule,
-  SetFilterModule,
-} from "ag-grid-enterprise";
-import { AgGridReact } from "ag-grid-react";
 import {
   type ChangeEvent,
   type FunctionComponent,
@@ -29,17 +7,33 @@ import {
   useState,
 } from "react";
 
+import type {
+  ColDef,
+  GetDetailRowDataParams,
+  SizeColumnsToFitGridStrategy,
+  ValueFormatterFunc,
+  ValueFormatterParams,
+  ValueGetterParams,
+} from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import {
+  ExcelExportModule,
+  MasterDetailModule,
+  MultiFilterModule,
+  SetFilterModule,
+} from "ag-grid-enterprise";
+import { AgGridReact } from "ag-grid-react";
+
 import styles from "./InventoryExample.module.css";
-import { getData } from "./data";
 import { ActionsCellRenderer } from "./cell-renderers/ActionsCellRenderer";
+import { PriceCellRenderer } from "./cell-renderers/PriceCellRenderer";
 import { ProductCellRenderer } from "./cell-renderers/ProductCellRenderer";
 import { StatusCellRenderer } from "./cell-renderers/StatusCellRenderer";
 import { StockCellRenderer } from "./cell-renderers/StockCellRenderer";
-import { PriceCellRenderer } from "./cell-renderers/PriceCellRenderer";
+import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
   MultiFilterModule,
@@ -86,6 +80,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
       field: "status",
       valueFormatter: statusFormatter,
       cellRenderer: StatusCellRenderer,
+      minWidth: 140,
       filter: true,
       filterParams: {
         valueFormatter: statusFormatter,
@@ -132,20 +127,20 @@ export const InventoryExample: FunctionComponent<Props> = ({
     () => ({
       resizable: false,
     }),
-    []
+    [],
   );
   const autoSizeStrategy = useMemo<SizeColumnsToFitGridStrategy>(
     () => ({
       type: "fitGridWidth",
     }),
-    []
+    [],
   );
   const themeClass = isDarkMode ? `${gridTheme}-dark` : gridTheme;
   const [quickFilterText, setQuickFilterText] = useState<string>();
   const onFilterTextBoxChanged = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
       setQuickFilterText(value),
-    []
+    [],
   );
 
   const detailCellRendererParams = useMemo(
@@ -172,7 +167,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
         data: { variantDetails },
       }: GetDetailRowDataParams) => successCallback(variantDetails),
     }),
-    []
+    [],
   );
   const [activeTab, setActiveTab] = useState("all");
   const handleTabClick = useCallback((status: string) => {
@@ -180,7 +175,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
     gridRef
       .current!.api.setColumnFilterModel(
         "status",
-        status === "all" ? null : { values: [status] }
+        status === "all" ? null : { values: [status] },
       )
       .then(() => gridRef.current!.api.onFilterChanged());
   }, []);
@@ -192,9 +187,7 @@ export const InventoryExample: FunctionComponent<Props> = ({
           <div className={styles.tabs}>
             {Object.entries(statuses).map(([key, displayValue]) => (
               <button
-                className={`${styles.tabButton} ${
-                  activeTab === key ? styles.active : ""
-                }`}
+                className={`${styles.tabButton} ${activeTab === key ? styles.active : ""}`}
                 onClick={() => handleTabClick(key)}
                 key={key}
               >
@@ -229,12 +222,11 @@ export const InventoryExample: FunctionComponent<Props> = ({
         </div>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
-            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
+            rowHeight={80}
             rowData={rowData}
             defaultColDef={defaultColDef}
-            rowHeight={80}
             autoSizeStrategy={autoSizeStrategy}
             pagination
             paginationPageSize={10}

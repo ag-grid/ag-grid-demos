@@ -1,16 +1,18 @@
+import {
+  type FunctionComponent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
 import type {
   ColDef,
   GetDataPath,
   ValueFormatterFunc,
   ValueFormatterParams,
 } from "ag-grid-community";
-import {
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  ModuleRegistry,
-} from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -21,13 +23,6 @@ import {
   TreeDataModule,
 } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
-import {
-  type FunctionComponent,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 
 import styles from "./HRExample.module.css";
 import { ContactCellRenderer } from "./cell-renderers/ContactCellRenderer";
@@ -39,7 +34,6 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,
@@ -167,9 +161,9 @@ export const HRExample: FunctionComponent<Props> = ({
       <div className={styles.container}>
         <div className={`${themeClass} ${styles.grid}`}>
           <AgGridReact
-            theme="legacy"
             ref={gridRef}
             columnDefs={colDefs}
+            rowHeight={62}
             rowData={rowData}
             groupDefaultExpanded={-1}
             getDataPath={getDataPath}

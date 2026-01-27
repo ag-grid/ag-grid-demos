@@ -12,11 +12,11 @@
   background-color: rgba(201, 201, 201, 0.2);
   border-radius: 8px;
   margin: 8px;
-}
 
-.image img {
-  width: 60px;
-  height: 60px;
+  img {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .productCell div:first-child {

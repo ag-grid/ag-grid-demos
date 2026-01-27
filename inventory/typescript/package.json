@@ -1,18 +1,25 @@
 {
-  "name": "ag-grid-inventory-example-typescript",
+  "name": "ag-grid-inventory-typescript",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "oxlint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "ag-grid-enterprise": "33.0.2"
+    "ag-grid-community": "35.0.1",
+    "ag-grid-enterprise": "35.0.1"
+  },
+  "devDependencies": {
+    "oxlint": "^1.41.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }

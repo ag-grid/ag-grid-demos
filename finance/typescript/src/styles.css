@@ -1,0 +1,93 @@
+:root {
+  --layout-grid-header-height: 32px;
+  --layout-grid-margin: 32px;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: #f5f7fb;
+  color: #1f2933;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fb;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+div.ag-theme-quartz,
+div.ag-theme-quartz-dark {
+  --ag-row-height: 42px;
+}
+
+.grid {
+  --ag-value-change-value-highlight-background-color: #44ad4961;
+  --ag-value-change-delta-down-color: rgb(255, 0, 92);
+  --ag-value-change-delta-up-color: rgb(53, 182, 90);
+}
+
+.gridHeight {
+  height: calc(
+    100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
+  );
+  margin: var(--layout-grid-margin);
+}
+
+@media screen and (max-height: 720px) {
+  .gridHeight {
+    min-height: 500px;
+    padding-bottom: 24px;
+  }
+}
+
+.ag-theme-quartz-dark .ag-row {
+  --ag-row-hover-color: #323a46;
+}
+
+@media screen and (max-width: 720px) {
+  div.ag-theme-quartz,
+  div.ag-theme-quartz-dark {
+    --ag-font-size: 12px;
+    --ag-grid-size: 6px;
+  }
+}
+
+.ag-theme-quartz .ag-row-group,
+.container {
+  width: 100%;
+}
+
+.ag-theme-quartz .ag-value-change-value-highlight,
+.ag-theme-quartz-dark .ag-value-change-value-highlight {
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 12px;
+  margin-left: 4px;
+}
+
+.ag-right-aligned-cell {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.ticker-name {
+  opacity: 0.8;
+}
+
+.ticker-cell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ticker-cell img {
+  width: 20px;
+  height: 20px;
+  border-radius: 32px;
+}

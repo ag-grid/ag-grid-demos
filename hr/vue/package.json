@@ -1,22 +1,28 @@
 {
-  "name": "ag-grid-hr-example-vue",
+  "name": "ag-grid-hr-vue",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "oxlint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "ag-grid-enterprise": "33.0.2",
-    "ag-grid-vue3": "33.0.2",
-    "vue": "^3.4.21"
+    "ag-grid-community": "35.0.1",
+    "ag-grid-enterprise": "35.0.1",
+    "ag-grid-vue3": "35.0.1",
+    "vue": "^3.5.27"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0",
-    "vue-tsc": "^2.0.6"
+    "@vitejs/plugin-vue": "^6.0.3",
+    "oxlint": "^1.41.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
