@@ -375,36 +375,27 @@ export default function EcommerceExample() {
 
   const colDefs = useMemo<(ColDef | ColGroupDef)[]>(() => {
     return [
+      // ===== IDENTITY (Pinned) =====
       {
-        headerName: "Product Info",
+        headerName: "Product",
+        field: "product",
+        pinned: "left",
+        minWidth: 220,
+        cellRenderer: "agGroupCellRenderer",
+        filter: "agTextColumnFilter",
+      },
+      {
+        headerName: "SKU",
+        field: "sku",
+        pinned: "left",
+        minWidth: 140,
+        filter: "agTextColumnFilter",
+      },
+
+      // ===== STATUS & HEALTH =====
+      {
+        headerName: "Status & Health",
         children: [
-          {
-            headerName: "Category",
-            field: "category",
-            enableRowGroup: true,
-            filter: "agSetColumnFilter",
-          },
-          {
-            headerName: "Subcategory",
-            field: "subcategory",
-            enableRowGroup: true,
-            filter: "agSetColumnFilter",
-          },
-          {
-            headerName: "Product",
-            field: "product",
-            pinned: "left",
-            minWidth: 220,
-            cellRenderer: "agGroupCellRenderer",
-            filter: "agTextColumnFilter",
-          },
-          {
-            headerName: "SKU",
-            field: "sku",
-            pinned: "left",
-            minWidth: 140,
-            filter: "agTextColumnFilter",
-          },
           {
             headerName: "Health",
             colId: "healthScore",
@@ -502,12 +493,6 @@ export default function EcommerceExample() {
             },
           },
           {
-            headerName: "Brand / Artist",
-            field: "brand",
-            minWidth: 160,
-            filter: "agTextColumnFilter",
-          },
-          {
             headerName: "Status",
             field: "status",
             cellRenderer: StatusBadgeRenderer,
@@ -515,30 +500,57 @@ export default function EcommerceExample() {
             minWidth: 120,
           },
           {
-            headerName: "Digital",
-            field: "isDigital",
-            cellRenderer: ({ value }: { value: boolean }) =>
-              value ? "Yes" : "No",
-            filter: "agSetColumnFilter",
-          },
-          {
-            headerName: "Launch Date",
-            field: "launchDate",
-            valueFormatter: ({ value }: { value: string }) =>
-              value
-                ? new Date(value).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })
-                : "",
-            filter: "agTextColumnFilter",
+            headerName: "Momentum",
+            colId: "momentum",
+            minWidth: 120,
+            cellRenderer: MomentumRenderer,
+            valueGetter: ({ data }) => {
+              if (!data) return null;
+              const sales = data.monthlySales as { month: string; sold: number }[];
+              const recent3 = sales
+                .slice(-3)
+                .reduce((s: number, m) => s + m.sold, 0);
+              const prior3 = sales
+                .slice(-6, -3)
+                .reduce((s: number, m) => s + m.sold, 0);
+              return prior3 > 0 ? ((recent3 - prior3) / prior3) * 100 : 0;
+            },
+            filter: "agNumberColumnFilter",
           },
         ],
       },
+
+      // ===== FINANCIALS (Reordered: Revenue & Margin first) =====
       {
         headerName: "Financials",
         children: [
+          {
+            headerName: "Revenue (12m)",
+            valueGetter: ({ data }) =>
+              data
+                ? data.monthlySales.reduce(
+                    (sum: number, m: { sold: number }) =>
+                      sum + m.sold * data.price,
+                    0
+                  )
+                : undefined,
+            valueFormatter: ({ value, data }) =>
+              value != null
+                ? `${data?.currency ?? "$"} ${value.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+                : "",
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            minWidth: 130,
+          },
+          {
+            headerName: "Margin %",
+            valueGetter: ({ data }) =>
+              data ? ((data.price - data.cost) / data.price) * 100 : null,
+            cellRenderer: MarginBarRenderer,
+            aggFunc: "avg",
+            filter: "agNumberColumnFilter",
+            minWidth: 140,
+          },
           {
             headerName: "Price",
             field: "price",
@@ -557,159 +569,13 @@ export default function EcommerceExample() {
                 : "",
             filter: "agNumberColumnFilter",
           },
-          {
-            headerName: "Currency",
-            field: "currency",
-            filter: "agSetColumnFilter",
-          },
-          {
-            headerName: "Margin %",
-            valueGetter: ({ data }) =>
-              data ? ((data.price - data.cost) / data.price) * 100 : null,
-            cellRenderer: MarginBarRenderer,
-            aggFunc: "avg",
-            filter: "agNumberColumnFilter",
-            minWidth: 140,
-          },
-          {
-            headerName: "Price Δ",
-            field: "priceChange",
-            cellRenderer: PriceChangeRenderer,
-            filter: "agNumberColumnFilter",
-            minWidth: 100,
-          },
-          {
-            headerName: "Revenue (12m)",
-            valueGetter: ({ data }) =>
-              data
-                ? data.monthlySales.reduce(
-                    (sum: number, m: { sold: number }) =>
-                      sum + m.sold * data.price,
-                    0
-                  )
-                : undefined,
-            valueFormatter: ({ value, data }) =>
-              value != null
-                ? `${data?.currency ?? "$"} ${value.toFixed(0)}`
-                : "",
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-          },
         ],
       },
+
+      // ===== INVENTORY (Reordered: Days of Stock first) =====
       {
         headerName: "Inventory",
         children: [
-          {
-            headerName: "Stock by Warehouse",
-            minWidth: 140,
-            cellRenderer: "agSparklineCellRenderer",
-            cellRendererParams: {
-              sparklineOptions: {
-                type: "bar",
-                direction: "horizontal",
-                fill: "#4F46E5",
-                stroke: "#4F46E5",
-                padding: { top: 8, bottom: 8, left: 4, right: 4 },
-                label: {
-                  enabled: true,
-                  placement: "outside-end",
-                  fontSize: 9,
-                  color: "#64748B",
-                },
-                highlightStyle: {
-                  fill: "#6366F1",
-                  stroke: "#6366F1",
-                },
-              } as AgSparklineOptions,
-            },
-            valueGetter: ({ data }) =>
-              data
-                ? Object.values(data.stockByWarehouse as Record<string, number>)
-                : [],
-          },
-          {
-            headerName: "Stock (Total)",
-            valueGetter: ({ data }) =>
-              data
-                ? Object.values(
-                    data.stockByWarehouse as Record<string, number>
-                  ).reduce((a, b) => a + b, 0)
-                : undefined,
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-          },
-          {
-            headerName: "US-West Stock",
-            field: "stockByWarehouse.US-West",
-            valueGetter: ({ data }) =>
-              data
-                ? (data.stockByWarehouse as Record<string, number>)[
-                    "US-West"
-                  ] ?? 0
-                : undefined,
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-            cellStyle: ({ value }) =>
-              value != null && value < 10
-                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
-                : null,
-          },
-          {
-            headerName: "EU-Central Stock",
-            field: "stockByWarehouse.EU-Central",
-            valueGetter: ({ data }) =>
-              data
-                ? (data.stockByWarehouse as Record<string, number>)[
-                    "EU-Central"
-                  ] ?? 0
-                : undefined,
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-            cellStyle: ({ value }) =>
-              value != null && value < 10
-                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
-                : null,
-          },
-          {
-            headerName: "Asia-East Stock",
-            field: "stockByWarehouse.Asia-East",
-            valueGetter: ({ data }) =>
-              data
-                ? (data.stockByWarehouse as Record<string, number>)[
-                    "Asia-East"
-                  ] ?? 0
-                : undefined,
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-            cellStyle: ({ value }) =>
-              value != null && value < 10
-                ? { backgroundColor: "#ffcccc", color: "#cc0000" }
-                : null,
-          },
-          {
-            headerName: "Incoming",
-            valueGetter: ({ data }) =>
-              data
-                ? Object.values(
-                    data.incomingByWarehouse as Record<string, number>
-                  ).reduce((a, b) => a + b, 0)
-                : undefined,
-            aggFunc: "sum",
-            filter: "agNumberColumnFilter",
-          },
-          {
-            headerName: "Primary WH",
-            field: "primaryWarehouse",
-            minWidth: 140,
-            filter: "agSetColumnFilter",
-          },
-          {
-            headerName: "Variants",
-            valueGetter: ({ data }) => data?.variants.length ?? undefined,
-            aggFunc: "avg",
-            filter: "agNumberColumnFilter",
-          },
           {
             headerName: "Days of Stock",
             colId: "daysOfStock",
@@ -751,8 +617,60 @@ export default function EcommerceExample() {
                 : 999;
             },
           },
+          {
+            headerName: "Stock (Total)",
+            valueGetter: ({ data }) =>
+              data
+                ? Object.values(
+                    data.stockByWarehouse as Record<string, number>
+                  ).reduce((a, b) => a + b, 0)
+                : undefined,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+          },
+          {
+            headerName: "Stock by Warehouse",
+            minWidth: 140,
+            cellRenderer: "agSparklineCellRenderer",
+            cellRendererParams: {
+              sparklineOptions: {
+                type: "bar",
+                direction: "horizontal",
+                fill: "#4F46E5",
+                stroke: "#4F46E5",
+                padding: { top: 8, bottom: 8, left: 4, right: 4 },
+                label: {
+                  enabled: true,
+                  placement: "outside-end",
+                  fontSize: 9,
+                  color: "#64748B",
+                },
+                highlightStyle: {
+                  fill: "#6366F1",
+                  stroke: "#6366F1",
+                },
+              } as AgSparklineOptions,
+            },
+            valueGetter: ({ data }) =>
+              data
+                ? Object.values(data.stockByWarehouse as Record<string, number>)
+                : [],
+          },
+          {
+            headerName: "Incoming",
+            valueGetter: ({ data }) =>
+              data
+                ? Object.values(
+                    data.incomingByWarehouse as Record<string, number>
+                  ).reduce((a, b) => a + b, 0)
+                : undefined,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+          },
         ],
       },
+
+      // ===== SALES PERFORMANCE (Collapsible with monthly details) =====
       {
         headerName: "Sales Performance",
         openByDefault: false,
@@ -807,25 +725,6 @@ export default function EcommerceExample() {
             valueFormatter: ({ value }) =>
               typeof value === "number" ? value.toFixed(1) : "",
             aggFunc: "avg",
-            filter: "agNumberColumnFilter",
-            columnGroupShow: "closed",
-          },
-          {
-            headerName: "Momentum",
-            colId: "momentum",
-            minWidth: 110,
-            cellRenderer: MomentumRenderer,
-            valueGetter: ({ data }) => {
-              if (!data) return null;
-              const sales = data.monthlySales as { month: string; sold: number }[];
-              const recent3 = sales
-                .slice(-3)
-                .reduce((s: number, m) => s + m.sold, 0);
-              const prior3 = sales
-                .slice(-6, -3)
-                .reduce((s: number, m) => s + m.sold, 0);
-              return prior3 > 0 ? ((recent3 - prior3) / prior3) * 100 : 0;
-            },
             filter: "agNumberColumnFilter",
             columnGroupShow: "closed",
           },
@@ -963,6 +862,8 @@ export default function EcommerceExample() {
           },
         ],
       },
+
+      // ===== CUSTOMER FEEDBACK =====
       {
         headerName: "Customer Feedback",
         children: [
@@ -979,6 +880,124 @@ export default function EcommerceExample() {
             field: "reviewCount",
             aggFunc: "sum",
             filter: "agNumberColumnFilter",
+          },
+        ],
+      },
+
+      // ===== PRODUCT DETAILS (Secondary info) =====
+      {
+        headerName: "Product Details",
+        openByDefault: false,
+        children: [
+          {
+            headerName: "Category",
+            field: "category",
+            enableRowGroup: true,
+            filter: "agSetColumnFilter",
+          },
+          {
+            headerName: "Subcategory",
+            field: "subcategory",
+            enableRowGroup: true,
+            filter: "agSetColumnFilter",
+          },
+          {
+            headerName: "Brand / Artist",
+            field: "brand",
+            minWidth: 160,
+            filter: "agTextColumnFilter",
+          },
+          {
+            headerName: "Digital",
+            field: "isDigital",
+            cellRenderer: ({ value }: { value: boolean }) =>
+              value ? "Yes" : "No",
+            filter: "agSetColumnFilter",
+          },
+          {
+            headerName: "Launch Date",
+            field: "launchDate",
+            valueFormatter: ({ value }: { value: string }) =>
+              value
+                ? new Date(value).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
+                : "",
+            filter: "agTextColumnFilter",
+          },
+          {
+            headerName: "Currency",
+            field: "currency",
+            filter: "agSetColumnFilter",
+          },
+          {
+            headerName: "Price Δ",
+            field: "priceChange",
+            cellRenderer: PriceChangeRenderer,
+            filter: "agNumberColumnFilter",
+            minWidth: 100,
+          },
+          {
+            headerName: "Primary WH",
+            field: "primaryWarehouse",
+            minWidth: 140,
+            filter: "agSetColumnFilter",
+          },
+          {
+            headerName: "Variants",
+            valueGetter: ({ data }) => data?.variants.length ?? undefined,
+            aggFunc: "avg",
+            filter: "agNumberColumnFilter",
+          },
+          {
+            headerName: "US-West Stock",
+            field: "stockByWarehouse.US-West",
+            valueGetter: ({ data }) =>
+              data
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "US-West"
+                  ] ?? 0
+                : undefined,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#FEF2F2", color: "#991B1B" }
+                : null,
+          },
+          {
+            headerName: "EU-Central Stock",
+            field: "stockByWarehouse.EU-Central",
+            valueGetter: ({ data }) =>
+              data
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "EU-Central"
+                  ] ?? 0
+                : undefined,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#FEF2F2", color: "#991B1B" }
+                : null,
+          },
+          {
+            headerName: "Asia-East Stock",
+            field: "stockByWarehouse.Asia-East",
+            valueGetter: ({ data }) =>
+              data
+                ? (data.stockByWarehouse as Record<string, number>)[
+                    "Asia-East"
+                  ] ?? 0
+                : undefined,
+            aggFunc: "sum",
+            filter: "agNumberColumnFilter",
+            cellStyle: ({ value }) =>
+              value != null && value < 10
+                ? { backgroundColor: "#FEF2F2", color: "#991B1B" }
+                : null,
           },
         ],
       },
