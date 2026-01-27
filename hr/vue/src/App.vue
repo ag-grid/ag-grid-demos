@@ -3,7 +3,6 @@ import { computed, defineComponent, h, ref } from "vue";
 import { AgGridVue } from "ag-grid-vue3";
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   type GetDataPath,
   ModuleRegistry,
@@ -23,7 +22,6 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,

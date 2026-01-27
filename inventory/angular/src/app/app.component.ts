@@ -9,11 +9,7 @@ import type {
   ValueFormatterParams,
   ValueGetterParams,
 } from "ag-grid-community";
-import {
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  ModuleRegistry,
-} from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -29,7 +25,6 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
   MultiFilterModule,
@@ -49,15 +44,7 @@ const statusFormatter: ValueFormatterFunc = ({ value }) =>
 @Component({
   standalone: true,
   selector: "app-root",
-  imports: [
-    CommonModule,
-    AgGridAngular,
-    ActionsCellRendererComponent,
-    PriceCellRendererComponent,
-    ProductCellRendererComponent,
-    StatusCellRendererComponent,
-    StockCellRendererComponent,
-  ],
+  imports: [CommonModule, AgGridAngular],
   template: `
     <div class="wrapper">
       <div class="container">

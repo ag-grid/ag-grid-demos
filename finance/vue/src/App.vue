@@ -11,7 +11,6 @@ import { AgGridVue } from "ag-grid-vue3";
 import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   type GetRowIdParams,
   ModuleRegistry,
@@ -42,7 +41,6 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

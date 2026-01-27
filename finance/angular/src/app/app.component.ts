@@ -12,7 +12,6 @@ import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
 import { AgGridAngular } from "ag-grid-angular";
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   type GetRowIdParams,
   ModuleRegistry,
@@ -44,7 +43,6 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,
@@ -73,7 +71,7 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
 @Component({
   standalone: true,
   selector: "app-root",
-  imports: [CommonModule, AgGridAngular, TickerCellRendererComponent],
+  imports: [CommonModule, AgGridAngular],
   template: `
     <div #gridWrapper [ngClass]="gridClasses" [ngStyle]="gridStyle">
       <ag-grid-angular

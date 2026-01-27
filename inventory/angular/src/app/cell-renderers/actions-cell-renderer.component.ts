@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import type { ICellRendererAngularComp } from "ag-grid-angular";
-import type { ICellRendererParams, RowNode, GridApi } from "ag-grid-community";
+import type { GridApi, ICellRendererParams, IRowNode } from "ag-grid-community";
 
 @Component({
   standalone: true,
@@ -20,7 +20,7 @@ import type { ICellRendererParams, RowNode, GridApi } from "ag-grid-community";
 })
 export class ActionsCellRendererComponent implements ICellRendererAngularComp {
   private api?: GridApi;
-  private node?: RowNode;
+  private node?: IRowNode;
 
   agInit(params: ICellRendererParams): void {
     this.api = params.api;

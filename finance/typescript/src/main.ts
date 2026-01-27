@@ -1,7 +1,6 @@
 import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   createGrid,
   type GetRowIdParams,
@@ -27,7 +26,6 @@ import {
   SparklinesModule,
   StatusBarModule,
 } from "ag-grid-enterprise";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import "./styles.css";
 import { getData } from "./data";
 
@@ -36,7 +34,6 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

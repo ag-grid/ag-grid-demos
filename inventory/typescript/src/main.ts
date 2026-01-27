@@ -1,6 +1,5 @@
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   createGrid,
   type GetDetailRowDataParams,
@@ -18,13 +17,11 @@ import {
   MultiFilterModule,
   SetFilterModule,
 } from "ag-grid-enterprise";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import "./styles.css";
 import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   SetFilterModule,
   MultiFilterModule,

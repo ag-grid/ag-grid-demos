@@ -1,6 +1,5 @@
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   createGrid,
   type GetDataPath,
@@ -18,13 +17,11 @@ import {
   StatusBarModule,
   TreeDataModule,
 } from "ag-grid-enterprise";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import "./styles.css";
 import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,

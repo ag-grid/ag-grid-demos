@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "oxlint ."
+    "lint": "oxlint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@angular/animations": "^21.1.1",

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "oxlint ."
+    "lint": "oxlint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "ag-charts-enterprise": "13.0.1",

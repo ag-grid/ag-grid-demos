@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   type GetDataPath,
   ModuleRegistry,
@@ -28,7 +27,6 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,
@@ -55,15 +53,7 @@ const departmentFormatter: ValueFormatterFunc = ({ value }) =>
 @Component({
   standalone: true,
   selector: "app-root",
-  imports: [
-    CommonModule,
-    AgGridAngular,
-    ContactCellRendererComponent,
-    EmployeeCellRendererComponent,
-    FlagCellRendererComponent,
-    StatusCellRendererComponent,
-    TagCellRendererComponent,
-  ],
+  imports: [CommonModule, AgGridAngular],
   template: `
     <div class="wrapper">
       <div class="container">

@@ -10,7 +10,6 @@ import React, {
 
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
   type ColDef,
   type GetRowIdFunc,
   type GetRowIdParams,
@@ -55,7 +54,6 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ClientSideRowModelModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

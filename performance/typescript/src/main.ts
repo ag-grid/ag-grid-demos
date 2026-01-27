@@ -5,6 +5,7 @@ import type {
   CsvExportParams,
   ExcelExportParams,
   GridApi,
+  GridOptions,
   GridReadyEvent,
   ILoadingOverlayComp,
   ILoadingOverlayParams,
@@ -56,10 +57,6 @@ import {
 import { excelStyles } from "./config/excelStyles";
 import { COUNTRY_CODES, colNames, countries, createRowItem } from "./data";
 import { createDataSizeValue } from "./utils";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import "ag-grid-community/styles/ag-theme-balham.css";
-import "ag-grid-community/styles/ag-theme-material.css";
 import "./styles.css";
 
 const IS_SSR = typeof window === "undefined";
@@ -115,7 +112,7 @@ class LoadingOverlayComponent implements ILoadingOverlayComp {
   }
 }
 
-const staticGridOptions = {
+const staticGridOptions: GridOptions = {
   statusBar: {
     statusPanels: [
       {
@@ -287,7 +284,7 @@ const sideBar: SideBarDef = {
   hiddenByDefault: isSmall,
 };
 
-const defaultExportParams = (): ExcelExportParams | CsvExportParams => ({
+const defaultExcelExportParams = (): ExcelExportParams => ({
   headerRowHeight: 40,
   rowHeight: 30,
   fontSize: 14,
@@ -311,6 +308,8 @@ const defaultExportParams = (): ExcelExportParams | CsvExportParams => ({
     return undefined;
   },
 });
+
+const defaultCsvExportParams = (): CsvExportParams => ({});
 
 const dataSizeOptions = () =>
   rowCols.map(([rows, cols]) => ({
@@ -431,8 +430,8 @@ const gridApi = createGrid(gridSurface, {
   columnTypes,
   dataTypeDefinitions,
   rowGroupPanelShow: isSmall ? undefined : "always",
-  defaultCsvExportParams: defaultExportParams(),
-  defaultExcelExportParams: defaultExportParams(),
+  defaultCsvExportParams: defaultCsvExportParams(),
+  defaultExcelExportParams: defaultExcelExportParams(),
   onGridReady,
 });
 
@@ -519,8 +518,11 @@ if (!IS_SSR) {
   });
 
   Promise.all(promiseArray).then(() => {
-    gridApi.setGridOption("defaultCsvExportParams", defaultExportParams());
-    gridApi.setGridOption("defaultExcelExportParams", defaultExportParams());
+    gridApi.setGridOption("defaultCsvExportParams", defaultCsvExportParams());
+    gridApi.setGridOption(
+      "defaultExcelExportParams",
+      defaultExcelExportParams(),
+    );
   });
 }
 

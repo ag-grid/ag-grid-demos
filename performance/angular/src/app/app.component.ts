@@ -1,11 +1,12 @@
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
   ViewChild,
+  computed,
+  signal,
 } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { AgChartsEnterpriseModule } from "ag-charts-enterprise";
@@ -15,9 +16,8 @@ import type {
   CsvExportParams,
   ExcelExportParams,
   GridApi,
+  GridOptions,
   GridReadyEvent,
-  ILoadingOverlayComp,
-  ILoadingOverlayParams,
   SideBarDef,
   Theme,
 } from "ag-grid-community";
@@ -65,8 +65,6 @@ import { excelStyles } from "../config/excelStyles";
 import { COUNTRY_CODES, colNames, countries, createRowItem } from "../data";
 import { createDataSizeValue } from "../utils";
 
-const IS_SSR = typeof window === "undefined";
-
 const themeMap: Record<string, Theme> = {
   alpine: themeAlpine,
   balham: themeBalham,
@@ -96,27 +94,7 @@ const modules = [
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
 ];
 
-class LoadingOverlayComponent implements ILoadingOverlayComp {
-  private gui?: HTMLElement;
-
-  init(_params: ILoadingOverlayParams): void {
-    const root = document.createElement("div");
-    root.className = "ag-overlay-loading-center";
-    root.setAttribute("role", "presentation");
-    const text = document.createElement("div");
-    text.setAttribute("aria-live", "polite");
-    text.setAttribute("aria-atomic", "true");
-    text.textContent = "Generating rows....";
-    root.append(text);
-    this.gui = root;
-  }
-
-  getGui(): HTMLElement {
-    return this.gui ?? document.createElement("div");
-  }
-}
-
-const staticGridOptions = {
+const staticGridOptions: GridOptions = {
   statusBar: {
     statusPanels: [
       {
@@ -154,7 +132,7 @@ const staticGridOptions = {
     }
     return 0;
   },
-  enableRtl: IS_SSR ? false : /[?&]rtl=true/.test(window.location.search),
+  enableRtl: /[?&]rtl=true/.test(window.location.search),
   pivotPanelShow: "always",
   enableCharts: true,
   undoRedoCellEditing: true,
@@ -166,7 +144,9 @@ const staticGridOptions = {
   enableFilterHandlers: true,
   rowDragManaged: true,
   rowDragMultiRow: true,
-  loadingOverlayComponent: LoadingOverlayComponent,
+  loadingOverlayComponentParams: {
+    loadingMessage: "Generating rows....",
+  },
 };
 
 @Component({
@@ -182,11 +162,11 @@ const staticGridOptions = {
             <select
               id="data-size"
               class="select"
-              [value]="dataSize"
+              [value]="dataSize() ?? ''"
               (change)="handleDataSizeChange($event)"
             >
               <option
-                *ngFor="let option of dataSizeOptions"
+                *ngFor="let option of dataSizeOptions()"
                 [value]="option.value"
               >
                 {{ option.label }}
@@ -198,7 +178,7 @@ const staticGridOptions = {
             <select
               id="theme-select"
               class="select"
-              [value]="gridThemeStr"
+              [value]="gridThemeStr()"
               (change)="handleThemeChange($event)"
             >
               <option
@@ -222,24 +202,24 @@ const staticGridOptions = {
         </div>
       </div>
       <section class="gridWrapper">
-        <div class="gridSurface" [ngClass]="themeClass">
+        <div class="gridSurface" [ngClass]="themeClass()">
           <ag-grid-angular
             #grid
             class="grid-root"
             [modules]="modules"
             [gridOptions]="gridOptions"
-            [theme]="gridTheme"
-            [chartThemes]="chartThemes"
-            [columnDefs]="columnDefs"
-            [rowData]="rowData"
-            [loading]="isLoading"
-            [defaultColDef]="defaultColDef"
-            [sideBar]="sideBar"
+            [theme]="gridTheme()"
+            [chartThemes]="chartThemes()"
+            [columnDefs]="columnDefs() ?? undefined"
+            [rowData]="rowData() ?? undefined"
+            [loading]="isLoading()"
+            [defaultColDef]="defaultColDef()"
+            [sideBar]="sideBar()"
             [columnTypes]="columnTypes"
             [dataTypeDefinitions]="dataTypeDefinitions"
-            [rowGroupPanelShow]="rowGroupPanelShow"
-            [defaultCsvExportParams]="defaultExportParams"
-            [defaultExcelExportParams]="defaultExportParams"
+            [rowGroupPanelShow]="rowGroupPanelShow()"
+            [defaultCsvExportParams]="defaultCsvExportParams()"
+            [defaultExcelExportParams]="defaultExcelExportParams()"
             (gridReady)="onGridReady($event)"
           >
           </ag-grid-angular>
@@ -252,30 +232,28 @@ const staticGridOptions = {
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("grid") private grid?: AgGridAngular;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {}
-
   modules = modules;
   gridOptions = staticGridOptions;
   columnTypes = columnTypes;
   dataTypeDefinitions = dataTypeDefinitions;
 
   darkMode = false;
-  gridThemeStr = IS_SSR
-    ? "quartz"
-    : (new URLSearchParams(window.location.search).get("theme") ?? "quartz");
-  isSmall = IS_SSR
-    ? false
-    : document.documentElement.clientHeight <= 415 ||
-      document.documentElement.clientWidth < 768;
+  gridThemeStr = signal(
+    new URLSearchParams(window.location.search).get("theme") ?? "quartz",
+  );
+  isSmall = signal(
+    document.documentElement.clientHeight <= 415 ||
+      document.documentElement.clientWidth < 768,
+  );
 
-  base64Flags?: Record<string, string>;
-  defaultCols?: (ColDef | ColGroupDef)[];
-  defaultColCount = 0;
-  columnDefs?: (ColDef | ColGroupDef)[];
-  rowData?: unknown[];
-  isLoading = true;
-  rowCols: [number, number][] = [];
-  dataSize?: string;
+  base64Flags = signal<Record<string, string> | null>(null);
+  defaultCols = signal<(ColDef | ColGroupDef)[] | null>(null);
+  defaultColCount = signal(0);
+  columnDefs = signal<(ColDef | ColGroupDef)[] | null>(null);
+  rowData = signal<unknown[] | null>(null);
+  isLoading = signal(true);
+  rowCols = signal<[number, number][]>([]);
+  dataSize = signal<string | null>(null);
 
   private loadInstance = 0;
   private dataIntervalId: number | null = null;
@@ -288,101 +266,97 @@ export class AppComponent implements OnInit, OnDestroy {
     { value: "alpine", label: "Alpine" },
   ];
 
-  dataSizeOptions: { label: string; value: string }[] = [];
+  dataSizeOptions = signal<{ label: string; value: string }[]>([]);
 
-  get gridTheme(): Theme {
-    return themeMap[this.gridThemeStr] || themeQuartz;
-  }
+  gridTheme = computed<Theme>(
+    () => themeMap[this.gridThemeStr()] || themeQuartz,
+  );
 
-  get themeClass(): string {
-    return this.darkMode
-      ? `ag-theme-${this.gridThemeStr}-dark`
-      : `ag-theme-${this.gridThemeStr}`;
-  }
+  themeClass = computed(() =>
+    this.darkMode
+      ? `ag-theme-${this.gridThemeStr()}-dark`
+      : `ag-theme-${this.gridThemeStr()}`,
+  );
 
-  get chartThemes(): string[] {
-    return getDefaultChartThemes(this.darkMode);
-  }
+  chartThemes = computed(() => getDefaultChartThemes(this.darkMode));
 
-  get rowGroupPanelShow(): "always" | undefined {
-    return this.isSmall ? undefined : "always";
-  }
+  rowGroupPanelShow = computed<"always" | undefined>(() =>
+    this.isSmall() ? undefined : "always",
+  );
 
-  get defaultColDef(): ColDef {
-    return {
-      minWidth: 50,
-      editable: true,
-      filter: true,
-      floatingFilter: !this.isSmall,
-      enableCellChangeFlash: true,
-    };
-  }
+  defaultColDef = computed<ColDef>(() => ({
+    minWidth: 50,
+    editable: true,
+    filter: true,
+    floatingFilter: !this.isSmall(),
+    enableCellChangeFlash: true,
+  }));
 
-  get sideBar(): SideBarDef {
-    return {
-      toolPanels: ["columns", "filters-new"],
-      position: "right",
-      defaultToolPanel: "columns",
-      hiddenByDefault: this.isSmall,
-    };
-  }
+  sideBar = computed<SideBarDef>(() => ({
+    toolPanels: ["columns", "filters-new"],
+    position: "right",
+    defaultToolPanel: "columns",
+    hiddenByDefault: this.isSmall(),
+  }));
 
-  get defaultExportParams(): ExcelExportParams | CsvExportParams {
-    return {
-      headerRowHeight: 40,
-      rowHeight: 30,
-      fontSize: 14,
-      addImageToCell: (rowIndex, column, value) => {
-        if (column.getColId() === "country" && this.base64Flags) {
-          return {
-            image: {
-              id: value,
-              base64: this.base64Flags[COUNTRY_CODES[value]],
-              imageType: "png",
-              width: 20,
-              height: 12,
-              position: {
-                offsetX: 17,
-                offsetY: 14,
-              },
+  defaultExcelExportParams = computed<ExcelExportParams>(() => ({
+    headerRowHeight: 40,
+    rowHeight: 30,
+    fontSize: 14,
+    addImageToCell: (rowIndex, column, value) => {
+      const flags = this.base64Flags();
+      if (column.getColId() === "country" && flags) {
+        return {
+          image: {
+            id: value,
+            base64: flags[COUNTRY_CODES[value]],
+            imageType: "png",
+            width: 20,
+            height: 12,
+            position: {
+              offsetX: 17,
+              offsetY: 14,
             },
-            value,
-          };
-        }
-        return undefined;
-      },
-    };
-  }
+          },
+          value,
+        };
+      }
+      return undefined;
+    },
+  }));
+
+  defaultCsvExportParams = computed<CsvExportParams>(() => ({}));
 
   ngOnInit() {
-    this.defaultCols = this.isSmall ? smallDefaultCols : largeDefaultCols;
-    this.defaultColCount = this.isSmall ? smallColCount : largeColCount;
+    const isSmall = this.isSmall();
+    this.defaultCols.set(isSmall ? smallDefaultCols : largeDefaultCols);
+    this.defaultColCount.set(isSmall ? smallColCount : largeColCount);
 
     const newRowsCols: [number, number][] = [
-      [100, this.defaultColCount],
-      [1000, this.defaultColCount],
+      [100, this.defaultColCount()],
+      [1000, this.defaultColCount()],
     ];
 
-    if (!this.isSmall) {
+    if (!isSmall) {
       newRowsCols.push(
         [10000, 100],
-        [50000, this.defaultColCount],
-        [100000, this.defaultColCount],
+        [50000, this.defaultColCount()],
+        [100000, this.defaultColCount()],
       );
     }
-    this.rowCols = newRowsCols;
-    this.dataSizeOptions = newRowsCols.map(([rows, cols]) => ({
+    this.rowCols.set(newRowsCols);
+    const dataSizeOptions = newRowsCols.map(([rows, cols]) => ({
       label: `${rows.toLocaleString()} Rows, ${cols.toLocaleString()} Cols`,
       value: createDataSizeValue(rows, cols),
     }));
-    this.dataSize = this.dataSizeOptions[0]?.value;
-    if (this.dataSize) {
-      this.scheduleDataLoad(this.dataSize);
+    this.dataSizeOptions.set(dataSizeOptions);
+    const initialSize = dataSizeOptions[0]?.value ?? null;
+    this.dataSize.set(initialSize);
+    if (initialSize) {
+      this.scheduleDataLoad(initialSize);
     }
 
-    if (!IS_SSR) {
-      this.loadFlags();
-    }
+    this.loadFlags();
   }
 
   ngOnDestroy() {
@@ -397,7 +371,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(event: GridReadyEvent) {
-    if (!IS_SSR && document.documentElement.clientWidth <= 1024) {
+    if (document.documentElement.clientWidth <= 1024) {
       event.api.closeToolPanel();
     }
   }
@@ -405,7 +379,7 @@ export class AppComponent implements OnInit, OnDestroy {
   handleDataSizeChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     const newValue = target.value;
-    this.dataSize = newValue;
+    this.dataSize.set(newValue);
     this.scheduleDataLoad(newValue);
   }
 
@@ -416,18 +390,16 @@ export class AppComponent implements OnInit, OnDestroy {
     if (gridApi) {
       this.setCountryColumnPopupEditor(newTheme, gridApi);
     }
-    this.gridThemeStr = newTheme;
+    this.gridThemeStr.set(newTheme);
 
-    if (!IS_SSR) {
-      let url = window.location.href;
-      if (url.includes("?theme=")) {
-        url = url.replace(/\?theme=[\w:-]+/, `?theme=${newTheme}`);
-      } else {
-        const separator = url.includes("?") ? "&" : "?";
-        url += `${separator}theme=${newTheme}`;
-      }
-      history.replaceState({}, "", url);
+    let url = window.location.href;
+    if (url.includes("?theme=")) {
+      url = url.replace(/\?theme=[\w:-]+/, `?theme=${newTheme}`);
+    } else {
+      const separator = url.includes("?") ? "&" : "?";
+      url += `${separator}theme=${newTheme}`;
     }
+    history.replaceState({}, "", url);
   }
 
   onFilterChanged(event: Event) {
@@ -443,8 +415,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.dataTimeoutId) {
       window.clearTimeout(this.dataTimeoutId);
     }
-    this.isLoading = true;
-    this.cdr.markForCheck();
+    this.isLoading.set(true);
     this.dataTimeoutId = window.setTimeout(() => {
       this.createData(size);
     }, 10);
@@ -480,8 +451,8 @@ export class AppComponent implements OnInit, OnDestroy {
           const rowItem = createRowItem(
             row,
             colCount,
-            this.defaultCols?.length ?? 0,
-            this.defaultColCount,
+            this.defaultCols()?.length ?? 0,
+            this.defaultColCount(),
           );
           data.push(rowItem);
           row += 1;
@@ -496,10 +467,9 @@ export class AppComponent implements OnInit, OnDestroy {
         const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
 
         window.setTimeout(() => {
-          this.isLoading = false;
-          this.columnDefs = colDefs;
-          this.rowData = data;
-          this.cdr.markForCheck();
+          this.isLoading.set(false);
+          this.columnDefs.set(colDefs);
+          this.rowData.set(data);
         }, remainingTime);
 
         if (this.dataIntervalId) {
@@ -511,9 +481,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private createCols(colCount: number) {
-    const columns = this.defaultCols?.slice(0, colCount) ?? [];
+    const columns = this.defaultCols()?.slice(0, colCount) ?? [];
 
-    for (let col = this.defaultColCount; col < colCount; col += 1) {
+    for (let col = this.defaultColCount(); col < colCount; col += 1) {
       const colName = colNames[col % colNames.length];
       const colDef = {
         headerName: colName,
@@ -529,10 +499,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setCountryColumnPopupEditor(themeName: string, gridApi: GridApi) {
-    if (!gridApi || !this.columnDefs) {
+    const columnDefs = this.columnDefs();
+    if (!gridApi || !columnDefs) {
       return;
     }
-    const participantGroup = this.columnDefs.find(
+    const participantGroup = columnDefs.find(
       (group) => (group as ColGroupDef).headerName === "Participant",
     );
     if (!participantGroup) {
@@ -546,8 +517,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ) as ColDef;
     countryColumn.cellEditorPopup = themeName.includes("material");
 
-    this.columnDefs = [...this.columnDefs];
-    this.cdr.markForCheck();
+    this.columnDefs.set([...columnDefs]);
   }
 
   private loadFlags() {
@@ -569,8 +539,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     Promise.all(promiseArray).then(() => {
-      this.base64Flags = flags;
-      this.cdr.markForCheck();
+      this.base64Flags.set(flags);
     });
   }
 }

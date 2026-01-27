@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "oxlint ."
+    "lint": "oxlint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "ag-grid-community": "35.0.1",

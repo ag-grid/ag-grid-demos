@@ -5,6 +5,7 @@
   "scripts": {
     "format": "pnpm -r format",
     "format:check": "pnpm -r format:check",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
   }
 }

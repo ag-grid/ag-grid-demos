@@ -49,7 +49,10 @@ const hierarchicalSeriesThemeOverrides = {
       label: {
         formatter: ({ value }: { value: unknown }) => {
           const num = Number(value);
-          return Number.isNaN(num) ? value : `$${num.toLocaleString()}`;
+          if (Number.isNaN(num)) {
+            return value == null ? "" : String(value);
+          }
+          return `$${num.toLocaleString()}`;
         },
       },
     },
