@@ -12,6 +12,11 @@
     "lint": "oxlint ."
   },
   "dependencies": {
+    "ag-charts-community": "13.0.1",
+    "ag-charts-enterprise": "13.0.1",
+    "ag-grid-community": "35.0.1",
+    "ag-grid-enterprise": "35.0.1",
+    "ag-grid-vue3": "35.0.1",
     "vue": "^3.5.27"
   },
   "devDependencies": {

@@ -37,7 +37,9 @@ div.ag-theme-quartz-dark {
 }
 
 .gridHeight {
-  height: calc(100vh - var(--layout-grid-header-height) - var(--layout-grid-margin));
+  height: calc(
+    100vh - var(--layout-grid-header-height) - var(--layout-grid-margin)
+  );
   margin: var(--layout-grid-margin);
 }
 

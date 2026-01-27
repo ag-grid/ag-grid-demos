@@ -28,6 +28,21 @@ importers:
       '@angular/platform-browser-dynamic':
         specifier: ^21.1.1
         version: 21.1.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/compiler@21.1.1)(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.1.1(@angular/animations@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-angular:
+        specifier: 35.0.1
+        version: 35.0.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -110,6 +125,19 @@ importers:
         version: 7.3.1(@types/node@25.0.10)(sass@1.97.1)
 
   finance/typescript:
+    dependencies:
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
     devDependencies:
       oxlint:
         specifier: ^1.41.0
@@ -126,6 +154,21 @@ importers:
 
   finance/vue:
     dependencies:
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-vue3:
+        specifier: 35.0.1
+        version: 35.0.1(vue@3.5.27(typescript@5.9.3))
       vue:
         specifier: ^3.5.27
         version: 3.5.27(typescript@5.9.3)
@@ -166,6 +209,15 @@ importers:
       '@angular/platform-browser-dynamic':
         specifier: ^21.1.1
         version: 21.1.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/compiler@21.1.1)(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.1.1(@angular/animations@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))
+      ag-grid-angular:
+        specifier: 35.0.1
+        version: 35.0.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -242,6 +294,13 @@ importers:
         version: 7.3.1(@types/node@25.0.10)(sass@1.97.1)
 
   hr/typescript:
+    dependencies:
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
     devDependencies:
       oxlint:
         specifier: ^1.41.0
@@ -258,6 +317,15 @@ importers:
 
   hr/vue:
     dependencies:
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-vue3:
+        specifier: 35.0.1
+        version: 35.0.1(vue@3.5.27(typescript@5.9.3))
       vue:
         specifier: ^3.5.27
         version: 3.5.27(typescript@5.9.3)
@@ -298,6 +366,15 @@ importers:
       '@angular/platform-browser-dynamic':
         specifier: ^21.1.1
         version: 21.1.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/compiler@21.1.1)(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.1.1(@angular/animations@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))
+      ag-grid-angular:
+        specifier: 35.0.1
+        version: 35.0.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -374,6 +451,13 @@ importers:
         version: 7.3.1(@types/node@25.0.10)(sass@1.97.1)
 
   inventory/typescript:
+    dependencies:
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
     devDependencies:
       oxlint:
         specifier: ^1.41.0
@@ -390,6 +474,15 @@ importers:
 
   inventory/vue:
     dependencies:
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-vue3:
+        specifier: 35.0.1
+        version: 35.0.1(vue@3.5.27(typescript@5.9.3))
       vue:
         specifier: ^3.5.27
         version: 3.5.27(typescript@5.9.3)
@@ -430,6 +523,21 @@ importers:
       '@angular/platform-browser-dynamic':
         specifier: ^21.1.1
         version: 21.1.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/compiler@21.1.1)(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.1.1(@angular/animations@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)))
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-angular:
+        specifier: 35.0.1
+        version: 35.0.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -512,6 +620,19 @@ importers:
         version: 7.3.1(@types/node@25.0.10)(sass@1.97.1)
 
   performance/typescript:
+    dependencies:
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
     devDependencies:
       oxlint:
         specifier: ^1.41.0
@@ -528,6 +649,21 @@ importers:
 
   performance/vue:
     dependencies:
+      ag-charts-community:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-charts-enterprise:
+        specifier: 13.0.1
+        version: 13.0.1
+      ag-grid-community:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-enterprise:
+        specifier: 35.0.1
+        version: 35.0.1
+      ag-grid-vue3:
+        specifier: 35.0.1
+        version: 35.0.1(vue@3.5.27(typescript@5.9.3))
       vue:
         specifier: ^3.5.27
         version: 3.5.27(typescript@5.9.3)
@@ -1615,6 +1751,12 @@ packages:
   ag-charts-types@13.0.1:
     resolution: {integrity: sha512-qg9adyiAaeUaDtWZEEPF45dv55kdJTe6Ghi0EQXCS79h/7KvOd6dxhqGZjPL1zeFl/L9qEXuYgb+LkGStq4mgQ==}
 
+  ag-grid-angular@35.0.1:
+    resolution: {integrity: sha512-+Y1K/ZxiEbd3GhZcRWzLf60yiP4ECNoTCCqI65EgHiiRGInz3g1pDueArR7hE7V+z5gluA3NMGB3VrOZYUBKLg==}
+    peerDependencies:
+      '@angular/common': '>= 18.0.0'
+      '@angular/core': '>= 18.0.0'
+
   ag-grid-community@35.0.1:
     resolution: {integrity: sha512-fYYZdymWKsN9/tZv+R6uZRnuiWYEQr+GHl85ZrB0ixbFcE8opYK4NJI29NnMc9ShYiCBnAO9hj54IFa+FI4aDA==}
 
@@ -1626,6 +1768,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  ag-grid-vue3@35.0.1:
+    resolution: {integrity: sha512-SE7wZPXiKHXfTSfzJDra+bnN/obmizLCkeri91b8v1Wy7ypza+NqApjMRiXAeZEUCaJqy2ZHv0r/oHIzxx7vJQ==}
+    peerDependencies:
+      vue: ^3.5.0
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -3254,6 +3401,13 @@ snapshots:
 
   ag-charts-types@13.0.1: {}
 
+  ag-grid-angular@35.0.1(@angular/common@21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)):
+    dependencies:
+      '@angular/common': 21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2)
+      '@angular/core': 21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)(zone.js@0.16.0)
+      ag-grid-community: 35.0.1
+      tslib: 2.8.1
+
   ag-grid-community@35.0.1:
     dependencies:
       ag-charts-types: 13.0.1
@@ -3271,6 +3425,11 @@ snapshots:
       prop-types: 15.8.1
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
+
+  ag-grid-vue3@35.0.1(vue@3.5.27(typescript@5.9.3)):
+    dependencies:
+      ag-grid-community: 35.0.1
+      vue: 3.5.27(typescript@5.9.3)
 
   agent-base@7.1.4: {}
 

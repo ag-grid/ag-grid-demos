@@ -1,7 +1,12 @@
 :root {
   font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", sans-serif;
   color: #0f172a;
-  background: radial-gradient(circle at top, #fef3c7 0%, #f8fafc 35%, #e2e8f0 100%);
+  background: radial-gradient(
+    circle at top,
+    #fef3c7 0%,
+    #f8fafc 35%,
+    #e2e8f0 100%
+  );
 }
 
 * {

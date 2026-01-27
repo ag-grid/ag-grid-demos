@@ -13,10 +13,7 @@ interface TickerCellParams extends ICellRendererParams {
   imports: [CommonModule],
   template: `
     <div class="ticker-cell" *ngIf="data">
-      <img
-        [src]="logoUrl"
-        [alt]="altText"
-      />
+      <img [src]="logoUrl" [alt]="altText" />
       <b class="custom-ticker">{{ data.ticker }}</b>
       <span class="ticker-name" *ngIf="!hideTickerName">
         {{ data.name }}
@@ -33,7 +30,9 @@ export class TickerCellRendererComponent implements ICellRendererAngularComp {
   agInit(params: TickerCellParams): void {
     this.data = params.data;
     this.hideTickerName = params.hideTickerName ?? false;
-    this.logoUrl = this.data ? `/example/finance/logos/${this.data.ticker}.png` : "";
+    this.logoUrl = this.data
+      ? `/example/finance/logos/${this.data.ticker}.png`
+      : "";
     this.altText = this.data ? `${this.data.name} logo` : "";
   }
 

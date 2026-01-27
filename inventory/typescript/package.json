@@ -11,7 +11,10 @@
     "format:check": "prettier --check .",
     "lint": "oxlint ."
   },
-  "dependencies": {},
+  "dependencies": {
+    "ag-grid-community": "35.0.1",
+    "ag-grid-enterprise": "35.0.1"
+  },
   "devDependencies": {
     "oxlint": "^1.41.0",
     "prettier": "^3.8.1",

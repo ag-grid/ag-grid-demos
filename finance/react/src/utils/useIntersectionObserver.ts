@@ -1,4 +1,4 @@
-import { type RefObject, useEffect } from 'react';
+import { type RefObject, useEffect } from "react";
 
 type IntersectionObserverHandler = (entry: IntersectionObserverEntry) => void;
 
@@ -8,7 +8,11 @@ interface Params {
   options?: IntersectionObserverInit;
 }
 
-export const useIntersectionObserver = ({ elementRef, onChange, options }: Params) => {
+export const useIntersectionObserver = ({
+  elementRef,
+  onChange,
+  options,
+}: Params) => {
   useEffect(() => {
     const element = elementRef.current;
     if (!element) {

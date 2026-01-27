@@ -93,6 +93,7 @@ export const FinanceExample: React.FC<Props> = ({
   const gridRef = useRef<AgGridReact>(null);
   const gridWrapperRef = useRef<HTMLDivElement>(null);
   const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isGridVisible = useRef(false);
   const createUpdater = useCallback(() => {
     return setInterval(() => {
       setRowData((rowData) =>
@@ -127,6 +128,7 @@ export const FinanceExample: React.FC<Props> = ({
   useIntersectionObserver({
     elementRef: gridWrapperRef as any,
     onChange: ({ isIntersecting }: { isIntersecting: boolean }) => {
+      isGridVisible.current = isIntersecting;
       if (isIntersecting) {
         if (!intervalId.current) {
           intervalId.current = createUpdater();
@@ -139,6 +141,16 @@ export const FinanceExample: React.FC<Props> = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (!isGridVisible.current) {
+      return;
+    }
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+    }
+    intervalId.current = createUpdater();
+  }, [createUpdater]);
 
   useEffect(() => {
     return () => {

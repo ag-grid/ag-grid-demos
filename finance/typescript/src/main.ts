@@ -107,7 +107,8 @@ const enableRowGroup = false;
 
 const gridWrapper = document.createElement("div");
 const themeClass = `${gridTheme}${isDarkMode ? "-dark" : ""}`;
-gridWrapper.className = `${themeClass} grid ${gridHeight ? "" : "gridHeight"}`.trim();
+gridWrapper.className =
+  `${themeClass} grid ${gridHeight ? "" : "gridHeight"}`.trim();
 if (gridHeight) {
   gridWrapper.style.height = `${gridHeight}px`;
 }

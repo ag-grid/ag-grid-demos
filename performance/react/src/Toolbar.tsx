@@ -40,7 +40,7 @@ export const Toolbar = ({
         label: `${rows.toLocaleString()} Rows, ${cols.toLocaleString()} Cols`,
         value: createDataSizeValue(rows, cols),
       })),
-    [rowCols]
+    [rowCols],
   );
 
   const themeOptions = useMemo(
@@ -49,7 +49,7 @@ export const Toolbar = ({
         value,
         label,
       })),
-    []
+    [],
   );
 
   const dataSizeValue = dataSize ?? dataSizeOptions[0]?.value ?? "";
@@ -85,7 +85,10 @@ export const Toolbar = ({
     if (!gridRef.current?.api) {
       return;
     }
-    gridRef.current.api.setGridOption("quickFilterText", deferredQuickFilterText);
+    gridRef.current.api.setGridOption(
+      "quickFilterText",
+      deferredQuickFilterText,
+    );
   }, [deferredQuickFilterText, gridRef]);
 
   const onFilterChanged = (event: ChangeEvent<HTMLInputElement>) => {

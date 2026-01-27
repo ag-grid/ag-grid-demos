@@ -225,13 +225,9 @@ const chartThemes = computed(() =>
   isDarkMode ? ["ag-default-dark"] : ["ag-default"],
 );
 
-const rowGroupPanelShow = computed(() =>
-  enableRowGroup ? "always" : "never",
-);
+const rowGroupPanelShow = computed(() => (enableRowGroup ? "always" : "never"));
 
-const themeClass = computed(
-  () => `${gridTheme}${isDarkMode ? "-dark" : ""}`,
-);
+const themeClass = computed(() => `${gridTheme}${isDarkMode ? "-dark" : ""}`);
 
 const gridClasses = computed(() => [
   themeClass.value,

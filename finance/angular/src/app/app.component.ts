@@ -75,11 +75,7 @@ const numberFormatter: ValueFormatterFunc = ({ value }) => {
   selector: "app-root",
   imports: [CommonModule, AgGridAngular, TickerCellRendererComponent],
   template: `
-    <div
-      #gridWrapper
-      [ngClass]="gridClasses"
-      [ngStyle]="gridStyle"
-    >
+    <div #gridWrapper [ngClass]="gridClasses" [ngStyle]="gridStyle">
       <ag-grid-angular
         [rowData]="rowData"
         [columnDefs]="colDefs"

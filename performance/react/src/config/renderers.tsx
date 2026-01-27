@@ -11,19 +11,37 @@ interface RatingRendererParams extends ICellRendererParams {
 export const CountryCellRenderer = ({ value }: ICellRendererParams) => {
   if (value === undefined) {
     return (
-      <span style={{ cursor: "default", overflow: "hidden", textOverflow: "ellipsis" }} />
+      <span
+        style={{
+          cursor: "default",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      />
     );
   }
   if (value == null || value === "" || value === "(Select All)") {
     return (
-      <span style={{ cursor: "default", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <span
+        style={{
+          cursor: "default",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
         {value || ""}
       </span>
     );
   }
 
   return (
-    <span style={{ cursor: "default", overflow: "hidden", textOverflow: "ellipsis" }}>
+    <span
+      style={{
+        cursor: "default",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
       <img
         alt={`${value} flag`}
         width={15}
@@ -44,7 +62,8 @@ export const RatingRenderer = (params: RatingRendererParams) => {
     return "(No stars)";
   }
 
-  const numericValue = typeof value === "string" ? parseInt(value, 10) : (value as number);
+  const numericValue =
+    typeof value === "string" ? parseInt(value, 10) : (value as number);
 
   return (
     <span>
@@ -58,7 +77,7 @@ export const RatingRenderer = (params: RatingRendererParams) => {
             width={12}
             height={12}
           />
-        ) : null
+        ) : null,
       )}
     </span>
   );

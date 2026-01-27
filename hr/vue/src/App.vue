@@ -67,14 +67,29 @@ const ContactCellRenderer = defineComponent({
                 rel: "noopener noreferrer",
                 class: "iconLink",
               },
-              [h("img", { class: "icon", src: "/example/hr/linkedin.svg", alt: "linkedin" })],
+              [
+                h("img", {
+                  class: "icon",
+                  src: "/example/hr/linkedin.svg",
+                  alt: "linkedin",
+                }),
+              ],
             ),
           ]),
           h("button", [
             h(
               "a",
-              { href: `mailto:${emailName.value}@company.com`, class: "iconLink" },
-              [h("img", { class: "icon", src: "/example/hr/email.svg", alt: "email" })],
+              {
+                href: `mailto:${emailName.value}@company.com`,
+                class: "iconLink",
+              },
+              [
+                h("img", {
+                  class: "icon",
+                  src: "/example/hr/email.svg",
+                  alt: "email",
+                }),
+              ],
             ),
           ]),
         ]),
@@ -98,7 +113,11 @@ const EmployeeCellRenderer = defineComponent({
           h("span", value.value),
           h("span", { class: "description" }, jobTitle.value),
         ]),
-        h("img", { class: "image", src: imageUrl.value, alt: value.value.toLowerCase() }),
+        h("img", {
+          class: "image",
+          src: imageUrl.value,
+          alt: value.value.toLowerCase(),
+        }),
       ]);
   },
 });
@@ -109,11 +128,17 @@ const FlagCellRenderer = defineComponent({
   setup(props) {
     const value = computed(() => (props.params as any).value ?? "");
     const flag = computed(() => (props.params as any).data?.flag ?? "");
-    const flagUrl = computed(() => (flag.value ? `/example/hr/${flag.value}.svg` : ""));
+    const flagUrl = computed(() =>
+      flag.value ? `/example/hr/${flag.value}.svg` : "",
+    );
     return () =>
       h("div", { class: "flagCell" }, [
         h("div", { class: "employeeData" }, [h("span", value.value)]),
-        h("img", { class: "flagImage", src: flagUrl.value, alt: value.value.toLowerCase() }),
+        h("img", {
+          class: "flagImage",
+          src: flagUrl.value,
+          alt: value.value.toLowerCase(),
+        }),
       ]);
   },
 });
@@ -126,7 +151,11 @@ const StatusCellRenderer = defineComponent({
     return () =>
       h("div", { class: ["tag", `${value.value}Tag`] }, [
         value.value === "paid"
-          ? h("img", { class: "tick", src: "/example/hr/tick.svg", alt: "tick" })
+          ? h("img", {
+              class: "tick",
+              src: "/example/hr/tick.svg",
+              alt: "tick",
+            })
           : null,
         h("span", value.value),
       ]);
@@ -138,7 +167,9 @@ const TagCellRenderer = defineComponent({
   props: { params: { type: Object, required: true } },
   setup(props) {
     const value = computed(() => (props.params as any).value ?? "");
-    const valueFormatted = computed(() => (props.params as any).valueFormatted ?? "");
+    const valueFormatted = computed(
+      () => (props.params as any).valueFormatted ?? "",
+    );
     return () =>
       h("div", { class: ["tag", `${value.value}Tag`] }, [
         h("div", { class: ["circle", `${value.value}Circle`] }),

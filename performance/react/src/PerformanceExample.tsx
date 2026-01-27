@@ -157,6 +157,9 @@ const PerformanceExampleInner = ({
 }) => {
   const gridRef = useRef<AgGridReact>(null as any);
   const loadInstance = useRef(0);
+  const dataIntervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+  const dataTimeoutId = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dataSizeTimeoutId = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [gridThemeStr, setGridThemeStr] = useState(theme);
 
   const gridTheme = themeMap[gridThemeStr] || themeQuartz;
@@ -233,6 +236,15 @@ const PerformanceExampleInner = ({
     const loadInstanceCopy = loadInstance.current;
     const startTime = Date.now();
 
+    if (dataIntervalId.current) {
+      clearInterval(dataIntervalId.current);
+      dataIntervalId.current = null;
+    }
+    if (dataTimeoutId.current) {
+      clearTimeout(dataTimeoutId.current);
+      dataTimeoutId.current = null;
+    }
+
     const colCount = parseInt(newDataSize?.split("x")[1] ?? "0", 10);
     const rowCount = parseFloat(newDataSize?.split("x")[0] ?? "0");
     const colDefs = createCols(colCount);
@@ -241,9 +253,12 @@ const PerformanceExampleInner = ({
     const data: unknown[] = [];
     const loopCount = rowCount > 10000 ? 10000 : 1000;
 
-    const intervalId = window.setInterval(() => {
+    dataIntervalId.current = window.setInterval(() => {
       if (loadInstanceCopy !== loadInstance.current) {
-        clearInterval(intervalId);
+        if (dataIntervalId.current) {
+          clearInterval(dataIntervalId.current);
+          dataIntervalId.current = null;
+        }
         return;
       }
 
@@ -267,13 +282,16 @@ const PerformanceExampleInner = ({
         const minDisplayTime = 500;
         const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
 
-        window.setTimeout(() => {
+        dataTimeoutId.current = window.setTimeout(() => {
           setIsLoading(false);
           setColumnDefs(colDefs);
           setRowData(data);
         }, remainingTime);
 
-        clearInterval(intervalId);
+        if (dataIntervalId.current) {
+          clearInterval(dataIntervalId.current);
+          dataIntervalId.current = null;
+        }
       }
     }, 0);
   };
@@ -324,25 +342,49 @@ const PerformanceExampleInner = ({
   }, [isSmall]);
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
     const flags: Record<string, string> = {};
-    const promiseArray = countries.map(async (country) => {
-      const countryCode = COUNTRY_CODES[country.country];
 
-      const response = await fetch(
-        `https://flagcdn.com/w20/${countryCode}.png`,
-      );
-      const blob = await response.blob();
-      return await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          flags[countryCode] = String(reader.result);
-          resolve(reader.result);
-        };
-        reader.readAsDataURL(blob);
-      });
-    });
+    const loadFlags = async () => {
+      try {
+        const promiseArray = countries.map(async (country) => {
+          const countryCode = COUNTRY_CODES[country.country];
 
-    Promise.all(promiseArray).then(() => setBase64Flags(flags));
+          const response = await fetch(
+            `https://flagcdn.com/w20/${countryCode}.png`,
+            { signal: controller.signal },
+          );
+          const blob = await response.blob();
+          return await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              flags[countryCode] = String(reader.result);
+              resolve(reader.result);
+            };
+            reader.readAsDataURL(blob);
+          });
+        });
+
+        await Promise.all(promiseArray);
+        if (isMounted) {
+          setBase64Flags(flags);
+        }
+      } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
+        void error;
+        // Leave flags unset on fetch failures.
+      }
+    };
+
+    loadFlags();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   const createCols = (colCount: number) => {
@@ -369,11 +411,38 @@ const PerformanceExampleInner = ({
   useEffect(() => {
     if (dataSize) {
       setIsLoading(true);
-      window.setTimeout(() => {
+      if (dataSizeTimeoutId.current) {
+        clearTimeout(dataSizeTimeoutId.current);
+      }
+      dataSizeTimeoutId.current = window.setTimeout(() => {
         createDataRef.current(dataSize);
       }, 10);
     }
+    return () => {
+      if (dataSizeTimeoutId.current) {
+        clearTimeout(dataSizeTimeoutId.current);
+        dataSizeTimeoutId.current = null;
+      }
+    };
   }, [dataSize]);
+
+  useEffect(() => {
+    return () => {
+      loadInstance.current += 1;
+      if (dataIntervalId.current) {
+        clearInterval(dataIntervalId.current);
+        dataIntervalId.current = null;
+      }
+      if (dataTimeoutId.current) {
+        clearTimeout(dataTimeoutId.current);
+        dataTimeoutId.current = null;
+      }
+      if (dataSizeTimeoutId.current) {
+        clearTimeout(dataSizeTimeoutId.current);
+        dataSizeTimeoutId.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className={styles.exampleWrapper}>
