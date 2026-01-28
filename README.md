@@ -59,8 +59,3 @@ https://ag-grid.zendesk.com/hc/en-us
 
 Please file bugs in the main AG Grid repository:
 https://github.com/ag-grid/ag-grid/issues
-
-## Developer references
-
-- Performance demo source: https://github.com/ag-grid/ag-grid/tree/latest/documentation/ag-grid-docs/src/components/example-grid
-- Finance/HR/Inventory demos source: https://github.com/ag-grid/ag-grid/tree/latest/documentation/ag-grid-docs/src/components/demos
