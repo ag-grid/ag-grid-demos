@@ -39,6 +39,7 @@ import {
   RowNumbersModule,
   SetFilterModule,
   SideBarModule,
+  SparklinesModule,
   StatusBarModule,
 } from "ag-grid-enterprise";
 import {
@@ -55,7 +56,7 @@ import {
   smallDefaultCols,
 } from "./config/colDefs";
 import { excelStyles } from "./config/excelStyles";
-import { COUNTRY_CODES, colNames, countries, createRowItem } from "./data";
+import { COUNTRY_CODES, countries, createRowItem, extraColumns } from "./data";
 import { createDataSizeValue } from "./utils";
 
 const IS_SSR = typeof window === "undefined";
@@ -87,6 +88,7 @@ const modules = [
   PivotModule,
   RowNumbersModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
+  SparklinesModule.with(AgChartsEnterpriseModule),
 ];
 
 class LoadingOverlayComponent implements ILoadingOverlayComp {
@@ -253,17 +255,61 @@ const dataSizeOptions = computed(() =>
 );
 
 const createCols = (colCount: number) => {
-  const columns = defaultCols.value?.slice(0, colCount) ?? [];
+  // start with a copy of the default cols
+  const columns: (ColDef | ColGroupDef)[] =
+    defaultCols.value?.slice(0, colCount) ?? [];
+
+  // Group extra columns by their group name
+  const groups = new Map<string, ColDef[]>();
   for (let col = defaultColCount.value; col < colCount; col += 1) {
-    const colName = colNames[col % colNames.length];
-    columns.push({
-      headerName: colName,
+    const extraColIndex = col - defaultColCount.value;
+    const colConfig = extraColumns[extraColIndex % extraColumns.length];
+    const colDef: ColDef = {
+      headerName: colConfig.headerName,
       field: `col${col}`,
-      width: 200,
+      width: 150,
       editable: true,
-      filter: "agTextColumnFilter",
+    };
+    switch (colConfig.dataType) {
+      case "currency":
+        colDef.cellDataType = "currency";
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 160;
+        break;
+      case "percent":
+        colDef.filter = "agNumberColumnFilter";
+        colDef.valueFormatter = (params) =>
+          params.value != null ? `${params.value.toFixed(1)}%` : "";
+        colDef.width = 130;
+        break;
+      case "rating":
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 120;
+        break;
+      case "text":
+        colDef.filter = "agSetColumnFilter";
+        colDef.width = 160;
+        break;
+      case "number":
+      default:
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 140;
+        break;
+    }
+    const group = colConfig.group;
+    if (!groups.has(group)) {
+      groups.set(group, []);
+    }
+    groups.get(group)!.push(colDef);
+  }
+
+  for (const [groupName, children] of groups) {
+    columns.push({
+      headerName: groupName,
+      children,
     });
   }
+
   return columns;
 };
 
@@ -405,17 +451,17 @@ onMounted(() => {
 
   const newRowsCols: [number, number][] = [
     [100, defaultColCount.value],
-    [1000, defaultColCount.value],
+    [1_000, defaultColCount.value],
   ];
   if (!isSmall.value) {
     newRowsCols.push(
-      [10000, 100],
-      [50000, defaultColCount.value],
-      [100000, defaultColCount.value],
+      [10_000, 100],
+      [50_000, defaultColCount.value],
+      [100_000, defaultColCount.value],
     );
   }
   rowCols.value = newRowsCols;
-  dataSize.value = createDataSizeValue(newRowsCols[0][0], newRowsCols[0][1]);
+  dataSize.value = createDataSizeValue(newRowsCols[1][0], newRowsCols[1][1]);
 
   if (!IS_SSR) {
     const flags: Record<string, string> = {};

@@ -39,6 +39,7 @@ import {
   RowNumbersModule,
   SetFilterModule,
   SideBarModule,
+  SparklinesModule,
   StatusBarModule,
 } from "ag-grid-enterprise";
 import {
@@ -55,7 +56,7 @@ import {
   smallDefaultCols,
 } from "./config/colDefs";
 import { excelStyles } from "./config/excelStyles";
-import { COUNTRY_CODES, colNames, countries, createRowItem } from "./data";
+import { COUNTRY_CODES, countries, createRowItem, extraColumns } from "./data";
 import { createDataSizeValue } from "./utils";
 import "./styles.css";
 
@@ -88,6 +89,7 @@ const modules = [
   PivotModule,
   RowNumbersModule,
   IntegratedChartsModule.with(AgChartsEnterpriseModule),
+  SparklinesModule.with(AgChartsEnterpriseModule),
 ];
 
 ModuleRegistry.registerModules(modules);
@@ -318,17 +320,60 @@ const dataSizeOptions = () =>
   }));
 
 const createCols = (colCount: number) => {
-  const columns = defaultCols.slice(0, colCount);
+  // start with a copy of the default cols
+  const columns: (ColDef | ColGroupDef)[] = defaultCols.slice(0, colCount);
+
+  // Group extra columns by their group name
+  const groups = new Map<string, ColDef[]>();
   for (let col = defaultColCount; col < colCount; col += 1) {
-    const colName = colNames[col % colNames.length];
-    columns.push({
-      headerName: colName,
+    const extraColIndex = col - defaultColCount;
+    const colConfig = extraColumns[extraColIndex % extraColumns.length];
+    const colDef: ColDef = {
+      headerName: colConfig.headerName,
       field: `col${col}`,
-      width: 200,
+      width: 150,
       editable: true,
-      filter: "agTextColumnFilter",
+    };
+    switch (colConfig.dataType) {
+      case "currency":
+        colDef.cellDataType = "currency";
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 160;
+        break;
+      case "percent":
+        colDef.filter = "agNumberColumnFilter";
+        colDef.valueFormatter = (params) =>
+          params.value != null ? `${params.value.toFixed(1)}%` : "";
+        colDef.width = 130;
+        break;
+      case "rating":
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 120;
+        break;
+      case "text":
+        colDef.filter = "agSetColumnFilter";
+        colDef.width = 160;
+        break;
+      case "number":
+      default:
+        colDef.filter = "agNumberColumnFilter";
+        colDef.width = 140;
+        break;
+    }
+    const group = colConfig.group;
+    if (!groups.has(group)) {
+      groups.set(group, []);
+    }
+    groups.get(group)!.push(colDef);
+  }
+
+  for (const [groupName, children] of groups) {
+    columns.push({
+      headerName: groupName,
+      children,
     });
   }
+
   return columns;
 };
 
@@ -448,17 +493,17 @@ const refreshDataSizeOptions = () => {
 const setupDataOptions = () => {
   rowCols = [
     [100, defaultColCount],
-    [1000, defaultColCount],
+    [1_000, defaultColCount],
   ];
   if (!isSmall) {
     rowCols.push(
-      [10000, 100],
-      [50000, defaultColCount],
-      [100000, defaultColCount],
+      [10_000, 100],
+      [50_000, defaultColCount],
+      [100_000, defaultColCount],
     );
   }
   refreshDataSizeOptions();
-  dataSize = createDataSizeValue(rowCols[0][0], rowCols[0][1]);
+  dataSize = createDataSizeValue(rowCols[1][0], rowCols[1][1]);
   dataSizeSelect.value = dataSize;
   scheduleDataLoad(dataSize);
 };
