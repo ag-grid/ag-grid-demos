@@ -7,6 +7,7 @@ import {
   type ValueFormatterFunc,
   type ValueFormatterParams,
   type ICellRendererParams,
+  ValidationModule,
 } from "ag-grid-community";
 import {
   ExcelExportModule,
@@ -22,6 +23,7 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,

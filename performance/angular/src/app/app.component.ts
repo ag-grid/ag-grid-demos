@@ -23,6 +23,7 @@ import type {
 } from "ag-grid-community";
 import {
   AllCommunityModule,
+  ValidationModule,
   themeAlpine,
   themeBalham,
   themeMaterial,
@@ -75,6 +76,7 @@ const themeMap: Record<string, Theme> = {
 
 const modules = [
   AllCommunityModule,
+  ValidationModule,
   ClipboardModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

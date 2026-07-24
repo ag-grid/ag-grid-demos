@@ -13,12 +13,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "ag-charts-community": "13.0.1",
-    "ag-charts-enterprise": "13.0.1",
-    "ag-grid-community": "35.0.1",
-    "ag-grid-enterprise": "35.0.1",
-    "ag-grid-vue3": "35.0.1",
-    "vue": "^3.5.27"
+    "ag-charts-community": "14.0.2",
+    "ag-charts-enterprise": "14.0.2",
+    "ag-grid-community": "36.0.2",
+    "ag-grid-enterprise": "36.0.2",
+    "ag-grid-vue3": "36.0.2",
+    "vue": "^3.5.32"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.3",

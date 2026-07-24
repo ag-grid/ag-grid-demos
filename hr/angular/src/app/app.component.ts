@@ -6,6 +6,7 @@ import {
   type ColDef,
   type GetDataPath,
   ModuleRegistry,
+  ValidationModule,
   type ValueFormatterFunc,
   type ValueFormatterParams,
 } from "ag-grid-community";
@@ -27,6 +28,7 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   ExcelExportModule,
   MasterDetailModule,
   RowGroupingModule,

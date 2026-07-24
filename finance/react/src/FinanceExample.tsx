@@ -14,6 +14,7 @@ import {
   type GetRowIdFunc,
   type GetRowIdParams,
   ModuleRegistry,
+  ValidationModule,
   type ValueFormatterFunc,
   type ValueGetterParams,
 } from "ag-grid-community";
@@ -54,6 +55,7 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

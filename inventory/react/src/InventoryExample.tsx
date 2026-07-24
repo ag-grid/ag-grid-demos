@@ -15,7 +15,11 @@ import type {
   ValueFormatterParams,
   ValueGetterParams,
 } from "ag-grid-community";
-import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  ValidationModule,
+} from "ag-grid-community";
 import {
   ExcelExportModule,
   MasterDetailModule,
@@ -34,6 +38,7 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   ExcelExportModule,
   SetFilterModule,
   MultiFilterModule,

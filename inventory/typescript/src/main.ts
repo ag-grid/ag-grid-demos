@@ -10,6 +10,7 @@ import {
   type ICellRendererParams,
   type GridApi,
   type SizeColumnsToFitGridStrategy,
+  ValidationModule,
 } from "ag-grid-community";
 import {
   ExcelExportModule,
@@ -22,6 +23,7 @@ import { getData } from "./data";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   ExcelExportModule,
   SetFilterModule,
   MultiFilterModule,

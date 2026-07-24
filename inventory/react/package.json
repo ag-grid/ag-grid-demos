@@ -13,9 +13,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "ag-grid-community": "35.0.1",
-    "ag-grid-enterprise": "35.0.1",
-    "ag-grid-react": "35.0.1",
+    "ag-grid-community": "36.0.2",
+    "ag-grid-enterprise": "36.0.2",
+    "ag-grid-react": "36.0.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },

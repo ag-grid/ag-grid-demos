@@ -8,6 +8,7 @@ import {
   type ValueFormatterFunc,
   type ValueGetterParams,
   type ICellRendererParams,
+  ValidationModule,
 } from "ag-grid-community";
 import {
   AdvancedFilterModule,
@@ -34,6 +35,7 @@ const PERCENTAGE_CHANGE = 20;
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
+  ValidationModule,
   AdvancedFilterModule,
   ColumnsToolPanelModule,
   ExcelExportModule,

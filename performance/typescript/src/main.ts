@@ -15,6 +15,7 @@ import type {
 import {
   AllCommunityModule,
   ModuleRegistry,
+  ValidationModule,
   createGrid,
   themeAlpine,
   themeBalham,
@@ -71,6 +72,7 @@ const themeMap: Record<string, Theme> = {
 
 const modules = [
   AllCommunityModule,
+  ValidationModule,
   ClipboardModule,
   ColumnsToolPanelModule,
   ExcelExportModule,
